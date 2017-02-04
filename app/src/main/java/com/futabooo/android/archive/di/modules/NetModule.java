@@ -39,7 +39,10 @@ public class NetModule {
   }
 
   @Provides @Singleton Retrofit provideRetrofit(OkHttpClient okHttpClient) {
-    Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).build();
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
+        .client(okHttpClient)
+        //.addConverterFactory(JsoupConverterFactory.create())
+        .build();
     return retrofit;
   }
 }

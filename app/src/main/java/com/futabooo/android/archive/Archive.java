@@ -8,7 +8,7 @@ import com.futabooo.android.archive.di.modules.NetModule;
 
 public class Archive extends Application {
 
-  private static final String BASE_URL = "https://elk.bookmeter.com";
+  private static final String BASE_URL = "https://i.bookmeter.com";
 
   private NetComponent netComponent;
 

@@ -3,21 +3,19 @@ package com.futabooo.android.archive;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,11 +26,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -183,13 +182,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       // form field with an error.
       focusView.requestFocus();
     } else {
-      RequestBody mail = RequestBody.create(MediaType.parse("text/plain"), email);
-      RequestBody pass = RequestBody.create(MediaType.parse("text/plain"), password);
+      //RequestBody mail = RequestBody.create(MediaType.parse("text/plain"), email);
+      //RequestBody pass = RequestBody.create(MediaType.parse("text/plain"), password);
 
-      Call<ResponseBody> call = retrofit.create(LoginService.class).login(mail, pass);
+      Call<ResponseBody> call = retrofit.create(LoginService.class).login(email, password);
       call.enqueue(new Callback<ResponseBody>() {
         @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-          textView.setText(response.toString());
+          BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+          StringBuffer result = null;
+          try {
+            result = new StringBuffer();
+            String line;
+            while ((line = reader.readLine()) != null) {
+              result.append(line);
+            }
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          textView.setText(result.toString());
         }
 
         @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -323,7 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       showProgress(false);
 
       if (success) {
-        finish();
+        //finish();
       } else {
         mPasswordView.setError(getString(R.string.error_incorrect_password));
         mPasswordView.requestFocus();

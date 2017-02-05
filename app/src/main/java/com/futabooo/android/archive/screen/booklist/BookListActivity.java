@@ -9,14 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.futabooo.android.archive.Archive;
 import com.futabooo.android.archive.R;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class BookListActivity extends AppCompatActivity {
@@ -45,27 +47,37 @@ public class BookListActivity extends AppCompatActivity {
   }
 
   private void getBookList() {
-    Call<ResponseBody> call = retrofit.create(BookListService.class).get();
-    call.enqueue(new Callback<ResponseBody>() {
-      @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
-        StringBuffer result = null;
-        try {
-          result = new StringBuffer();
-          String line;
-          while ((line = reader.readLine()) != null) {
-            result.append(line);
+    Observable<ResponseBody> observable = retrofit.create(BookListService.class).get();
+    observable.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<ResponseBody>() {
+          @Override public void onSubscribe(Disposable d) {
+
           }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
 
-        textView.setText(result.toString());
-      }
+          @Override public void onNext(ResponseBody value) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(value.byteStream()));
+            StringBuffer result = null;
+            try {
+              result = new StringBuffer();
+              String line;
+              while ((line = reader.readLine()) != null) {
+                result.append(line);
+              }
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
 
-      @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-        textView.setText(t.toString());
-      }
-    });
+            textView.setText(result.toString());
+          }
+
+          @Override public void onError(Throwable e) {
+            textView.setText(e.toString());
+          }
+
+          @Override public void onComplete() {
+
+          }
+        });
   }
 }

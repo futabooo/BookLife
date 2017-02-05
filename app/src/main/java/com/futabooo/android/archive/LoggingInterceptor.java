@@ -1,4 +1,4 @@
-package com.futabooo.android;
+package com.futabooo.android.archive;
 
 import android.util.Log;
 import java.io.IOException;

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.futabooo.android.LoggingInterceptor;
+import com.futabooo.android.archive.LoggingInterceptor;
 import com.futabooo.android.archive.BuildConfig;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import dagger.Module;

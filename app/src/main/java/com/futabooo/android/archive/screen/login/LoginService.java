@@ -1,4 +1,4 @@
-package com.futabooo.android.archive;
+package com.futabooo.android.archive.screen.login;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.futabooo.android.archive.LoginActivity"
+    tools:context=".screen.login.LoginActivity"
     >
 
   <!-- Login progress -->
@@ -77,6 +77,15 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp"
           android:text="@string/action_sign_in"
+          android:textStyle="bold"
+          style="?android:textAppearanceSmall"
+          />
+      <Button
+          android:id="@+id/booklist_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:text="booklist"
           android:textStyle="bold"
           style="?android:textAppearanceSmall"
           />

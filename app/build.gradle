@@ -30,6 +30,7 @@ dependencies {
   })
   compile 'com.android.support:appcompat-v7:25.0.1'
   compile 'com.android.support:design:25.0.1'
+  compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
   // jsouper
   compile 'com.ekchang.jsouper:jsouper:0.0.3-SNAPSHOT'
@@ -43,6 +44,7 @@ dependencies {
 
   // okhttp3
   compile 'com.squareup.okhttp3:okhttp:3.5.0'
+  compile "com.squareup.okhttp3:okhttp-urlconnection:3.5.0"
 
   // dagger2
   compile 'com.google.dagger:dagger:2.8'

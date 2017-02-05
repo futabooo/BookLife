@@ -3,15 +3,22 @@ package com.futabooo.android.archive.di.modules;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.futabooo.android.LoggingInterceptor;
+import com.futabooo.android.archive.BuildConfig;
+import com.futabooo.android.archive.HostSelectionInterceptor;
 import dagger.Module;
 import dagger.Provides;
+import java.net.CookieManager;
 import javax.inject.Singleton;
 import okhttp3.Cache;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
-@Module
-public class NetModule {
+@Module public class NetModule {
 
   String baseUrl;
 
@@ -33,14 +40,40 @@ public class NetModule {
     return cache;
   }
 
-  @Provides @Singleton OkHttpClient provideOkHttpClient(Cache cache) {
-    OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
-    return client;
+  @Singleton @Provides public HostSelectionInterceptor provideHostSelectionInterceptor() {
+    return new HostSelectionInterceptor();
+  }
+
+  @Singleton @Provides public LoggingInterceptor provideLoggingInterceptor() {
+    return new LoggingInterceptor();
+  }
+
+  @Singleton @Provides public JavaNetCookieJar provideJavaNetCookieJar(CookieManager cookieManager) {
+    return new JavaNetCookieJar(cookieManager);
+  }
+
+  @Singleton @Provides public PersistentCookieJar providePersistentCookieJar(Application application) {
+    return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(application));
+  }
+
+  @Singleton @Provides public CookieManager provideCookieManager() {
+    return new CookieManager();
+  }
+
+  @Provides @Singleton OkHttpClient provideOkHttpClient(Cache cache, HostSelectionInterceptor hostSelectionInterceptor,
+      LoggingInterceptor loggingInterceptor, PersistentCookieJar persistentCookieJar) {
+    OkHttpClient.Builder builder =
+        new OkHttpClient.Builder().cookieJar(persistentCookieJar).cache(cache).addInterceptor(hostSelectionInterceptor);
+
+    if (BuildConfig.DEBUG) {
+      builder.addInterceptor(loggingInterceptor);
+    }
+
+    return builder.build();
   }
 
   @Provides @Singleton Retrofit provideRetrofit(OkHttpClient okHttpClient) {
-    Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
-        .client(okHttpClient)
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
         //.addConverterFactory(JsoupConverterFactory.create())
         .build();
     return retrofit;

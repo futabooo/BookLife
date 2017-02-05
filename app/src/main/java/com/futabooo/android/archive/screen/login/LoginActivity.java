@@ -1,4 +1,4 @@
-package com.futabooo.android.archive;
+package com.futabooo.android.archive.screen.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,7 +9,6 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -26,6 +25,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.futabooo.android.archive.Archive;
+import com.futabooo.android.archive.HostSelectionInterceptor;
+import com.futabooo.android.archive.R;
+import com.futabooo.android.archive.screen.booklist.BookListActivity;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,6 +50,7 @@ import static com.futabooo.android.archive.R.id.response;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
   @Inject Retrofit retrofit;
+  @Inject HostSelectionInterceptor hostSelectionInterceptor;
 
   TextView textView;
 
@@ -54,11 +58,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
    * Id to identity READ_CONTACTS permission request.
    */
   private static final int REQUEST_READ_CONTACTS = 0;
-
-  /**
-   * Keep track of the login task to ensure we can cancel it if requested.
-   */
-  private UserLoginTask mAuthTask = null;
 
   // UI references.
   private AutoCompleteTextView mEmailView;
@@ -86,6 +85,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     });
 
     textView = (TextView) findViewById(response);
+    Button button = (Button) findViewById(R.id.booklist_button);
+    button.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(BookListActivity.createIntent(LoginActivity.this));
+      }
+    });
 
     Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
     mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -144,10 +149,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
    * errors are presented and no actual login attempt is made.
    */
   private void attemptLogin() {
-    if (mAuthTask != null) {
-      return;
-    }
-
     // Reset errors.
     mEmailView.setError(null);
     mPasswordView.setError(null);
@@ -182,9 +183,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       // form field with an error.
       focusView.requestFocus();
     } else {
-      //RequestBody mail = RequestBody.create(MediaType.parse("text/plain"), email);
-      //RequestBody pass = RequestBody.create(MediaType.parse("text/plain"), password);
-
+      hostSelectionInterceptor.setScheme("https");
       Call<ResponseBody> call = retrofit.create(LoginService.class).login(email, password);
       call.enqueue(new Callback<ResponseBody>() {
         @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -201,18 +200,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
           }
 
           textView.setText(result.toString());
+          hostSelectionInterceptor.setScheme(null);
         }
 
         @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
           textView.setText(t.toString());
+          hostSelectionInterceptor.setScheme(null);
         }
       });
-
-      // Show a progress spinner, and kick off a background task to
-      // perform the user login attempt.
-      showProgress(true);
-      mAuthTask = new UserLoginTask(email, password);
-      mAuthTask.execute((Void) null);
     }
   }
 
@@ -223,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
   private boolean isPasswordValid(String password) {
     //TODO: Replace this with your own logic
-    return password.length() > 4;
+    return password.length() > 0;
   }
 
   /**
@@ -306,45 +301,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     int ADDRESS = 0;
     int IS_PRIMARY = 1;
-  }
-
-  /**
-   * Represents an asynchronous login/registration task used to authenticate
-   * the user.
-   */
-  public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-    private final String mEmail;
-    private final String mPassword;
-
-    UserLoginTask(String email, String password) {
-      mEmail = email;
-      mPassword = password;
-    }
-
-    @Override protected Boolean doInBackground(Void... params) {
-
-
-      // TODO: register the new account here.
-      return true;
-    }
-
-    @Override protected void onPostExecute(final Boolean success) {
-      mAuthTask = null;
-      showProgress(false);
-
-      if (success) {
-        //finish();
-      } else {
-        mPasswordView.setError(getString(R.string.error_incorrect_password));
-        mPasswordView.requestFocus();
-      }
-    }
-
-    @Override protected void onCancelled() {
-      mAuthTask = null;
-      showProgress(false);
-    }
   }
 }
 

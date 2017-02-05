@@ -9,6 +9,8 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.futabooo.android.archive.LoggingInterceptor;
 import com.futabooo.android.archive.BuildConfig;
 import com.futabooo.android.archive.HostSelectionInterceptor;
+import com.futabooo.android.archive.LoggingInterceptor;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
 import java.net.CookieManager;
@@ -74,6 +76,7 @@ import retrofit2.Retrofit;
 
   @Provides @Singleton Retrofit provideRetrofit(OkHttpClient okHttpClient) {
     Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         //.addConverterFactory(JsoupConverterFactory.create())
         .build();
     return retrofit;

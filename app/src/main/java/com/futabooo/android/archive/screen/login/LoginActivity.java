@@ -19,14 +19,16 @@ import com.futabooo.android.archive.Archive;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import com.futabooo.android.archive.R;
 import com.futabooo.android.archive.screen.booklist.BookListActivity;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static com.futabooo.android.archive.R.id.response;
@@ -42,20 +44,20 @@ public class LoginActivity extends AppCompatActivity {
   TextView textView;
 
   // UI references.
-  private AutoCompleteTextView mEmailView;
-  private EditText mPasswordView;
-  private View mProgressView;
-  private View mLoginFormView;
+  private AutoCompleteTextView emailView;
+  private EditText passwordView;
+  private View progressView;
+  private View loginFormView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((Archive) getApplication()).getNetComponent().inject(this);
     setContentView(R.layout.activity_login);
     // Set up the login form.
-    mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+    emailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-    mPasswordView = (EditText) findViewById(R.id.password);
-    mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    passwordView = (EditText) findViewById(R.id.password);
+    passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
         if (id == R.id.login || id == EditorInfo.IME_NULL) {
           attemptLogin();
@@ -80,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-    mLoginFormView = findViewById(R.id.login_form);
-    mProgressView = findViewById(R.id.login_progress);
+    loginFormView = findViewById(R.id.login_form);
+    progressView = findViewById(R.id.login_progress);
   }
 
   /**
@@ -91,31 +93,31 @@ public class LoginActivity extends AppCompatActivity {
    */
   private void attemptLogin() {
     // Reset errors.
-    mEmailView.setError(null);
-    mPasswordView.setError(null);
+    emailView.setError(null);
+    passwordView.setError(null);
 
     // Store values at the time of the login attempt.
-    String email = mEmailView.getText().toString();
-    String password = mPasswordView.getText().toString();
+    String email = emailView.getText().toString();
+    String password = passwordView.getText().toString();
 
     boolean cancel = false;
     View focusView = null;
 
     // Check for a valid password, if the user entered one.
     if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-      mPasswordView.setError(getString(R.string.error_invalid_password));
-      focusView = mPasswordView;
+      passwordView.setError(getString(R.string.error_invalid_password));
+      focusView = passwordView;
       cancel = true;
     }
 
     // Check for a valid email address.
     if (TextUtils.isEmpty(email)) {
-      mEmailView.setError(getString(R.string.error_field_required));
-      focusView = mEmailView;
+      emailView.setError(getString(R.string.error_field_required));
+      focusView = emailView;
       cancel = true;
     } else if (!isEmailValid(email)) {
-      mEmailView.setError(getString(R.string.error_invalid_email));
-      focusView = mEmailView;
+      emailView.setError(getString(R.string.error_invalid_email));
+      focusView = emailView;
       cancel = true;
     }
 
@@ -125,30 +127,40 @@ public class LoginActivity extends AppCompatActivity {
       focusView.requestFocus();
     } else {
       hostSelectionInterceptor.setScheme("https");
-      Call<ResponseBody> call = retrofit.create(LoginService.class).login(email, password);
-      call.enqueue(new Callback<ResponseBody>() {
-        @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-          BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
-          StringBuffer result = null;
-          try {
-            result = new StringBuffer();
-            String line;
-            while ((line = reader.readLine()) != null) {
-              result.append(line);
+      Observable<ResponseBody> observable = retrofit.create(LoginService.class).login(email, password);
+      observable.subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Observer<ResponseBody>() {
+            @Override public void onSubscribe(Disposable d) {
+
             }
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
 
-          textView.setText(result.toString());
-          hostSelectionInterceptor.setScheme(null);
-        }
+            @Override public void onNext(ResponseBody value) {
+              BufferedReader reader = new BufferedReader(new InputStreamReader(value.byteStream()));
+              StringBuffer result = null;
+              try {
+                result = new StringBuffer();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                  result.append(line);
+                }
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
 
-        @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-          textView.setText(t.toString());
-          hostSelectionInterceptor.setScheme(null);
-        }
-      });
+              textView.setText(result.toString());
+              hostSelectionInterceptor.setScheme(null);
+            }
+
+            @Override public void onError(Throwable e) {
+              textView.setText(e.toString());
+              hostSelectionInterceptor.setScheme(null);
+            }
+
+            @Override public void onComplete() {
+
+            }
+          });
     }
   }
 
@@ -172,27 +184,27 @@ public class LoginActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
       int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-      mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-      mLoginFormView.animate()
+      loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+      loginFormView.animate()
           .setDuration(shortAnimTime)
           .alpha(show ? 0 : 1)
           .setListener(new AnimatorListenerAdapter() {
             @Override public void onAnimationEnd(Animator animation) {
-              mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+              loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
           });
 
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+      progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+      progressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
         @Override public void onAnimationEnd(Animator animation) {
-          mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+          progressView.setVisibility(show ? View.VISIBLE : View.GONE);
         }
       });
     } else {
       // The ViewPropertyAnimator APIs are not available, so simply show
       // and hide the relevant UI components.
-      mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+      progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+      loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
   }
 }

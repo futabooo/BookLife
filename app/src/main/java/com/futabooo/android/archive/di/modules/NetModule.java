@@ -1,12 +1,9 @@
 package com.futabooo.android.archive.di.modules;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.futabooo.android.archive.LoggingInterceptor;
 import com.futabooo.android.archive.BuildConfig;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import com.futabooo.android.archive.LoggingInterceptor;
@@ -27,13 +24,6 @@ import retrofit2.Retrofit;
   // Constructor needs one parameter to instantiate.
   public NetModule(String baseUrl) {
     this.baseUrl = baseUrl;
-  }
-
-  // Dagger will only look for methods annotated with @Provides
-  @Provides @Singleton
-  // Application reference must come from AppModule.class
-  SharedPreferences providesSharedPreferences(Application application) {
-    return PreferenceManager.getDefaultSharedPreferences(application);
   }
 
   @Provides @Singleton Cache provideOkHttpCache(Application application) {

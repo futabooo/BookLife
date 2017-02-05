@@ -1,6 +1,8 @@
 package com.futabooo.android.archive.di.modules;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -15,5 +17,9 @@ import javax.inject.Singleton;
 
   @Provides @Singleton Application provideApplication() {
     return application;
+  }
+
+  @Provides @Singleton SharedPreferences provideSharedPreferences(Application application) {
+    return PreferenceManager.getDefaultSharedPreferences(application);
   }
 }

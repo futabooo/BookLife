@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.futabooo.android.archive.Archive;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import com.futabooo.android.archive.R;
-import com.futabooo.android.archive.screen.booklist.BookListActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,8 +30,6 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 
-import static com.futabooo.android.archive.R.id.response;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -41,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
   @Inject Retrofit retrofit;
   @Inject HostSelectionInterceptor hostSelectionInterceptor;
 
-  TextView textView;
+  private LoginPresenterImpl loginPresenter;
 
   // UI references.
   private AutoCompleteTextView emailView;
@@ -52,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((Archive) getApplication()).getNetComponent().inject(this);
+    loginPresenter = new LoginPresenterImpl();
+
     setContentView(R.layout.activity_login);
     // Set up the login form.
     emailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -64,14 +63,6 @@ public class LoginActivity extends AppCompatActivity {
           return true;
         }
         return false;
-      }
-    });
-
-    textView = (TextView) findViewById(response);
-    Button button = (Button) findViewById(R.id.booklist_button);
-    button.setOnClickListener(new OnClickListener() {
-      @Override public void onClick(View v) {
-        startActivity(BookListActivity.createIntent(LoginActivity.this));
       }
     });
 
@@ -104,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     View focusView = null;
 
     // Check for a valid password, if the user entered one.
-    if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+    if (!TextUtils.isEmpty(password) && !loginPresenter.isPasswordValid(password)) {
       passwordView.setError(getString(R.string.error_invalid_password));
       focusView = passwordView;
       cancel = true;
@@ -115,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
       emailView.setError(getString(R.string.error_field_required));
       focusView = emailView;
       cancel = true;
-    } else if (!isEmailValid(email)) {
+    } else if (!loginPresenter.isEmailValid(email)) {
       emailView.setError(getString(R.string.error_invalid_email));
       focusView = emailView;
       cancel = true;
@@ -148,12 +139,10 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
               }
 
-              textView.setText(result.toString());
               hostSelectionInterceptor.setScheme(null);
             }
 
             @Override public void onError(Throwable e) {
-              textView.setText(e.toString());
               hostSelectionInterceptor.setScheme(null);
             }
 
@@ -162,16 +151,6 @@ public class LoginActivity extends AppCompatActivity {
             }
           });
     }
-  }
-
-  private boolean isEmailValid(String email) {
-    //TODO: Replace this with your own logic
-    return email.contains("@");
-  }
-
-  private boolean isPasswordValid(String password) {
-    //TODO: Replace this with your own logic
-    return password.length() > 0;
   }
 
   /**

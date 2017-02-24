@@ -18,14 +18,12 @@ import android.widget.TextView;
 import com.futabooo.android.archive.Archive;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import com.futabooo.android.archive.R;
+import com.futabooo.android.archive.screen.home.HomeActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -127,18 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override public void onNext(ResponseBody value) {
-              BufferedReader reader = new BufferedReader(new InputStreamReader(value.byteStream()));
-              StringBuffer result = null;
-              try {
-                result = new StringBuffer();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                  result.append(line);
-                }
-              } catch (IOException e) {
-                e.printStackTrace();
-              }
-
+              startActivity(HomeActivity.createIntent(LoginActivity.this));
               hostSelectionInterceptor.setScheme(null);
             }
 

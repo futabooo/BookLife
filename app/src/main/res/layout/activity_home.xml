@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+  <RelativeLayout
+      android:id="@+id/activity_main"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingBottom="@dimen/activity_vertical_margin"
+      android:paddingLeft="@dimen/activity_horizontal_margin"
+      android:paddingRight="@dimen/activity_horizontal_margin"
+      android:paddingTop="@dimen/activity_vertical_margin"
+      tools:context="com.futabooo.android.archive.screen.home.HomeActivity"
+      >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        />
+
+    <TextView
+        android:id="@+id/reading_volume_this_month_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        tools:text="当月の読書量"
+        />
+
+    <TextView
+        android:id="@+id/reading_page_this_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_this_month_title"
+        android:layout_toLeftOf="@+id/reading_volume_this_month"
+        tools:text="100ページ"
+        />
+
+    <TextView
+        android:id="@+id/reading_volume_this_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_this_month_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        tools:text="100冊"
+        />
+
+    <TextView
+        android:id="@+id/reading_page_par_day_this_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_this_month_title"
+        android:layout_toRightOf="@+id/reading_volume_this_month"
+        tools:text="100ページ/日"
+        />
+
+    <TextView
+        android:id="@+id/reading_volume_last_month_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_this_month"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        tools:text="先月の読書量"
+        />
+
+    <TextView
+        android:id="@+id/reading_page_last_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_last_month_title"
+        android:layout_toLeftOf="@+id/reading_volume_last_month"
+        tools:text="200ページ"
+        />
+
+    <TextView
+        android:id="@+id/reading_volume_last_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_last_month_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        tools:text="200冊"
+        />
+
+    <TextView
+        android:id="@+id/reading_page_par_day_last_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reading_volume_last_month_title"
+        android:layout_toRightOf="@+id/reading_volume_last_month"
+        tools:text="200ページ/日"
+        />
+
+  </RelativeLayout>
+</layout>

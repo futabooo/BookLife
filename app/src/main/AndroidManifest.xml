@@ -21,6 +21,9 @@
       </intent-filter>
     </activity>
 
+    <activity android:name=".screen.home.HomeActivity">
+    </activity>
+
     <activity android:name=".screen.booklist.BookListActivity">
     </activity>
   </application>

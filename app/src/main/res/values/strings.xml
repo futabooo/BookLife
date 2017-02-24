@@ -11,4 +11,10 @@
   <string name="error_incorrect_password">This password is incorrect</string>
   <string name="error_field_required">This field is required</string>
   <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+
+
+  <string name="reading_page">%sページ</string>
+  <string name="reading_volume">%s冊</string>
+  <string name="reading_page_par_day">%sページ/日</string>
+
 </resources>

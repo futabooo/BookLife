@@ -3,6 +3,7 @@ package com.futabooo.android.archive.screen.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import com.futabooo.android.archive.Archive;
 import com.futabooo.android.archive.HostSelectionInterceptor;
 import com.futabooo.android.archive.R;
+import com.futabooo.android.archive.databinding.ActivityLoginBinding;
 import com.futabooo.android.archive.screen.home.HomeActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -36,25 +36,17 @@ public class LoginActivity extends AppCompatActivity {
   @Inject Retrofit retrofit;
   @Inject HostSelectionInterceptor hostSelectionInterceptor;
 
-  private LoginPresenterImpl loginPresenter;
+  private ActivityLoginBinding binding;
 
-  // UI references.
-  private AutoCompleteTextView emailView;
-  private EditText passwordView;
-  private View progressView;
-  private View loginFormView;
+  private LoginPresenterImpl loginPresenter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((Archive) getApplication()).getNetComponent().inject(this);
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     loginPresenter = new LoginPresenterImpl();
 
-    setContentView(R.layout.activity_login);
-    // Set up the login form.
-    emailView = (AutoCompleteTextView) findViewById(R.id.email);
-
-    passwordView = (EditText) findViewById(R.id.password);
-    passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    binding.password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
         if (id == R.id.login || id == EditorInfo.IME_NULL) {
           attemptLogin();
@@ -70,9 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         attemptLogin();
       }
     });
-
-    loginFormView = findViewById(R.id.login_form);
-    progressView = findViewById(R.id.login_progress);
   }
 
   /**
@@ -82,31 +71,31 @@ public class LoginActivity extends AppCompatActivity {
    */
   private void attemptLogin() {
     // Reset errors.
-    emailView.setError(null);
-    passwordView.setError(null);
+    binding.email.setError(null);
+    binding.password.setError(null);
 
     // Store values at the time of the login attempt.
-    String email = emailView.getText().toString();
-    String password = passwordView.getText().toString();
+    String email = binding.email.getText().toString();
+    String password = binding.password.getText().toString();
 
     boolean cancel = false;
     View focusView = null;
 
     // Check for a valid password, if the user entered one.
     if (!TextUtils.isEmpty(password) && !loginPresenter.isPasswordValid(password)) {
-      passwordView.setError(getString(R.string.error_invalid_password));
-      focusView = passwordView;
+      binding.password.setError(getString(R.string.error_invalid_password));
+      focusView = binding.password;
       cancel = true;
     }
 
     // Check for a valid email address.
     if (TextUtils.isEmpty(email)) {
-      emailView.setError(getString(R.string.error_field_required));
-      focusView = emailView;
+      binding.email.setError(getString(R.string.error_field_required));
+      focusView = binding.email;
       cancel = true;
     } else if (!loginPresenter.isEmailValid(email)) {
-      emailView.setError(getString(R.string.error_invalid_email));
-      focusView = emailView;
+      binding.email.setError(getString(R.string.error_invalid_email));
+      focusView = binding.email;
       cancel = true;
     }
 
@@ -150,27 +139,27 @@ public class LoginActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
       int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-      loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-      loginFormView.animate()
+      binding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
+      binding.loginForm.animate()
           .setDuration(shortAnimTime)
           .alpha(show ? 0 : 1)
           .setListener(new AnimatorListenerAdapter() {
             @Override public void onAnimationEnd(Animator animation) {
-              loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+              binding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
             }
           });
 
-      progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      progressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+      binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+      binding.loginProgress.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
         @Override public void onAnimationEnd(Animator animation) {
-          progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+          binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
         }
       });
     } else {
       // The ViewPropertyAnimator APIs are not available, so simply show
       // and hide the relevant UI components.
-      progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-      loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+      binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+      binding.loginForm.setVisibility(show ? View.GONE : View.VISIBLE);
     }
   }
 }

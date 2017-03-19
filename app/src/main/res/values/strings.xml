@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Archive</string>
+  <string name="app_name">BookLife</string>
 
   <!-- Strings related to login -->
   <string name="prompt_email">Email</string>

@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.screen.booklist;
+package com.futabooo.android.booklife.screen.booklist;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;

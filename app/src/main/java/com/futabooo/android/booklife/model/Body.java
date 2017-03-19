@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.model;
+package com.futabooo.android.booklife.model;
 
 import com.ekchang.jsouper.SoupQuery;
 

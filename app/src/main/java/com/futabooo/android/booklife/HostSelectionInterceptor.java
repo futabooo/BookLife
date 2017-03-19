@@ -1,4 +1,4 @@
-package com.futabooo.android.archive;
+package com.futabooo.android.booklife;
 
 import java.io.IOException;
 import okhttp3.HttpUrl;

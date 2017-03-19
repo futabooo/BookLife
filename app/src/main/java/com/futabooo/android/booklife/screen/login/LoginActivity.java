@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.screen.login;
+package com.futabooo.android.booklife.screen.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -14,11 +14,11 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
-import com.futabooo.android.archive.Archive;
-import com.futabooo.android.archive.HostSelectionInterceptor;
-import com.futabooo.android.archive.R;
-import com.futabooo.android.archive.databinding.ActivityLoginBinding;
-import com.futabooo.android.archive.screen.home.HomeActivity;
+import com.futabooo.android.booklife.BookLife;
+import com.futabooo.android.booklife.HostSelectionInterceptor;
+import com.futabooo.android.booklife.R;
+import com.futabooo.android.booklife.databinding.ActivityLoginBinding;
+import com.futabooo.android.booklife.screen.home.HomeActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    ((Archive) getApplication()).getNetComponent().inject(this);
+    ((BookLife) getApplication()).getNetComponent().inject(this);
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     loginPresenter = new LoginPresenterImpl();
 

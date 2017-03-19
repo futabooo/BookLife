@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.screen.home;
+package com.futabooo.android.booklife.screen.home;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;

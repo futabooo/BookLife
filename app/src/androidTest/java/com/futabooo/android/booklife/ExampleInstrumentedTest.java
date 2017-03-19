@@ -1,4 +1,4 @@
-package com.futabooo.android.archive;
+package com.futabooo.android.booklife;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -19,6 +19,6 @@ import static org.junit.Assert.*;
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getTargetContext();
 
-    assertEquals("com.futabooo.android.archive", appContext.getPackageName());
+    assertEquals("com.futabooo.android.booklife", appContext.getPackageName());
   }
 }

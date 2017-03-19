@@ -1,12 +1,12 @@
-package com.futabooo.android.archive;
+package com.futabooo.android.booklife;
 
 import android.app.Application;
-import com.futabooo.android.archive.di.components.DaggerNetComponent;
-import com.futabooo.android.archive.di.components.NetComponent;
-import com.futabooo.android.archive.di.modules.AppModule;
-import com.futabooo.android.archive.di.modules.NetModule;
+import com.futabooo.android.booklife.di.components.DaggerNetComponent;
+import com.futabooo.android.booklife.di.components.NetComponent;
+import com.futabooo.android.booklife.di.modules.AppModule;
+import com.futabooo.android.booklife.di.modules.NetModule;
 
-public class Archive extends Application {
+public class BookLife extends Application {
 
   private static final String BASE_URL = "http://i.bookmeter.com";
 

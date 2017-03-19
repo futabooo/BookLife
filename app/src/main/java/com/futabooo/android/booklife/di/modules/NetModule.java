@@ -1,12 +1,12 @@
-package com.futabooo.android.archive.di.modules;
+package com.futabooo.android.booklife.di.modules;
 
 import android.app.Application;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.futabooo.android.archive.BuildConfig;
-import com.futabooo.android.archive.HostSelectionInterceptor;
-import com.futabooo.android.archive.LoggingInterceptor;
+import com.futabooo.android.booklife.BuildConfig;
+import com.futabooo.android.booklife.HostSelectionInterceptor;
+import com.futabooo.android.booklife.LoggingInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import dagger.Module;
 import dagger.Provides;

@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.screen.booklist;
+package com.futabooo.android.booklife.screen.booklist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.futabooo.android.archive.Archive;
-import com.futabooo.android.archive.R;
+import com.futabooo.android.booklife.BookLife;
+import com.futabooo.android.booklife.R;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -43,7 +43,7 @@ public class BookListActivity extends AppCompatActivity {
     });
     textView = (TextView) findViewById(R.id.booklist);
 
-    ((Archive) getApplication()).getNetComponent().inject(this);
+    ((BookLife) getApplication()).getNetComponent().inject(this);
   }
 
   private void getBookList() {

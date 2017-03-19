@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.screen.login;
+package com.futabooo.android.booklife.screen.login;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;

@@ -1,4 +1,4 @@
-package com.futabooo.android.archive.di.modules;
+package com.futabooo.android.booklife.di.modules;
 
 import android.app.Application;
 import android.content.SharedPreferences;

@@ -12,6 +12,7 @@ import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivityMainBinding;
 import com.futabooo.android.booklife.screen.booklist.BookListFragment;
 import com.futabooo.android.booklife.screen.home.HomeFragment;
+import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
           fragmentTransaction.replace(binding.contentContainer.getId(), bookListFragment);
           fragmentTransaction.commit();
         }
+      }
+    });
+
+    binding.bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+      @Override public void onTabReSelected(@IdRes int tabId) {
+        // do reselected
       }
     });
   }

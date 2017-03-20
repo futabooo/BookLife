@@ -21,11 +21,9 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="com.futabooo.android.booklife.screen.home.HomeActivity">
+    <activity android:name="com.futabooo.android.booklife.screen.MainActivity">
     </activity>
 
-    <activity android:name="com.futabooo.android.booklife.screen.booklist.BookListActivity">
-    </activity>
   </application>
 
 </manifest>

@@ -57,5 +57,8 @@ dependencies {
   compile 'com.github.bumptech.glide:glide:3.7.0'
   compile 'jp.wasabeef:glide-transformations:2.0.1'
 
+  // views
+  compile 'com.roughike:bottom-bar:2.1.1'
+
   testCompile 'junit:junit:4.12'
 }

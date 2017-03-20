@@ -18,11 +18,12 @@ import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.HostSelectionInterceptor;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivityLoginBinding;
-import com.futabooo.android.booklife.screen.home.HomeActivity;
+import com.futabooo.android.booklife.screen.MainActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
@@ -108,13 +109,18 @@ public class LoginActivity extends AppCompatActivity {
       Observable<ResponseBody> observable = retrofit.create(LoginService.class).login(email, password);
       observable.subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
+          .doOnSubscribe(new Consumer<Disposable>() {
+            @Override public void accept(Disposable disposable) throws Exception {
+              showProgress(true);
+            }
+          })
           .subscribe(new Observer<ResponseBody>() {
             @Override public void onSubscribe(Disposable d) {
 
             }
 
             @Override public void onNext(ResponseBody value) {
-              startActivity(HomeActivity.createIntent(LoginActivity.this));
+              startActivity(MainActivity.createIntent(LoginActivity.this));
               hostSelectionInterceptor.setScheme(null);
             }
 

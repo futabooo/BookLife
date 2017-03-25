@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
 public class BookListFragment extends Fragment {
@@ -27,6 +30,8 @@ public class BookListFragment extends Fragment {
   @Inject Retrofit retrofit;
 
   private FragmentBookListBinding binding;
+  private BookAdapter bookAdapter;
+
 
   public BookListFragment() {
   }
@@ -36,7 +41,6 @@ public class BookListFragment extends Fragment {
     //args.putString(key, value);
     BookListFragment f = new BookListFragment();
     f.setArguments(args);
-
     return f;
   }
 
@@ -53,6 +57,12 @@ public class BookListFragment extends Fragment {
 
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
+    binding.bookList.setHasFixedSize(true);
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+    binding.bookList.setLayoutManager(layoutManager);
+
     binding.get.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         getBookList();
@@ -82,11 +92,12 @@ public class BookListFragment extends Fragment {
               e.printStackTrace();
             }
 
-            binding.booklist.setText(result.toString());
+            Elements bookList = Jsoup.parse(result.toString()).select("div.book_list_box div.book");
+            bookAdapter = new BookAdapter(getContext(),bookList);
+            binding.bookList.setAdapter(bookAdapter);
           }
 
           @Override public void onError(Throwable e) {
-            binding.booklist.setText(e.toString());
           }
 
           @Override public void onComplete() {

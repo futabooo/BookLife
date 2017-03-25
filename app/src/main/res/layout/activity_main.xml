@@ -17,7 +17,6 @@
           android:id="@+id/content_container"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_above="@+id/bottomBar"
           />
 
     </android.support.v4.widget.NestedScrollView>
@@ -28,6 +27,7 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom"
         app:bb_activeTabColor="@color/accent"
+        app:bb_behavior="shy"
         app:bb_tabXmlResource="@xml/bottom_bar_tabs"
         />
 

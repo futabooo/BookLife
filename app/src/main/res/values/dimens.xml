@@ -3,6 +3,12 @@
   <dimen name="activity_horizontal_margin">16dp</dimen>
   <dimen name="activity_vertical_margin">16dp</dimen>
 
+  <!-- standard metrics -->
+  <dimen name="space_small">4dp</dimen>
+  <dimen name="space_medium">8dp</dimen>
+  <dimen name="space_large">16dp</dimen>
+  <dimen name="space_xlarge">32dp</dimen>
+
   <!-- App Primary Text Sizes -->
   <dimen name="app_text_size_xsmall">11sp</dimen>
   <dimen name="app_text_size_small">12sp</dimen>

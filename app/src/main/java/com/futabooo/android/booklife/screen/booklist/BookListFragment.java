@@ -63,11 +63,7 @@ public class BookListFragment extends Fragment {
     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     binding.bookList.setLayoutManager(layoutManager);
 
-    binding.get.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        getBookList();
-      }
-    });
+    getBookList();
   }
 
   private void getBookList() {

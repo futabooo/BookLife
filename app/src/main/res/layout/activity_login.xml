@@ -26,15 +26,13 @@
         style="?android:attr/progressBarStyleLarge"
         />
 
-    <TextView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <ImageView
+        android:layout_width="240dp"
+        android:layout_height="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/logo_margin_top"
-        android:text="@string/app_name"
-        android:textSize="32dp"
+        android:src="@drawable/ic_logo"
         />
 
     <LinearLayout
@@ -65,7 +63,6 @@
       <android.support.design.widget.TextInputLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@id/logo"
           >
 
         <EditText

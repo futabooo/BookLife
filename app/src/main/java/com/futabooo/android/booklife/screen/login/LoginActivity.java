@@ -3,7 +3,9 @@ package com.futabooo.android.booklife.screen.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.TextView;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.HostSelectionInterceptor;
@@ -29,9 +30,6 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends AppCompatActivity {
 
   @Inject Retrofit retrofit;
@@ -57,10 +55,25 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-    Button signInButton = (Button) findViewById(R.id.sign_in_button);
-    signInButton.setOnClickListener(new OnClickListener() {
+    binding.signInButton.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View view) {
         attemptLogin();
+      }
+    });
+
+    binding.forgetPassword.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        Uri uri = Uri.parse("http://i.bookmeter.com/reset_password");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+      }
+    });
+
+    binding.signUp.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        Uri uri = Uri.parse("https://i.bookmeter.com/signup");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
       }
     });
   }

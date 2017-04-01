@@ -102,6 +102,8 @@
           android:layout_gravity="center_horizontal"
           android:layout_marginBottom="64dp"
           android:layout_marginTop="@dimen/space_large"
+          android:background="?android:attr/selectableItemBackground"
+          android:clickable="true"
           android:text="@string/forget_password"
           android:textColor="@color/secondary_text"
           />
@@ -113,7 +115,6 @@
           android:orientation="horizontal"
           >
         <TextView
-            android:id="@+id/create_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -129,6 +130,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/space_small"
             android:layout_marginTop="@dimen/space_medium"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
             android:text="@string/sign_up"
             android:textColor="@color/secondary_text"
             />

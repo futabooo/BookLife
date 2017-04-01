@@ -57,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-    Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-    mEmailSignInButton.setOnClickListener(new OnClickListener() {
+    Button signInButton = (Button) findViewById(R.id.sign_in_button);
+    signInButton.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View view) {
         attemptLogin();
       }

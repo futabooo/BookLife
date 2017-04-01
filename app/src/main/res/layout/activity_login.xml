@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:drawme="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screen.login.LoginActivity"
     >
 
-  <LinearLayout
+  <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center_horizontal"
@@ -12,86 +14,128 @@
       android:paddingLeft="@dimen/activity_horizontal_margin"
       android:paddingRight="@dimen/activity_horizontal_margin"
       android:paddingTop="@dimen/activity_vertical_margin"
-      tools:context=".screen.login.LoginActivity"
       >
-
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/space_medium"
         android:visibility="gone"
         style="?android:attr/progressBarStyleLarge"
         />
 
     <TextView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/logo_margin_top"
         android:text="@string/app_name"
-        android:textSize="@dimen/app_text_size_xlarge"
+        android:textSize="32dp"
         />
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/space_xlarge"
+        android:paddingRight="@dimen/space_xlarge"
         >
-
-      <LinearLayout
-          android:id="@+id/email_login_form"
+      <android.support.design.widget.TextInputLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:orientation="vertical"
           >
 
-        <android.support.design.widget.TextInputLayout
+        <AutoCompleteTextView
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-
-          <AutoCompleteTextView
-              android:id="@+id/email"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/prompt_email"
-              android:inputType="textEmailAddress"
-              android:maxLines="1"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-          <EditText
-              android:id="@+id/password"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:hint="@string/prompt_password"
-              android:imeActionId="@+id/login"
-              android:imeActionLabel="@string/action_sign_in_short"
-              android:imeOptions="actionUnspecified"
-              android:inputType="textPassword"
-              android:maxLines="1"
-              />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:id="@+id/email_sign_in_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"
-            style="?android:textAppearanceSmall"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
             />
 
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/logo"
+          >
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_password"
+            android:imeActionId="@+id/login"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <com.rafakob.drawme.DrawMeButton
+          android:id="@+id/sign_in_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:layout_marginLeft="@dimen/space_xlarge"
+          android:layout_marginRight="@dimen/space_xlarge"
+          android:layout_marginTop="36dp"
+          android:text="@string/action_sign_in"
+          android:textColor="@android:color/white"
+          drawme:dm_backColor="@color/accent"
+          drawme:dm_radius="32dp"
+          drawme:dm_textColor="@android:color/white"
+          style="?android:textAppearanceSmall"
+          />
+
+      <TextView
+          android:id="@+id/forget_password"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:layout_marginBottom="64dp"
+          android:layout_marginTop="@dimen/space_large"
+          android:text="@string/forget_password"
+          android:textColor="@color/secondary_text"
+          />
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_horizontal"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:id="@+id/create_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/space_medium"
+            android:text="@string/create_account"
+            android:textColor="@color/secondary_text"
+            />
+
+        <TextView
+            android:id="@+id/sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/space_small"
+            android:layout_marginTop="@dimen/space_medium"
+            android:text="@string/sign_up"
+            android:textColor="@color/secondary_text"
+            />
       </LinearLayout>
-    </ScrollView>
-  </LinearLayout>
+    </LinearLayout>
+  </RelativeLayout>
 </layout>

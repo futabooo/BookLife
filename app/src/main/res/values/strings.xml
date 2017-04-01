@@ -1,7 +1,7 @@
 <resources>
   <string name="app_name">BookLife</string>
 
-  <!-- Strings related to login -->
+  <!-- LoginActivity -->
   <string name="prompt_email">Email</string>
   <string name="prompt_password">Password</string>
   <string name="action_sign_in">Sign in</string>
@@ -11,8 +11,11 @@
   <string name="error_incorrect_password">This password is incorrect</string>
   <string name="error_field_required">This field is required</string>
   <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+  <string name="forget_password">Forget your password?</string>
+  <string name="sign_up">Sign Up</string>
+  <string name="create_account">Doesn\'t have an account?</string>
 
-
+  <!-- BookListFragment -->
   <string name="reading_page">%sページ</string>
   <string name="reading_volume">%s冊</string>
   <string name="reading_page_par_day">%sページ/日</string>

@@ -10,10 +10,6 @@
       android:layout_height="match_parent"
       android:gravity="center_horizontal"
       android:orientation="vertical"
-      android:paddingBottom="@dimen/activity_vertical_margin"
-      android:paddingLeft="@dimen/activity_horizontal_margin"
-      android:paddingRight="@dimen/activity_horizontal_margin"
-      android:paddingTop="@dimen/activity_vertical_margin"
       >
     <!-- Login progress -->
     <ProgressBar
@@ -84,8 +80,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
-          android:layout_marginLeft="@dimen/space_xlarge"
-          android:layout_marginRight="@dimen/space_xlarge"
+          android:layout_marginLeft="@dimen/space_large"
+          android:layout_marginRight="@dimen/space_large"
           android:layout_marginTop="36dp"
           android:text="@string/action_sign_in"
           android:textColor="@android:color/white"

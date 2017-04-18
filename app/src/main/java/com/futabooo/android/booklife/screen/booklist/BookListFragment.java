@@ -1,5 +1,6 @@
 package com.futabooo.android.booklife.screen.booklist;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentBookListBinding;
+import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,6 +24,7 @@ import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
@@ -31,7 +34,6 @@ public class BookListFragment extends Fragment {
 
   private FragmentBookListBinding binding;
   private BookAdapter bookAdapter;
-
 
   public BookListFragment() {
   }
@@ -89,8 +91,15 @@ public class BookListFragment extends Fragment {
             }
 
             Elements bookList = Jsoup.parse(result.toString()).select("div.book_list_box div.book");
-            bookAdapter = new BookAdapter(getContext(),bookList);
+            bookAdapter = new BookAdapter(getContext(), bookList);
             binding.bookList.setAdapter(bookAdapter);
+            bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
+              @Override public void onItemClick(BookAdapter adapter, int position, Element book) {
+                String path = book.select("div.book_list_detail a").attr("href");
+                Intent intent = BookDetailActivity.createIntent(getContext(), path);
+                startActivity(intent);
+              }
+            });
           }
 
           @Override public void onError(Throwable e) {

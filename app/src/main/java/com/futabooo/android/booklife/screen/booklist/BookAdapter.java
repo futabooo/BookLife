@@ -12,18 +12,32 @@ import com.futabooo.android.booklife.R;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> implements View.OnClickListener {
 
   private Context context;
   private Elements books;
+
+  private RecyclerView recyclerView;
+  private OnItemClickListener listener;
 
   public BookAdapter(Context context, Elements books) {
     this.context = context;
     this.books = books;
   }
 
+  @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    super.onAttachedToRecyclerView(recyclerView);
+    this.recyclerView = recyclerView;
+  }
+
+  @Override public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    super.onDetachedFromRecyclerView(recyclerView);
+    this.recyclerView = null;
+  }
+
   @Override public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.component_book_card_view, parent, false);
+    itemView.setOnClickListener(this);
     return new BookViewHolder(itemView);
   }
 
@@ -39,6 +53,26 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
   @Override public int getItemCount() {
     return books.size();
+  }
+
+  @Override public void onClick(View view) {
+    if (recyclerView == null) {
+      return;
+    }
+
+    if (listener != null) {
+      int position = recyclerView.getChildAdapterPosition(view);
+      Element book = books.get(position);
+      listener.onItemClick(this, position, book);
+    }
+  }
+
+  public void setOnItemClickListener(OnItemClickListener listener) {
+    this.listener = listener;
+  }
+
+  public static interface OnItemClickListener {
+    public void onItemClick(BookAdapter adapter, int position, Element book);
   }
 
   public static class BookViewHolder extends RecyclerView.ViewHolder {

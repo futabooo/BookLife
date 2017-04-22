@@ -11,19 +11,19 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity
-        android:name=".screen.login.LoginActivity"
-        android:theme="@style/NoActionBar">
+    <activity android:name=".screen.splash.SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-    <activity android:name=".screen.MainActivity">
-    </activity>
-    <activity android:name=".screen.bookdetail.BookDetailActivity">
-    </activity>
+
+    <activity
+        android:name=".screen.login.LoginActivity"
+        android:theme="@style/NoActionBar"/>
+
+    <activity android:name=".screen.MainActivity"/>
+    <activity android:name=".screen.bookdetail.BookDetailActivity"/>
   </application>
 
 </manifest>

@@ -10,8 +10,11 @@
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:supportsRtl="true"
-      android:theme="@style/SplashTheme">
-    <activity android:name=".screen.splash.SplashActivity">
+      android:theme="@style/NoActionBar">
+
+    <activity
+        android:name=".screen.splash.SplashActivity"
+        android:theme="@style/SplashTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -20,10 +23,21 @@
 
     <activity
         android:name=".screen.login.LoginActivity"
-        android:theme="@style/NoActionBar"/>
+        android:theme="@style/NoActionBar">
+    </activity>
 
-    <activity android:name=".screen.MainActivity"/>
-    <activity android:name=".screen.bookdetail.BookDetailActivity"/>
+    <activity
+        android:name=".screen.MainActivity">
+    </activity>
+
+    <activity
+        android:name=".screen.bookdetail.BookDetailActivity">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value=".screen.MainActivity"
+          />
+    </activity>
+
   </application>
 
 </manifest>

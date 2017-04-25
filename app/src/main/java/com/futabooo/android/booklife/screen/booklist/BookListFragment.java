@@ -96,7 +96,7 @@ public class BookListFragment extends Fragment {
             bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
               @Override public void onItemClick(BookAdapter adapter, int position, Element book) {
                 String path = book.select("div.book_list_detail a").attr("href");
-                Intent intent = BookDetailActivity.createIntent(getContext(), path);
+                Intent intent = BookDetailActivity.createIntent(getContext(), path.substring(3));
                 startActivity(intent);
               }
             });

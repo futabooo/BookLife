@@ -20,4 +20,7 @@
   <string name="reading_volume">%s冊</string>
   <string name="reading_page_par_day">%sページ/日</string>
 
+  <!-- BookDetailActivity -->
+  <string name="amazon">Amazon</string>
+
 </resources>

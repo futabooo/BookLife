@@ -3,11 +3,13 @@ package com.futabooo.android.booklife.screen.bookdetail;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
@@ -48,6 +50,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
     setSupportActionBar(binding.bookDetailToolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    binding.bookDetailToolbar.setTitle("");
 
     String bookId = getIntent().getExtras().getString(EXTRA_BOOK_PATH);
     Log.d(this.getClass().getName(), "onItemClick: " + bookId);
@@ -75,10 +78,20 @@ public class BookDetailActivity extends AppCompatActivity {
 
             Document document = Jsoup.parse(result.toString());
             String title = document.select("h1").text();
+            String author = document.select("div.default_box_body_link span").text();
             String thumbnail = document.select("div.book_detail_thumb img").first().absUrl("src");
+            final String url = document.select("div.button_amazon_kindle a").attr("href");
 
             binding.bookDetailToolbar.setTitle(title);
+            binding.bookDetailBookAuthor.setText(author);
             Glide.with(BookDetailActivity.this).load(thumbnail).into(binding.bookDetailBookThumbnail);
+            binding.bookDetailBuy.setOnClickListener(new View.OnClickListener() {
+              @Override public void onClick(View v) {
+                Uri uri = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+              }
+            });
           }
 
           @Override public void onError(Throwable e) {

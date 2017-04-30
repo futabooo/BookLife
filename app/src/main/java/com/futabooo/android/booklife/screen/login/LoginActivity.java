@@ -3,13 +3,16 @@ package com.futabooo.android.booklife.screen.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +23,22 @@ import com.futabooo.android.booklife.HostSelectionInterceptor;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivityLoginBinding;
 import com.futabooo.android.booklife.screen.MainActivity;
+import com.kazakago.cryptore.Cryptore;
+import com.kazakago.cryptore.EncryptResult;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
+import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
@@ -34,16 +47,30 @@ public class LoginActivity extends AppCompatActivity {
 
   @Inject Retrofit retrofit;
   @Inject HostSelectionInterceptor hostSelectionInterceptor;
+  @Inject SharedPreferences sharedPreferences;
+  @Inject Cryptore cryptore;
+
+  public static final String EXTRA_EMAIL = "email";
+  public static final String EXTRA_PASSWORD = "password";
 
   private ActivityLoginBinding binding;
-
   private LoginPresenterImpl loginPresenter;
+
+  public static Intent createIntent(Context context, String email, String password) {
+    Intent intent = new Intent(context, LoginActivity.class);
+    intent.putExtra(EXTRA_EMAIL, email);
+    intent.putExtra(EXTRA_PASSWORD, password);
+    return intent;
+  }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((BookLife) getApplication()).getNetComponent().inject(this);
     binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
     loginPresenter = new LoginPresenterImpl();
+
+    binding.email.setText(getIntent().getStringExtra(EXTRA_EMAIL));
+    binding.password.setText(getIntent().getStringExtra(EXTRA_PASSWORD));
 
     binding.password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
       @Override public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -89,8 +116,8 @@ public class LoginActivity extends AppCompatActivity {
     binding.password.setError(null);
 
     // Store values at the time of the login attempt.
-    String email = binding.email.getText().toString();
-    String password = binding.password.getText().toString();
+    final String email = binding.email.getText().toString();
+    final String password = binding.password.getText().toString();
 
     boolean cancel = false;
     View focusView = null;
@@ -133,6 +160,36 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override public void onNext(ResponseBody value) {
+              try {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                byte[] emailBytes = email.getBytes();
+                EncryptResult encryptEmail = cryptore.encrypt(emailBytes);
+                editor.putString("email", Base64.encodeToString(encryptEmail.getBytes(), Base64.DEFAULT));
+                editor.apply();
+
+                byte[] passwordBytes = password.getBytes();
+                EncryptResult encryptPassword = cryptore.encrypt(passwordBytes);
+                editor.putString("password", Base64.encodeToString(encryptPassword.getBytes(), Base64.DEFAULT));
+                editor.apply();
+              } catch (UnrecoverableEntryException e) {
+                e.printStackTrace();
+              } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+              } catch (KeyStoreException e) {
+                e.printStackTrace();
+              } catch (InvalidKeyException e) {
+                e.printStackTrace();
+              } catch (InvalidAlgorithmParameterException e) {
+                e.printStackTrace();
+              } catch (NoSuchPaddingException e) {
+                e.printStackTrace();
+              } catch (IOException e) {
+                e.printStackTrace();
+              } catch (NoSuchProviderException e) {
+                e.printStackTrace();
+              }
+
               startActivity(MainActivity.createIntent(LoginActivity.this));
               hostSelectionInterceptor.setScheme(null);
             }
@@ -169,11 +226,14 @@ public class LoginActivity extends AppCompatActivity {
           });
 
       binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-      binding.loginProgress.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-        @Override public void onAnimationEnd(Animator animation) {
-          binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-      });
+      binding.loginProgress.animate()
+          .setDuration(shortAnimTime)
+          .alpha(show ? 1 : 0)
+          .setListener(new AnimatorListenerAdapter() {
+            @Override public void onAnimationEnd(Animator animation) {
+              binding.loginProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+          });
     } else {
       // The ViewPropertyAnimator APIs are not available, so simply show
       // and hide the relevant UI components.

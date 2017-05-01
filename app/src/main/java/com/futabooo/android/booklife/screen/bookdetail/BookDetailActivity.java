@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,6 +82,11 @@ public class BookDetailActivity extends AppCompatActivity {
             String author = document.select("div.default_box_body_link span").text();
             String thumbnail = document.select("div.book_detail_thumb img").first().absUrl("src");
             final String url = document.select("div.button_amazon_kindle a").attr("href");
+
+            String impression = document.select("div.book_edit_area textarea").text();
+            if (!TextUtils.isEmpty(impression)) {
+              binding.bookDetailImpression.setText(impression);
+            }
 
             binding.bookDetailToolbar.setTitle(title);
             binding.bookDetailBookAuthor.setText(author);

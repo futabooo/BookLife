@@ -74,5 +74,18 @@
           />
     </RelativeLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        >
+      <TextView
+          android:id="@+id/book_detail_impression"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="@dimen/space_large"
+          tools:text="ここには感想やレビューがはいりますよ。えとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえとせとらえ"
+          />
+    </ScrollView>
+
   </LinearLayout>
 </layout>

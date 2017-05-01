@@ -3,9 +3,13 @@
   <tab
       icon="@drawable/ic_home"
       id="@+id/tab_home"
-      title="Home"/>
+      inActiveColor="@color/primary_dark"
+      title="Home"
+      />
   <tab
       icon="@drawable/ic_book"
       id="@+id/tab_book"
-      title="Book"/>
+      inActiveColor="@color/primary_dark"
+      title="Book"
+      />
 </tabs>

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.R;
-import com.futabooo.android.booklife.screen.booklist.BookAdapter;
 import com.rafakob.drawme.DrawMeButton;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,7 +21,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   private Elements books;
 
   private RecyclerView recyclerView;
-  private BookAdapter.OnItemClickListener listener;
+  private OnCardClickListener listener;
 
   public SearchResultAdapter(Context context, Elements books) {
     this.context = context;
@@ -40,7 +39,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   }
 
   @Override public ResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.component_result_view, parent, false);
+    View itemView =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.component_search_result_card_view, parent, false);
     itemView.setOnClickListener(this);
     return new ResultViewHolder(itemView);
   }
@@ -68,7 +68,23 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   }
 
   @Override public void onClick(View v) {
+    if (recyclerView == null) {
+      return;
+    }
 
+    if (listener != null) {
+      int position = recyclerView.getChildAdapterPosition(v);
+      Element book = books.get(position);
+      listener.onCardClick(this, position, book);
+    }
+  }
+
+  public void setOnCardClickListener(OnCardClickListener listener) {
+    this.listener = listener;
+  }
+
+  public interface OnCardClickListener {
+    void onCardClick(SearchResultAdapter adapter, int position, Element book);
   }
 
   public static class ResultViewHolder extends RecyclerView.ViewHolder {

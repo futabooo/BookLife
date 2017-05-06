@@ -12,6 +12,7 @@ import android.view.Menu;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivitySearchBinding;
+import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,6 +24,7 @@ import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
@@ -92,6 +94,13 @@ public class SearchActivity extends AppCompatActivity {
             Elements bookList = Jsoup.parse(result.toString()).select("div.book_list_box div.book");
             resultAdapter = new SearchResultAdapter(SearchActivity.this, bookList);
             binding.activitySearchResultList.setAdapter(resultAdapter);
+            resultAdapter.setOnCardClickListener(new SearchResultAdapter.OnCardClickListener() {
+              @Override public void onCardClick(SearchResultAdapter adapter, int position, Element book) {
+                String path = book.select("div.book_list_detail a").attr("href");
+                Intent intent = BookDetailActivity.createIntent(SearchActivity.this, path.substring(3));
+                startActivity(intent);
+              }
+            });
           }
 
           @Override public void onError(Throwable e) {

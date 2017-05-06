@@ -71,8 +71,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     this.listener = listener;
   }
 
-  public static interface OnItemClickListener {
-    public void onItemClick(BookAdapter adapter, int position, Element book);
+  public interface OnItemClickListener {
+    void onItemClick(BookAdapter adapter, int position, Element book);
   }
 
   public static class BookViewHolder extends RecyclerView.ViewHolder {

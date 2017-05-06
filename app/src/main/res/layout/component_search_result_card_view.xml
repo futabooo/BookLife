@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:drawme="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_result_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/space_small"
+    android:layout_marginLeft="@dimen/space_medium"
+    android:layout_marginRight="@dimen/space_medium"
+    android:layout_marginTop="@dimen/space_small"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardCornerRadius="4dp"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingLeft="@dimen/space_large"
+      android:paddingRight="@dimen/space_large"
+      >
+
+    <ImageView
+        android:id="@+id/search_result_book_thumbnail"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/space_large"
+        tools:src="@color/accent"
+        />
+
+    <TextView
+        android:id="@+id/search_result_book_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_small"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/primary_text"
+        tools:text="本のタイトルだけどめっちゃ長い文字列が入った時にどうなるのかを表す"
+        />
+
+    <TextView
+        android:id="@+id/search_result_book_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_book_title"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/app_text_size_small"
+        tools:text="本の著者名がここにはいる"
+        />
+
+    <TextView
+        android:id="@+id/search_result_book_readers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_book_author"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/app_text_size_small"
+        tools:text="何人が登録したか"
+        />
+
+    <com.rafakob.drawme.DrawMeButton
+        android:id="@+id/search_result_book_register"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@id/search_result_book_readers"
+        android:layout_marginTop="@dimen/space_small"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:text="@string/register"
+        android:textSize="@dimen/app_text_size_medium"
+        drawme:dm_backColor="@color/accent"
+        drawme:dm_radius="4dp"
+        drawme:dm_textColor="@android:color/white"
+        style="?android:textAppearanceSmall"
+        />
+
+    <TextView
+        android:id="@+id/search_result_book_read_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_result_book_readers"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@id/search_result_book_register"
+        android:textColor="@color/secondary_text"
+        tools:text="読了マーク"
+        />
+  </RelativeLayout>
+</android.support.v7.widget.CardView>

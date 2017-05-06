@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module public class NetModule {
 
@@ -57,6 +58,7 @@ import retrofit2.Retrofit;
   @Provides @Singleton Retrofit provideRetrofit(OkHttpClient okHttpClient) {
     Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         //.addConverterFactory(JsoupConverterFactory.create())
         .build();
     return retrofit;

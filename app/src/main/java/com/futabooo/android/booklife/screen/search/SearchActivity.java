@@ -23,12 +23,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements
+    BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener{
 
   @Inject Retrofit retrofit;
 
@@ -101,8 +103,8 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
               }
 
-              @Override public void onRegisterClick(SearchResultAdapter adapter, int position, Element book) {
-                BookRegisterBottomSheetDialogFragment dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance();
+              @Override public void onRegisterClick(String asin) {
+                BookRegisterBottomSheetDialogFragment dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance(asin);
                 dialogFragment.show(getSupportFragmentManager(), "bottom_sheet");
               }
             });
@@ -116,5 +118,36 @@ public class SearchActivity extends AppCompatActivity {
 
           }
         });
+  }
+
+  @Override public void onBottomSheetAction(ActionType type, String asin) {
+    switch (type){
+      case READ:
+        // TODO: 感想の編集できる画面を開く
+        break;
+      case READING:
+      case TO_READ:
+      case QUITTED:
+        Observable<JSONObject> observable = retrofit.create(ActionService.class).addBook(type.getAddBookParam(),asin, System.currentTimeMillis());
+        observable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<JSONObject>() {
+              @Override public void onSubscribe(Disposable d) {
+
+              }
+
+              @Override public void onNext(JSONObject value) {
+
+              }
+
+              @Override public void onError(Throwable e) {
+
+              }
+
+              @Override public void onComplete() {
+
+              }
+            });
+    }
   }
 }

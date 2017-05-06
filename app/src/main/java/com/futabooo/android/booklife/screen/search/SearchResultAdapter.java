@@ -47,7 +47,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         if (listener != null) {
           int position = recyclerView.getChildAdapterPosition((View)v.getParent().getParent());
           Element book = books.get(position);
-          listener.onRegisterClick(SearchResultAdapter.this, position, book);
+          String asin = book.select("div.book_list_detail a").attr("href").substring(3);
+          listener.onRegisterClick(asin);
         }
       }
     });
@@ -95,7 +96,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   public interface OnCardClickListener {
     void onCardClick(SearchResultAdapter adapter, int position, Element book);
 
-    void onRegisterClick(SearchResultAdapter adapter, int position, Element book);
+    void onRegisterClick(String asin);
   }
 
   public static class ResultViewHolder extends RecyclerView.ViewHolder {

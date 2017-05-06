@@ -10,10 +10,8 @@ import com.futabooo.android.booklife.LoggingInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
-import java.net.CookieManager;
 import javax.inject.Singleton;
 import okhttp3.Cache;
-import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -40,16 +38,8 @@ import retrofit2.Retrofit;
     return new LoggingInterceptor();
   }
 
-  @Singleton @Provides public JavaNetCookieJar provideJavaNetCookieJar(CookieManager cookieManager) {
-    return new JavaNetCookieJar(cookieManager);
-  }
-
   @Singleton @Provides public PersistentCookieJar providePersistentCookieJar(Application application) {
     return new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(application));
-  }
-
-  @Singleton @Provides public CookieManager provideCookieManager() {
-    return new CookieManager();
   }
 
   @Provides @Singleton OkHttpClient provideOkHttpClient(Cache cache, HostSelectionInterceptor hostSelectionInterceptor,

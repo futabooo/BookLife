@@ -15,6 +15,10 @@
   <string name="sign_up">Sign Up</string>
   <string name="create_account">Doesn\'t have an account?</string>
 
+  <!-- MainActivity -->
+  <string name="menu_search">search</string>
+  <string name="search_hint">Title・Author</string>
+
   <!-- BookListFragment -->
   <string name="reading_page">%sページ</string>
   <string name="reading_volume">%s冊</string>

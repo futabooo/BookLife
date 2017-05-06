@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_result_item"
+    android:layout_width="match_parent"
+    android:layout_height="172dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    >
+
+  <ImageView
+      android:id="@+id/search_result_book_thumbnail"
+      android:layout_width="100dp"
+      android:layout_height="140dp"
+      android:layout_marginLeft="@dimen/space_large"
+      android:layout_marginStart="@dimen/space_large"
+      android:layout_marginTop="@dimen/space_large"
+      />
+
+  <TextView
+      android:id="@+id/search_result_book_title"
+      android:layout_width="213dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="132dp"
+      android:layout_marginStart="132dp"
+      android:layout_marginTop="@dimen/space_large"
+      tools:text="本のタイトルだけどめっちゃ長い文字列が入った時にどうなるのかを表す"
+      />
+
+</RelativeLayout>

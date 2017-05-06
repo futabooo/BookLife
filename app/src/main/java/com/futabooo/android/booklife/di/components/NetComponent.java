@@ -6,6 +6,7 @@ import com.futabooo.android.booklife.di.modules.AppModule;
 import com.futabooo.android.booklife.di.modules.NetModule;
 import com.futabooo.android.booklife.screen.booklist.BookListFragment;
 import com.futabooo.android.booklife.screen.login.LoginActivity;
+import com.futabooo.android.booklife.screen.search.SearchActivity;
 import com.futabooo.android.booklife.screen.splash.SplashActivity;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -16,4 +17,5 @@ import javax.inject.Singleton;
   void inject(LoginActivity loginActivity);
   void inject(BookListFragment bookListActivity);
   void inject(BookDetailActivity bookDetailActivity);
+  void inject(SearchActivity searchActivity);
 }

@@ -1,31 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:drawme="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_result_item"
     android:layout_width="match_parent"
-    android:layout_height="172dp"
-    android:layout_margin="5dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
+    android:padding="@dimen/space_large"
     >
 
   <ImageView
       android:id="@+id/search_result_book_thumbnail"
       android:layout_width="100dp"
-      android:layout_height="140dp"
-      android:layout_marginLeft="@dimen/space_large"
-      android:layout_marginStart="@dimen/space_large"
-      android:layout_marginTop="@dimen/space_large"
+      android:layout_height="160dp"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="@dimen/space_large"
+      tools:src="@color/accent"
       />
 
   <TextView
       android:id="@+id/search_result_book_title"
-      android:layout_width="213dp"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="132dp"
-      android:layout_marginStart="132dp"
-      android:layout_marginTop="@dimen/space_large"
+      android:layout_marginTop="@dimen/space_small"
+      android:layout_toRightOf="@id/search_result_book_thumbnail"
       tools:text="本のタイトルだけどめっちゃ長い文字列が入った時にどうなるのかを表す"
+      />
+
+  <TextView
+      android:id="@+id/search_result_book_author"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/search_result_book_title"
+      android:layout_marginTop="@dimen/space_small"
+      android:layout_toRightOf="@id/search_result_book_thumbnail"
+      tools:text="本の著者名がここにはいる"
+      />
+
+  <TextView
+      android:id="@+id/search_result_book_readers"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/search_result_book_author"
+      android:layout_marginTop="@dimen/space_small"
+      android:layout_toRightOf="@id/search_result_book_thumbnail"
+      tools:text="何人が登録したか"
+      />
+
+  <com.rafakob.drawme.DrawMeButton
+      android:id="@+id/search_result_book_register"
+      android:layout_width="wrap_content"
+      android:layout_height="36dp"
+      android:layout_below="@id/search_result_book_readers"
+      android:layout_marginTop="@dimen/space_large"
+      android:layout_toRightOf="@id/search_result_book_thumbnail"
+      android:paddingBottom="3dp"
+      android:paddingTop="3dp"
+      android:text="@string/register"
+      android:textSize="@dimen/app_text_size_medium"
+      drawme:dm_backColor="@color/accent"
+      drawme:dm_radius="4dp"
+      drawme:dm_textColor="@android:color/white"
+      style="?android:textAppearanceSmall"
+      />
+
+  <TextView
+      android:id="@+id/search_result_book_read_mark"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/search_result_book_readers"
+      android:layout_marginLeft="@dimen/space_large"
+      android:layout_marginTop="24dp"
+      android:layout_toRightOf="@id/search_result_book_register"
+      tools:text="読了マーク"
       />
 
 </RelativeLayout>

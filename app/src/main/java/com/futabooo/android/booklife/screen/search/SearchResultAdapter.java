@@ -2,6 +2,7 @@ package com.futabooo.android.booklife.screen.search;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.screen.booklist.BookAdapter;
+import com.rafakob.drawme.DrawMeButton;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -48,6 +50,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     String thumbnail = book.select("div.book_list_thumb a img").first().absUrl("src");
     Glide.with(context).load(thumbnail).into(holder.thumbnail);
     holder.title.setText(book.select("div.book_list_detail a").first().attr("title"));
+    holder.author.setText(book.select("div.book_box_book_author a").text());
+    holder.readers.setText(book.select("span.readers").text());
+    String mark = book.select("div.dokuryou_flag_mark").text();
+    if (!TextUtils.isEmpty(mark)) {
+      holder.readMark.setText(mark);
+      holder.readMark.setVisibility(View.VISIBLE);
+      holder.button.setText(context.getString(R.string.edit));
+    } else {
+      holder.readMark.setVisibility(View.INVISIBLE);
+      holder.button.setText(context.getString(R.string.register));
+    }
   }
 
   @Override public int getItemCount() {
@@ -61,11 +74,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   public static class ResultViewHolder extends RecyclerView.ViewHolder {
     protected ImageView thumbnail;
     protected TextView title;
+    protected TextView author;
+    protected TextView readers;
+    protected TextView readMark;
+    protected DrawMeButton button;
 
     public ResultViewHolder(View v) {
       super(v);
       thumbnail = (ImageView) v.findViewById(R.id.search_result_book_thumbnail);
       title = (TextView) v.findViewById(R.id.search_result_book_title);
+      author = (TextView) v.findViewById(R.id.search_result_book_author);
+      readers = (TextView) v.findViewById(R.id.search_result_book_readers);
+      readMark = (TextView) v.findViewById(R.id.search_result_book_read_mark);
+      button = (DrawMeButton) v.findViewById(R.id.search_result_book_register);
     }
   }
 }

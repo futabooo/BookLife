@@ -19,6 +19,10 @@
   <string name="menu_search">search</string>
   <string name="search_hint">Title・Author</string>
 
+  <!-- SearchActivity -->
+  <string name="register">Register</string>
+  <string name="edit">Edit</string>
+
   <!-- BookListFragment -->
   <string name="reading_page">%sページ</string>
   <string name="reading_volume">%s冊</string>

@@ -42,6 +42,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     View itemView =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.component_search_result_card_view, parent, false);
     itemView.setOnClickListener(this);
+    itemView.findViewById(R.id.search_result_book_register).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (listener != null) {
+          int position = recyclerView.getChildAdapterPosition((View)v.getParent().getParent());
+          Element book = books.get(position);
+          listener.onRegisterClick(SearchResultAdapter.this, position, book);
+        }
+      }
+    });
     return new ResultViewHolder(itemView);
   }
 
@@ -85,6 +94,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
   public interface OnCardClickListener {
     void onCardClick(SearchResultAdapter adapter, int position, Element book);
+
+    void onRegisterClick(SearchResultAdapter adapter, int position, Element book);
   }
 
   public static class ResultViewHolder extends RecyclerView.ViewHolder {

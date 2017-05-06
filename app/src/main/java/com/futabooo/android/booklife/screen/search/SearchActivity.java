@@ -100,6 +100,11 @@ public class SearchActivity extends AppCompatActivity {
                 Intent intent = BookDetailActivity.createIntent(SearchActivity.this, path.substring(3));
                 startActivity(intent);
               }
+
+              @Override public void onRegisterClick(SearchResultAdapter adapter, int position, Element book) {
+                BookRegisterBottomSheetDialogFragment dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "bottom_sheet");
+              }
             });
           }
 

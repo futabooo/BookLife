@@ -192,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
 
               startActivity(MainActivity.createIntent(LoginActivity.this));
               hostSelectionInterceptor.setScheme(null);
+              finish();
             }
 
             @Override public void onError(Throwable e) {

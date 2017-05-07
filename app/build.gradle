@@ -3,6 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 ext {
   supportLibraryVersion = '25.3.0'
+  retrofitVersion = '2.1.0'
 }
 
 android {
@@ -47,8 +48,9 @@ dependencies {
   // http client
   compile 'com.squareup.okhttp3:okhttp:3.5.0'
   compile 'com.squareup.okhttp3:okhttp-urlconnection:3.5.0'
-  compile 'com.squareup.retrofit2:retrofit:2.1.0'
-  compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+  compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+  compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+  compile "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
   compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
   compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 

@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import com.bumptech.glide.Glide;
@@ -54,8 +52,6 @@ public class BookDetailActivity extends AppCompatActivity {
     binding.bookDetailToolbar.setTitle("");
 
     String bookId = getIntent().getExtras().getString(EXTRA_BOOK_PATH);
-    Log.d(this.getClass().getName(), "onItemClick: " + bookId);
-
     Observable<ResponseBody> observable = retrofit.create(BookDetailService.class).get(bookId);
     observable.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -115,7 +111,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
     switch (id) {
       case android.R.id.home:
-        NavUtils.navigateUpFromSameTask(this);
+        finish();
         return true;
     }
     return super.onOptionsItemSelected(item);

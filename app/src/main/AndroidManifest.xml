@@ -36,10 +36,10 @@
 
     <activity
         android:name=".screen.bookdetail.BookDetailActivity">
-      <meta-data
-          android:name="android.support.PARENT_ACTIVITY"
-          android:value=".screen.MainActivity"
-          />
+    </activity>
+
+    <activity
+        android:name=".screen.bookedit.BookEditActivity">
     </activity>
 
   </application>

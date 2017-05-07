@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivitySearchBinding;
+import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment;
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -29,8 +32,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
-public class SearchActivity extends AppCompatActivity implements
-    BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener{
+public class SearchActivity extends AppCompatActivity
+    implements BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener,
+    AddBookDialogFragment.OnAddBookActionListener {
 
   @Inject Retrofit retrofit;
 
@@ -104,7 +108,8 @@ public class SearchActivity extends AppCompatActivity implements
               }
 
               @Override public void onRegisterClick(String asin) {
-                BookRegisterBottomSheetDialogFragment dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance(asin);
+                BookRegisterBottomSheetDialogFragment dialogFragment =
+                    BookRegisterBottomSheetDialogFragment.newInstance(asin);
                 dialogFragment.show(getSupportFragmentManager(), "bottom_sheet");
               }
             });
@@ -121,14 +126,17 @@ public class SearchActivity extends AppCompatActivity implements
   }
 
   @Override public void onBottomSheetAction(ActionType type, String asin) {
-    switch (type){
+    switch (type) {
       case READ:
-        // TODO: 感想の編集できる画面を開く
+        //startActivity(BookEditActivity.createIntent(SearchActivity.this, asin));
+        AddBookDialogFragment dialogFragment = AddBookDialogFragment.newInstance(asin);
+        dialogFragment.show(getSupportFragmentManager(), "add_book_dialog");
         break;
       case READING:
       case TO_READ:
       case QUITTED:
-        Observable<JSONObject> observable = retrofit.create(ActionService.class).addBook(type.getAddBookParam(),asin, System.currentTimeMillis());
+        Observable<JSONObject> observable =
+            retrofit.create(ActionService.class).addBook(type.getAddBookParam(), asin, System.currentTimeMillis());
         observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<JSONObject>() {
@@ -148,6 +156,13 @@ public class SearchActivity extends AppCompatActivity implements
 
               }
             });
+    }
+  }
+
+  @Override public void onRegister(String title) {
+    if (!TextUtils.isEmpty(title)) {
+      Snackbar.make(findViewById(android.R.id.content), getString(R.string.registered_book, title),
+          Snackbar.LENGTH_LONG).show();
     }
   }
 }

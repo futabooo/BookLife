@@ -1,5 +1,10 @@
 <resources>
+
+  <!-- Common -->
   <string name="app_name">BookLife</string>
+  <string name="confirm">confirm</string>
+  <string name="cancel">cancel</string>
+
 
   <!-- LoginActivity -->
   <string name="prompt_email">Email</string>
@@ -22,6 +27,7 @@
   <!-- SearchActivity -->
   <string name="register">Register</string>
   <string name="edit">Edit</string>
+  <string name="registered_book">%s Registered</string>
 
   <!-- BookListFragment -->
   <string name="reading_page">%sページ</string>
@@ -31,10 +37,15 @@
   <!-- BookDetailActivity -->
   <string name="amazon">Amazon</string>
 
+  <!-- BookEditActivity -->
+  <string name="spoilers">Spoilers</string>
+  <string name="read_date">Read Date</string>
+  <string name="impressions_review">Impressions・Review</string>
+
   <!-- Bottom Sheet -->
   <string name="reading">Reading</string>
-  <string name="to_read">To Read</string>
   <string name="read">Read</string>
+  <string name="to_read">To Read</string>
   <string name="quitted">Quitted</string>
 
 </resources>

@@ -2,7 +2,6 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:drawme="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_result_item"
     android:layout_width="match_parent"
@@ -68,33 +67,26 @@
         tools:text="何人が登録したか"
         />
 
-    <com.rafakob.drawme.DrawMeButton
-        android:id="@+id/search_result_book_register"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_below="@id/search_result_book_readers"
-        android:layout_marginTop="@dimen/space_small"
-        android:layout_toRightOf="@id/search_result_book_thumbnail"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
-        android:text="@string/register"
-        android:textSize="@dimen/app_text_size_medium"
-        drawme:dm_backColor="@color/accent"
-        drawme:dm_radius="4dp"
-        drawme:dm_textColor="@android:color/white"
-        style="?android:textAppearanceSmall"
-        />
-
     <TextView
         android:id="@+id/search_result_book_read_mark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/search_result_book_readers"
-        android:layout_marginLeft="@dimen/space_large"
         android:layout_marginTop="12dp"
-        android:layout_toRightOf="@id/search_result_book_register"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
         android:textColor="@color/secondary_text"
         tools:text="読了マーク"
         />
+
+    <ImageView
+        android:id="@+id/search_result_book_action"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@id/book_detail_book_thumbnail"
+        android:layout_marginLeft="@dimen/space_xlarge"
+        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:src="@drawable/ic_add_black_24dp"
+        />
+
   </RelativeLayout>
 </android.support.v7.widget.CardView>

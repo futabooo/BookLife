@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <EditText
+        android:id="@+id/dialog_book_add_impressions"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="@dimen/space_large"
+        android:background="@android:color/white"
+        android:gravity="top|left"
+        android:hint="@string/impressions_review"
+        android:padding="@dimen/space_medium"
+        tools:text="ほげほげほげほげほげふがふがふがふがふがふが"
+        />
+
+    <View
+        android:id="@+id/dialog_book_add_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/dialog_book_add_impressions"
+        android:layout_marginBottom="@dimen/space_medium"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_medium"
+        android:background="@color/divider"
+        />
+
+    <LinearLayout
+        android:id="@+id/dialog_book_add_read_date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_book_add_divider"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/read_date"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/app_text_size_large"
+          />
+
+      <android.support.v4.widget.Space
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          />
+
+      <TextView
+          android:id="@+id/dialog_book_add_read_date"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="7dp"
+          android:background="?android:attr/selectableItemBackground"
+          android:clickable="true"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/app_text_size_large"
+          tools:text="2017/05/07"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dialog_book_add_spoiler_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_book_add_read_date_layout"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        android:gravity="center_vertical"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/spoilers"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/app_text_size_large"
+          />
+
+      <android.support.v4.widget.Space
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          />
+
+      <android.support.v7.widget.AppCompatCheckBox
+          android:id="@+id/dialog_book_add_spoiler"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dialog_book_add_spoiler_layout"
+        android:layout_marginBottom="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_medium"
+        android:gravity="center"
+        >
+
+      <TextView
+          android:id="@+id/dialog_book_add_negative"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_marginRight="@dimen/space_medium"
+          android:background="?android:attr/selectableItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:paddingLeft="@dimen/space_medium"
+          android:paddingRight="@dimen/space_medium"
+          android:text="@string/cancel"
+          android:textAllCaps="true"
+          android:textColor="@color/accent"
+          />
+
+      <TextView
+          android:id="@+id/dialog_book_add_positive"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:background="?android:attr/selectableItemBackground"
+          android:clickable="true"
+          android:gravity="center"
+          android:paddingLeft="@dimen/space_medium"
+          android:paddingRight="@dimen/space_medium"
+          android:text="@string/register"
+          android:textAllCaps="true"
+          android:textColor="@color/accent"
+          />
+
+    </LinearLayout>
+
+  </RelativeLayout>
+
+</layout>

@@ -1,5 +1,6 @@
 package com.futabooo.android.booklife.di.components;
 
+import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment;
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity;
 import com.futabooo.android.booklife.screen.home.HomeFragment;
 import com.futabooo.android.booklife.di.modules.AppModule;
@@ -18,4 +19,5 @@ import javax.inject.Singleton;
   void inject(BookListFragment bookListActivity);
   void inject(BookDetailActivity bookDetailActivity);
   void inject(SearchActivity searchActivity);
+  void inject(AddBookDialogFragment addBookDialogFragment);
 }

@@ -42,7 +42,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     View itemView =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.component_search_result_card_view, parent, false);
     itemView.setOnClickListener(this);
-    itemView.findViewById(R.id.search_result_book_register).setOnClickListener(new View.OnClickListener() {
+    itemView.findViewById(R.id.search_result_book_action).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (listener != null) {
           int position = recyclerView.getChildAdapterPosition((View)v.getParent().getParent());
@@ -114,7 +114,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
       author = (TextView) v.findViewById(R.id.search_result_book_author);
       readers = (TextView) v.findViewById(R.id.search_result_book_readers);
       readMark = (TextView) v.findViewById(R.id.search_result_book_read_mark);
-      button = (DrawMeButton) v.findViewById(R.id.search_result_book_register);
+      button = (DrawMeButton) v.findViewById(R.id.search_result_book_action);
     }
   }
 }

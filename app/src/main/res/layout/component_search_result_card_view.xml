@@ -17,7 +17,7 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="120dp"
       android:paddingLeft="@dimen/space_large"
       android:paddingRight="@dimen/space_large"
       >
@@ -80,11 +80,14 @@
 
     <ImageView
         android:id="@+id/search_result_book_action"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@id/book_detail_book_thumbnail"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/search_result_book_readers"
         android:layout_marginLeft="@dimen/space_xlarge"
-        android:layout_toRightOf="@id/search_result_book_thumbnail"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         android:src="@drawable/ic_add_black_24dp"
         />
 

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.R;
-import com.rafakob.drawme.DrawMeButton;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -45,7 +44,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     itemView.findViewById(R.id.search_result_book_action).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (listener != null) {
-          int position = recyclerView.getChildAdapterPosition((View)v.getParent().getParent());
+          int position = recyclerView.getChildAdapterPosition((View) v.getParent().getParent());
           Element book = books.get(position);
           String asin = book.select("div.book_list_detail a").attr("href").substring(3);
           listener.onRegisterClick(asin);
@@ -66,10 +65,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     if (!TextUtils.isEmpty(mark)) {
       holder.readMark.setText(mark);
       holder.readMark.setVisibility(View.VISIBLE);
-      holder.button.setText(context.getString(R.string.edit));
     } else {
       holder.readMark.setVisibility(View.INVISIBLE);
-      holder.button.setText(context.getString(R.string.register));
     }
   }
 
@@ -105,7 +102,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     protected TextView author;
     protected TextView readers;
     protected TextView readMark;
-    protected DrawMeButton button;
+    protected ImageView button;
 
     public ResultViewHolder(View v) {
       super(v);
@@ -114,7 +111,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
       author = (TextView) v.findViewById(R.id.search_result_book_author);
       readers = (TextView) v.findViewById(R.id.search_result_book_readers);
       readMark = (TextView) v.findViewById(R.id.search_result_book_read_mark);
-      button = (DrawMeButton) v.findViewById(R.id.search_result_book_action);
+      button = (ImageView) v.findViewById(R.id.search_result_book_action);
     }
   }
 }

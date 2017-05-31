@@ -5,5 +5,5 @@ import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 
 interface HomeService {
-  @GET("/") Observable<ResponseBody> home();
+  @GET("/home") Observable<ResponseBody> home();
 }

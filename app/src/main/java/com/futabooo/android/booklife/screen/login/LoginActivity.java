@@ -31,7 +31,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -41,6 +43,7 @@ import java.security.UnrecoverableEntryException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
+import org.jsoup.Jsoup;
 import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
@@ -52,9 +55,12 @@ public class LoginActivity extends AppCompatActivity {
 
   public static final String EXTRA_EMAIL = "email";
   public static final String EXTRA_PASSWORD = "password";
+  public static final String EXTRA_AUTHENTICITY_TOKEN = "authenticity_token";
 
   private ActivityLoginBinding binding;
   private LoginPresenterImpl loginPresenter;
+
+  private String authenticityToken = "";
 
   public static Intent createIntent(Context context, String email, String password) {
     Intent intent = new Intent(context, LoginActivity.class);
@@ -103,6 +109,8 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
       }
     });
+
+    getToken();
   }
 
   /**
@@ -146,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
       focusView.requestFocus();
     } else {
       hostSelectionInterceptor.setScheme("https");
-      Observable<ResponseBody> observable = retrofit.create(LoginService.class).login(email, password);
+      Observable<ResponseBody> observable = retrofit.create(LoginService.class).login(email, password, authenticityToken);
       observable.subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .doOnSubscribe(new Consumer<Disposable>() {
@@ -206,6 +214,40 @@ public class LoginActivity extends AppCompatActivity {
     }
   }
 
+  private void getToken() {
+    Observable<ResponseBody> observable = retrofit.create(LoginService.class).get();
+    observable.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<ResponseBody>() {
+          @Override public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override public void onNext(ResponseBody value) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(value.byteStream()));
+            StringBuffer result = null;
+            try {
+              result = new StringBuffer();
+              String line;
+              while ((line = reader.readLine()) != null) {
+                result.append(line);
+              }
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+            authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr("value");
+
+          }
+
+          @Override public void onError(Throwable e) {
+
+          }
+
+          @Override public void onComplete() {
+
+          }
+        });
+  }
   /**
    * Shows the progress UI and hides the login form.
    */

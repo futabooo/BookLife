@@ -24,6 +24,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 
 public class HomeFragment extends Fragment {
@@ -78,35 +79,27 @@ public class HomeFragment extends Fragment {
             } catch (IOException e) {
               e.printStackTrace();
             }
-            String icon =
-                Jsoup.parse(result.toString()).select("div.default_box a[href^=/u/] div").get(0).attr("style");
+            String iconUrl =
+                Jsoup.parse(result.toString()).select("div.home_index__userdata__side a img").attr("src");
             Glide.with(HomeFragment.this)
-                .load(icon.substring(icon.indexOf("http://"), icon.indexOf(")")))
+                .load(iconUrl)
                 .bitmapTransform(new CropCircleTransformation(getContext()))
                 .into(binding.icon);
 
-            Element readingVolume = Jsoup.parse(result.toString())
-                .select("div.default_box [style=font-size:12px;line-height:22px;font-weight:bold;color:#808080;]")
-                .get(0)
-                .parent();
-            binding.readingVolumeThisMonthTitle.setText(readingVolume.child(0).ownText());
-            binding.readingPageThisMonth.setText(getString(R.string.reading_page, readingVolume.child(1).ownText()));
-            binding.readingVolumeThisMonth.setText(
-                getString(R.string.reading_volume, readingVolume.child(2).ownText()));
-            binding.readingPageParDayThisMonth.setText(
-                getString(R.string.reading_page_par_day, readingVolume.child(3).ownText()));
 
-            Element lastMonthReadingVolume = Jsoup.parse(result.toString())
-                .select("div.default_box [style=font-size:12px;line-height:22px;font-weight:bold;color:#808080;]")
-                .get(1)
-                .parent();
-            binding.readingVolumeLastMonthTitle.setText(lastMonthReadingVolume.child(0).ownText());
-            binding.readingPageLastMonth.setText(
-                getString(R.string.reading_page, lastMonthReadingVolume.child(1).ownText()));
-            binding.readingVolumeLastMonth.setText(
-                getString(R.string.reading_volume, lastMonthReadingVolume.child(2).ownText()));
-            binding.readingPageParDayLastMonth.setText(
-                getString(R.string.reading_page_par_day, lastMonthReadingVolume.child(3).ownText()));
+            Elements readingVolumes = Jsoup.parse(result.toString()).select("div.home_index__userdata__main section.home_index__userdata__reading-volume");
+
+            Element thisVolume = readingVolumes.get(0);
+            binding.readingVolumeThisMonthTitle.setText(thisVolume.select(".home_index__userdata__reading-volume__title").text());
+            binding.readingPageThisMonth.setText(getString(R.string.reading_page, thisVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
+            binding.readingVolumeThisMonth.setText(getString(R.string.reading_volume, thisVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
+            binding.readingPageParDayThisMonth.setText(getString(R.string.reading_page_par_day, thisVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
+
+            Element lastMonthReadingVolume = readingVolumes.get(1);
+            binding.readingVolumeLastMonthTitle.setText(lastMonthReadingVolume.select(".home_index__userdata__reading-volume__title").text());
+            binding.readingPageLastMonth.setText(getString(R.string.reading_page, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
+            binding.readingVolumeLastMonth.setText(getString(R.string.reading_volume, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
+            binding.readingPageParDayLastMonth.setText(getString(R.string.reading_page_par_day, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
           }
 
           @Override public void onError(Throwable e) {

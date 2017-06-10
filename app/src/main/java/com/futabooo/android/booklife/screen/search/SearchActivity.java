@@ -116,8 +116,7 @@ public class SearchActivity extends AppCompatActivity
         binding.activitySearchResultList.setAdapter(resultAdapter);
         resultAdapter.setOnCardClickListener(new SearchResultAdapter.OnCardClickListener() {
           @Override public void onCardClick(SearchResultAdapter adapter, int position, Book book) {
-            String path = book.getPath();
-            Intent intent = BookDetailActivity.createIntent(SearchActivity.this, path.substring(3));
+            Intent intent = BookDetailActivity.createIntent(SearchActivity.this, book.getId());
             startActivity(intent);
           }
 

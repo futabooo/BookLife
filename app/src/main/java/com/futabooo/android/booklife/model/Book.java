@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 public class Book {
   int id;
   String title;
-  @SerializedName("image_url")
-  String imageUrl;
+  @SerializedName("image_url") String imageUrl;
   String path;
   int page;
   boolean original;
-  @SerializedName("registration_count")
-  int registrationCount;
+  @SerializedName("registration_count") int registrationCount;
   Author author;
+  @SerializedName("amazon_urls") AmazonUrl amazonUrl;
 
-  public Book(int id, String title, String imageUrl, String path, int page, boolean original, int registrationCount, Author author) {
+  public Book(int id, String title, String imageUrl, String path, int page, boolean original, int registrationCount,
+      Author author, AmazonUrl amazonUrl) {
     this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
@@ -23,6 +23,7 @@ public class Book {
     this.original = original;
     this.registrationCount = registrationCount;
     this.author = author;
+    this.amazonUrl = amazonUrl;
   }
 
   public int getId() {
@@ -87,5 +88,13 @@ public class Book {
 
   public void setAuthor(Author author) {
     this.author = author;
+  }
+
+  public AmazonUrl getAmazonUrl() {
+    return amazonUrl;
+  }
+
+  public void setAmazonUrl(AmazonUrl amazonUrl) {
+    this.amazonUrl = amazonUrl;
   }
 }

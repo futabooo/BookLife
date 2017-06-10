@@ -75,6 +75,7 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
     dialog.setContentView(binding.getRoot());
 
     final Calendar calendar = Calendar.getInstance();
+    readAt = DateFormat.format("yyyy/M/d", calendar).toString();
     final int year = calendar.get(Calendar.YEAR);
     final int month = calendar.get(Calendar.MONTH);
     final int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);

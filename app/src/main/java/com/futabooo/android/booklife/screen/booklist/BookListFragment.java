@@ -115,8 +115,7 @@ public class BookListFragment extends Fragment {
         binding.bookList.setAdapter(bookAdapter);
         bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
           @Override public void onItemClick(BookAdapter adapter, int position, Book book) {
-            String path = book.getPath();
-            Intent intent = BookDetailActivity.createIntent(getContext(), path.substring(3));
+            Intent intent = BookDetailActivity.createIntent(getContext(), book.getId());
             startActivity(intent);
           }
         });

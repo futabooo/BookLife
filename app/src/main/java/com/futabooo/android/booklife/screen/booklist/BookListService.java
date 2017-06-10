@@ -19,6 +19,6 @@ public interface BookListService {
       @Path("user_id") String userId,
       @Path("book_list_menu") String bookListMenu,
       @Query("attach_review") String attach_review,
-      @Query("offset") String offset,
-      @Query("limit") String limit);
+      @Query("offset") int offset,
+      @Query("limit") int limit);
 }

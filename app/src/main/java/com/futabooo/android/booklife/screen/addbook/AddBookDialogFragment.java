@@ -17,7 +17,7 @@ import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.DialogBookAddBinding;
 import com.futabooo.android.booklife.screen.search.ActionService;
-import com.futabooo.android.booklife.screen.search.ActionType;
+import com.google.gson.JsonObject;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,12 +25,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.Calendar;
 import javax.inject.Inject;
-import org.json.JSONObject;
 import retrofit2.Retrofit;
+import retrofit2.http.Header;
 
 public class AddBookDialogFragment extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
 
-  private static final String EXTRA_BOOK_ASIN = "asin";
+  private static final String EXTRA_CSRF_TOKEN = "csrf_token";
+  private static final String EXTRA_BOOK_USER_ID = "user_id";
+  private static final String EXTRA_BOOK_ID= "book_id";
 
   @Inject Retrofit retrofit;
 
@@ -38,17 +40,17 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
 
   private OnAddBookActionListener listener;
 
-  private int year;
-  private int month;
-  private int dayOfMonth;
+  private String readAt;
 
   public AddBookDialogFragment() {
   }
 
-  public static AddBookDialogFragment newInstance(String asin) {
+  public static AddBookDialogFragment newInstance(String csrfToken, String userID, int bookId) {
     AddBookDialogFragment dialogFragment = new AddBookDialogFragment();
     Bundle args = new Bundle();
-    args.putString(EXTRA_BOOK_ASIN, asin);
+    args.putString(EXTRA_CSRF_TOKEN, csrfToken);
+    args.putString(EXTRA_BOOK_USER_ID, userID);
+    args.putInt(EXTRA_BOOK_ID, bookId);
     dialogFragment.setArguments(args);
     return dialogFragment;
   }
@@ -73,9 +75,9 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
     dialog.setContentView(binding.getRoot());
 
     final Calendar calendar = Calendar.getInstance();
-    year = calendar.get(Calendar.YEAR);
-    month = calendar.get(Calendar.MONTH);
-    dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+    final int year = calendar.get(Calendar.YEAR);
+    final int month = calendar.get(Calendar.MONTH);
+    final int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
     binding.dialogBookAddReadDate.setText(DateFormat.format("yyyy/MM/dd", calendar));
 
@@ -95,23 +97,23 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
 
     binding.dialogBookAddPositive.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        String type = ActionType.READ.getAddBookParam();
-        String asin = getArguments().getString(EXTRA_BOOK_ASIN);
+        String csrfToken = getArguments().getString(EXTRA_CSRF_TOKEN);
+        String userId = getArguments().getString(EXTRA_BOOK_USER_ID);
+        final int bookId = getArguments().getInt(EXTRA_BOOK_ID);
         String impressions = binding.dialogBookAddImpressions.getText().toString();
         int netabare = binding.dialogBookAddSpoiler.isChecked() ? 1 : 0;
 
-        Observable<JSONObject> observable = retrofit.create(ActionService.class)
-            .addBook(type, asin, 1, String.format("%1$02d", year), String.format("%1$02d", month),
-                String.format("%1$02d", dayOfMonth), impressions, "", "", netabare, System.currentTimeMillis());
+        Observable<JsonObject> observable = retrofit.create(ActionService.class)
+            .read(csrfToken, userId, bookId, readAt, impressions, netabare);
         observable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<JSONObject>() {
+            .subscribe(new Observer<JsonObject>() {
               @Override public void onSubscribe(Disposable d) {
 
               }
 
-              @Override public void onNext(JSONObject value) {
-                listener.onRegister(value.optString("book_title"));
+              @Override public void onNext(JsonObject value) {
+                listener.onRegister(bookId);
                 dismiss();
               }
 
@@ -137,15 +139,13 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
   }
 
   @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-    this.year = year;
-    this.month = month;
-    this.dayOfMonth = dayOfMonth;
     Calendar calendar = Calendar.getInstance();
     calendar.set(year, month, dayOfMonth);
+    readAt = DateFormat.format("yyyy/M/d", calendar).toString();
     binding.dialogBookAddReadDate.setText(DateFormat.format("yyyy/MM/dd", calendar));
   }
 
   public interface OnAddBookActionListener {
-    void onRegister(String asin);
+    void onRegister(int bookId);
   }
 }

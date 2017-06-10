@@ -10,21 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.R;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.futabooo.android.booklife.model.Book;
+import com.futabooo.android.booklife.model.SearchResultResource;
+import java.util.Arrays;
+import java.util.List;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ResultViewHolder>
     implements View.OnClickListener {
 
   private Context context;
-  private Elements books;
+  private List<SearchResultResource> resource;
 
   private RecyclerView recyclerView;
   private OnCardClickListener listener;
 
-  public SearchResultAdapter(Context context, Elements books) {
+  public SearchResultAdapter(Context context, SearchResultResource[] searchResultResources) {
     this.context = context;
-    this.books = books;
+    this.resource = Arrays.asList(searchResultResources);
   }
 
   @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -45,9 +47,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
       @Override public void onClick(View v) {
         if (listener != null) {
           int position = recyclerView.getChildAdapterPosition((View) v.getParent().getParent());
-          Element book = books.get(position);
-          String asin = book.select("div.book_list_detail a").attr("href").substring(3);
-          listener.onRegisterClick(asin);
+          Book book = resource.get(position).getContents().getBook();
+          listener.onRegisterClick(book.getId());
         }
       }
     });
@@ -55,13 +56,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   }
 
   @Override public void onBindViewHolder(ResultViewHolder holder, int position) {
-    Element book = books.get(position);
-    String thumbnail = book.select("div.book_list_thumb a img").first().absUrl("src");
+    Book book = resource.get(position).getContents().getBook();
+    String thumbnail = book.getImageUrl();
     Glide.with(context).load(thumbnail).into(holder.thumbnail);
-    holder.title.setText(book.select("div.book_list_detail a").first().attr("title"));
-    holder.author.setText(book.select("div.book_box_book_author a").text());
-    holder.readers.setText(book.select("span.readers").text());
-    String mark = book.select("div.dokuryou_flag_mark").text();
+    holder.title.setText(book.getTitle());
+    holder.author.setText(book.getAuthor().getName());
+    holder.readers.setText(Integer.toString(book.getRegistrationCount()));
+    String mark = resource.get(position).getStatusText();
     if (!TextUtils.isEmpty(mark)) {
       holder.readMark.setText(mark);
       holder.readMark.setVisibility(View.VISIBLE);
@@ -71,7 +72,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   }
 
   @Override public int getItemCount() {
-    return books.size();
+    return resource.size();
   }
 
   @Override public void onClick(View v) {
@@ -81,7 +82,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     if (listener != null) {
       int position = recyclerView.getChildAdapterPosition(v);
-      Element book = books.get(position);
+      Book book = resource.get(position).getContents().getBook();
       listener.onCardClick(this, position, book);
     }
   }
@@ -91,9 +92,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
   }
 
   public interface OnCardClickListener {
-    void onCardClick(SearchResultAdapter adapter, int position, Element book);
+    void onCardClick(SearchResultAdapter adapter, int position, Book book);
 
-    void onRegisterClick(String asin);
+    void onRegisterClick(int bookId);
   }
 
   public static class ResultViewHolder extends RecyclerView.ViewHolder {

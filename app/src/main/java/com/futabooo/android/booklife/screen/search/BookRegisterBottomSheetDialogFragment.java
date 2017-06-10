@@ -12,10 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ComponentBottomSheetBinding;
+import com.futabooo.android.booklife.screen.BookListMenu;
 
 public class BookRegisterBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
-  private static final String EXTRA_BOOK_ASIN = "asin";
+  private static final String EXTRA_BOOK_ID = "book_id";
 
   private ComponentBottomSheetBinding binding;
 
@@ -37,10 +38,10 @@ public class BookRegisterBottomSheetDialogFragment extends BottomSheetDialogFrag
 
   }
 
-  public static BookRegisterBottomSheetDialogFragment newInstance(String asin) {
+  public static BookRegisterBottomSheetDialogFragment newInstance(int bookId) {
     BookRegisterBottomSheetDialogFragment dialogFragment = new BookRegisterBottomSheetDialogFragment();
     Bundle args = new Bundle();
-    args.putString(EXTRA_BOOK_ASIN, asin);
+    args.putInt(EXTRA_BOOK_ID, bookId);
     dialogFragment.setArguments(args);
     return dialogFragment;
   }
@@ -73,25 +74,25 @@ public class BookRegisterBottomSheetDialogFragment extends BottomSheetDialogFrag
   }
 
   @Override public void onClick(View v) {
-    String asin = getArguments().getString(EXTRA_BOOK_ASIN);
+    int bookId = getArguments().getInt(EXTRA_BOOK_ID);
     switch (v.getId()) {
       case R.id.bottom_sheet_reading:
-        listener.onBottomSheetAction(ActionType.READING, asin);
+        listener.onBottomSheetAction(BookListMenu.READING, bookId);
         break;
       case R.id.bottom_sheet_to_read:
-        listener.onBottomSheetAction(ActionType.TO_READ, asin);
+        listener.onBottomSheetAction(BookListMenu.TO_READ, bookId);
         break;
       case R.id.bottom_sheet_read:
-        listener.onBottomSheetAction(ActionType.READ, asin);
+        listener.onBottomSheetAction(BookListMenu.READ, bookId);
         break;
       case R.id.bottom_sheet_quitted:
-        listener.onBottomSheetAction(ActionType.QUITTED, asin);
+        listener.onBottomSheetAction(BookListMenu.QUITTED, bookId);
         break;
     }
     dismiss();
   }
 
   public interface OnBottomSheetActionListener {
-    void onBottomSheetAction(ActionType actionType, String asin);
+    void onBottomSheetAction(BookListMenu bookListMenu, int bookId);
   }
 }

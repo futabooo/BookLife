@@ -3,7 +3,7 @@ package com.futabooo.android.booklife.model;
 import com.google.gson.annotations.SerializedName;
 
 public class Book {
-  Long id;
+  int id;
   String title;
   @SerializedName("image_url")
   String imageUrl;
@@ -12,8 +12,9 @@ public class Book {
   boolean original;
   @SerializedName("registration_count")
   int registrationCount;
+  Author author;
 
-  public Book(Long id, String title, String imageUrl, String path, int page, boolean original, int registrationCount) {
+  public Book(int id, String title, String imageUrl, String path, int page, boolean original, int registrationCount, Author author) {
     this.id = id;
     this.title = title;
     this.imageUrl = imageUrl;
@@ -21,13 +22,14 @@ public class Book {
     this.page = page;
     this.original = original;
     this.registrationCount = registrationCount;
+    this.author = author;
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -77,5 +79,13 @@ public class Book {
 
   public void setRegistrationCount(int registrationCount) {
     this.registrationCount = registrationCount;
+  }
+
+  public Author getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(Author author) {
+    this.author = author;
   }
 }

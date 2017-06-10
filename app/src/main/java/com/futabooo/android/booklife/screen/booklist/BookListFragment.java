@@ -101,7 +101,7 @@ public class BookListFragment extends Fragment {
 
         String csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]").get(0).attr("content");
         return retrofit.create(BookListService.class)
-            .getJson(csrfToken, userId, bookListMenu.getKey(), "true", "0", "10");
+            .getJson(csrfToken, userId, bookListMenu.getKey(), "true", 0, 10);
       }
     }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<JsonObject>() {
       @Override public void onSubscribe(Disposable d) {

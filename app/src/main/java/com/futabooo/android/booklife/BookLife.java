@@ -8,7 +8,7 @@ import com.futabooo.android.booklife.di.modules.NetModule;
 
 public class BookLife extends Application {
 
-  private static final String BASE_URL = "http://i.bookmeter.com";
+  private static final String BASE_URL = "https://i.bookmeter.com";
 
   private NetComponent netComponent;
 

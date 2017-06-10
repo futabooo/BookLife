@@ -153,7 +153,6 @@ public class LoginActivity extends AppCompatActivity {
       // form field with an error.
       focusView.requestFocus();
     } else {
-      hostSelectionInterceptor.setScheme("https");
       Observable<ResponseBody> observable = retrofit.create(LoginService.class).login(email, password, authenticityToken);
       observable.subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
@@ -199,12 +198,10 @@ public class LoginActivity extends AppCompatActivity {
               }
 
               startActivity(MainActivity.createIntent(LoginActivity.this));
-              hostSelectionInterceptor.setScheme(null);
               finish();
             }
 
             @Override public void onError(Throwable e) {
-              hostSelectionInterceptor.setScheme(null);
             }
 
             @Override public void onComplete() {

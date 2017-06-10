@@ -21,6 +21,8 @@
   <string name="create_account">Doesn\'t have an account?</string>
 
   <!-- MainActivity -->
+  <string name="home">Home</string>
+  <string name="book">Book</string>
   <string name="menu_search">search</string>
   <string name="search_hint">Title・Author</string>
 

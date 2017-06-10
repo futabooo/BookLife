@@ -6,14 +6,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.futabooo.android.booklife.MainBottomMenu;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivityMainBinding;
-import com.futabooo.android.booklife.screen.booklist.BookListFragment;
-import com.futabooo.android.booklife.screen.home.HomeFragment;
 import com.futabooo.android.booklife.screen.search.SearchActivity;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -21,6 +19,8 @@ import com.roughike.bottombar.OnTabSelectListener;
 public class MainActivity extends AppCompatActivity {
 
   private ActivityMainBinding binding;
+
+  private MainViewPagerAdapter adapter;
 
   public static Intent createIntent(Context context) {
     return new Intent(context, MainActivity.class);
@@ -32,21 +32,22 @@ public class MainActivity extends AppCompatActivity {
 
     setSupportActionBar(binding.activityMainToolbar);
 
+    adapter = new MainViewPagerAdapter(MainActivity.this, getSupportFragmentManager());
+    binding.activityMainViewpager.setAdapter(adapter);
+    binding.activityMainTabLayout.setupWithViewPager(binding.activityMainViewpager);
+
     binding.bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
       @Override public void onTabSelected(@IdRes int tabId) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        if (tabId == R.id.tab_home) {
-          binding.activityMainToolbar.setTitle("Home");
-          HomeFragment homeFragment = HomeFragment.newInstance();
-          fragmentTransaction.replace(binding.contentContainer.getId(), homeFragment);
-          fragmentTransaction.commit();
-        }
-        if (tabId == R.id.tab_book) {
-          binding.activityMainToolbar.setTitle("Book");
-          BookListFragment bookListFragment = BookListFragment.newInstance();
-          fragmentTransaction.replace(binding.contentContainer.getId(), bookListFragment);
-          fragmentTransaction.commit();
-        }
+        MainBottomMenu bottomMenu = MainBottomMenu.fromPosition(binding.bottomBar.findPositionForTabWithId(tabId));
+        // PagerAdapter の更新
+        adapter.setBottomMenu(bottomMenu);
+        adapter.notifyDataSetChanged();
+
+        // View の更新
+        binding.activityMainToolbar.setTitle(bottomMenu.getTitleId());
+        binding.activityMainTabLayout.setVisibility(bottomMenu.getTabLayoutVisibility());
+        binding.activityMainTabLayout.setTabMode(bottomMenu.getTabLayoutMode());
+        binding.activityMainViewpager.setCurrentItem(0, false);
       }
     });
 

@@ -2,13 +2,8 @@ package com.futabooo.android.booklife.model;
 
 public class Owner {
 
+  private int id;
+  private String path;
   private String name;
-  private String email;
-  private String password;
-
-  public Owner(String name, String email, String password) {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-  }
+  private String image;
 }

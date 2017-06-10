@@ -9,20 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.R;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.futabooo.android.booklife.model.Book;
+import com.futabooo.android.booklife.model.Resource;
+import java.util.Arrays;
+import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> implements View.OnClickListener {
 
   private Context context;
-  private Elements books;
+  private List<Resource> resources;
 
   private RecyclerView recyclerView;
   private OnItemClickListener listener;
 
-  public BookAdapter(Context context, Elements books) {
+  public BookAdapter(Context context, Resource[] resources) {
     this.context = context;
-    this.books = books;
+    this.resources = Arrays.asList(resources);
   }
 
   @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -42,17 +44,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
   }
 
   @Override public void onBindViewHolder(BookViewHolder holder, int position) {
-    Element book = books.get(position);
-    String thumbnail = book.select("div.book_list_thumb a img").first().absUrl("src");
+    Book book = resources.get(position).getBook();
+    String thumbnail = book.getImageUrl();
     Glide.with(context).load(thumbnail)
         //.bitmapTransform(new CropCircleTransformation(()))
         .into(holder.thumbnail);
 
-    holder.title.setText(book.select("div.book_list_detail a").first().attr("title"));
+    holder.title.setText(book.getTitle());
   }
 
   @Override public int getItemCount() {
-    return books.size();
+    return resources.size();
   }
 
   @Override public void onClick(View view) {
@@ -62,7 +64,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     if (listener != null) {
       int position = recyclerView.getChildAdapterPosition(view);
-      Element book = books.get(position);
+      Book book = resources.get(position).getBook();
       listener.onItemClick(this, position, book);
     }
   }
@@ -72,7 +74,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
   }
 
   public interface OnItemClickListener {
-    void onItemClick(BookAdapter adapter, int position, Element book);
+    void onItemClick(BookAdapter adapter, int position, Book book);
   }
 
   public static class BookViewHolder extends RecyclerView.ViewHolder {

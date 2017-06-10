@@ -1,5 +1,6 @@
 package com.futabooo.android.booklife.screen.home;
 
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import retrofit2.Retrofit;
 public class HomeFragment extends Fragment {
 
   @Inject Retrofit retrofit;
+  @Inject SharedPreferences sharedPreferences;
 
   private FragmentHomeBinding binding;
 
@@ -79,6 +81,15 @@ public class HomeFragment extends Fragment {
             } catch (IOException e) {
               e.printStackTrace();
             }
+
+            // user_idが保存されていない場合は取得して保存する
+            if(!sharedPreferences.contains("user_id")){
+              String userId = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href").toString().substring(7);
+              SharedPreferences.Editor editor = sharedPreferences.edit();
+              editor.putString("user_id", userId);
+              editor.apply();
+            }
+
             String iconUrl =
                 Jsoup.parse(result.toString()).select("div.home_index__userdata__side a img").attr("src");
             Glide.with(HomeFragment.this)

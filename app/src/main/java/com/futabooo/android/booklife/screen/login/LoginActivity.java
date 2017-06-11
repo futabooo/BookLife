@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
     binding.forgetPassword.setOnClickListener(new OnClickListener() {
       @Override public void onClick(View v) {
-        Uri uri = Uri.parse("http://i.bookmeter.com/reset_password");
+        Uri uri = Uri.parse("https://i.bookmeter.com/account/password/tokens/new");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
       }

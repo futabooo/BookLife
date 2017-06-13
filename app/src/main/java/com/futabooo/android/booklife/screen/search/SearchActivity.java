@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import retrofit2.Retrofit;
+import timber.log.Timber;
 
 public class SearchActivity extends AppCompatActivity
     implements BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener,
@@ -98,7 +99,7 @@ public class SearchActivity extends AppCompatActivity
             result.append(line);
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          Timber.e(e);
         }
 
         csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]").get(0).attr("content");
@@ -129,6 +130,7 @@ public class SearchActivity extends AppCompatActivity
       }
 
       @Override public void onError(Throwable e) {
+        Timber.e(e);
       }
 
       @Override public void onComplete() {
@@ -158,6 +160,7 @@ public class SearchActivity extends AppCompatActivity
               }
 
               @Override public void onError(Throwable e) {
+                Timber.e(e);
               }
 
               @Override public void onComplete() {

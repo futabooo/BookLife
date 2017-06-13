@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
@@ -28,6 +27,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
+import timber.log.Timber;
 
 public class HomeFragment extends Fragment {
 
@@ -80,10 +80,8 @@ public class HomeFragment extends Fragment {
                 result.append(line);
               }
             } catch (IOException e) {
-              e.printStackTrace();
+              Timber.e(e);
             }
-
-            Crashlytics.setString("html", result.toString());
 
             // user_idが保存されていない場合は取得して保存する
             if(!sharedPreferences.contains("user_id")){
@@ -117,7 +115,7 @@ public class HomeFragment extends Fragment {
           }
 
           @Override public void onError(Throwable e) {
-
+            Timber.e(e);
           }
 
           @Override public void onComplete() {

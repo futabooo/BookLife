@@ -15,6 +15,7 @@ import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 import javax.crypto.NoSuchPaddingException;
 import javax.inject.Singleton;
+import timber.log.Timber;
 
 @Module public class AppModule {
 
@@ -38,19 +39,19 @@ import javax.inject.Singleton;
     try {
       return builder.build();
     } catch (IOException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (CertificateException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (InvalidAlgorithmParameterException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (NoSuchPaddingException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (NoSuchProviderException e) {
-      e.printStackTrace();
+      Timber.e(e);
     } catch (KeyStoreException e) {
-      e.printStackTrace();
+      Timber.e(e);
     }
     return null;
   }

@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import retrofit2.Retrofit;
+import timber.log.Timber;
 
 public class BookDetailActivity extends AppCompatActivity
     implements BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener,
@@ -85,7 +86,7 @@ public class BookDetailActivity extends AppCompatActivity
             result.append(line);
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          Timber.e(e);
         }
 
         title = Jsoup.parse(result.toString()).select("h2.bm-headline span.bm-headline__text").get(0).text();
@@ -138,6 +139,7 @@ public class BookDetailActivity extends AppCompatActivity
       }
 
       @Override public void onError(Throwable e) {
+        Timber.e(e);
       }
 
       @Override public void onComplete() {
@@ -177,6 +179,7 @@ public class BookDetailActivity extends AppCompatActivity
               }
 
               @Override public void onError(Throwable e) {
+                Timber.e(e);
               }
 
               @Override public void onComplete() {

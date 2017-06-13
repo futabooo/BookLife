@@ -7,6 +7,7 @@ import com.futabooo.android.booklife.di.components.NetComponent;
 import com.futabooo.android.booklife.di.modules.AppModule;
 import com.futabooo.android.booklife.di.modules.NetModule;
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 public class BookLife extends Application {
 
@@ -19,6 +20,12 @@ public class BookLife extends Application {
 
     if (BuildConfig.USE_CRASHLYTICS) {
       Fabric.with(this, new Crashlytics());
+    }
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    } else {
+      Timber.plant(new CrashReportingTree());
     }
 
     // Dagger%COMPONENT_NAME%

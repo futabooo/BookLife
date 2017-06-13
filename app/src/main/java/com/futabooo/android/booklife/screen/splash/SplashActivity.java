@@ -15,6 +15,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -43,17 +44,17 @@ public class SplashActivity extends AppCompatActivity {
         finish();
         return;
       } catch (IOException e) {
-        e.printStackTrace();
+        Timber.e(e);
       } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
+        Timber.e(e);
       } catch (UnrecoverableKeyException e) {
-        e.printStackTrace();
+        Timber.e(e);
       } catch (InvalidKeyException e) {
-        e.printStackTrace();
+        Timber.e(e);
       } catch (InvalidAlgorithmParameterException e) {
-        e.printStackTrace();
+        Timber.e(e);
       } catch (KeyStoreException e) {
-        e.printStackTrace();
+        Timber.e(e);
       }
     }
 

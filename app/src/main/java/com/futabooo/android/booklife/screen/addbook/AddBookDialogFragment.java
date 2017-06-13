@@ -27,6 +27,7 @@ import java.util.Calendar;
 import javax.inject.Inject;
 import retrofit2.Retrofit;
 import retrofit2.http.Header;
+import timber.log.Timber;
 
 public class AddBookDialogFragment extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -119,7 +120,7 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
               }
 
               @Override public void onError(Throwable e) {
-
+                Timber.e(e);
               }
 
               @Override public void onComplete() {

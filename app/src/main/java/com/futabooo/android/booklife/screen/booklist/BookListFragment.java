@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import retrofit2.Retrofit;
+import timber.log.Timber;
 
 public class BookListFragment extends Fragment {
 
@@ -96,7 +97,7 @@ public class BookListFragment extends Fragment {
             result.append(line);
           }
         } catch (IOException e) {
-          e.printStackTrace();
+          Timber.e(e);
         }
 
         String csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]").get(0).attr("content");
@@ -122,6 +123,7 @@ public class BookListFragment extends Fragment {
       }
 
       @Override public void onError(Throwable e) {
+        Timber.e(e);
       }
 
       @Override public void onComplete() {

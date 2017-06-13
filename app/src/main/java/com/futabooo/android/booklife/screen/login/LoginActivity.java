@@ -45,6 +45,7 @@ import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import retrofit2.Retrofit;
+import timber.log.Timber;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -180,21 +181,21 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("password", Base64.encodeToString(encryptPassword.getBytes(), Base64.DEFAULT));
                 editor.apply();
               } catch (UnrecoverableEntryException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (KeyStoreException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (InvalidKeyException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (NoSuchPaddingException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (IOException e) {
-                e.printStackTrace();
+                Timber.e(e);
               } catch (NoSuchProviderException e) {
-                e.printStackTrace();
+                Timber.e(e);
               }
 
               startActivity(MainActivity.createIntent(LoginActivity.this));
@@ -202,6 +203,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override public void onError(Throwable e) {
+              Timber.e(e);
             }
 
             @Override public void onComplete() {
@@ -230,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                 result.append(line);
               }
             } catch (IOException e) {
-              e.printStackTrace();
+              Timber.e(e);
             }
             authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr("value");
 

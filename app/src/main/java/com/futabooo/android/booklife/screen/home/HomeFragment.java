@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
@@ -81,6 +82,8 @@ public class HomeFragment extends Fragment {
             } catch (IOException e) {
               e.printStackTrace();
             }
+
+            Crashlytics.setString("html", result.toString());
 
             // user_idが保存されていない場合は取得して保存する
             if(!sharedPreferences.contains("user_id")){

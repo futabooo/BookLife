@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
 
 // Load keystore
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -37,7 +38,7 @@ android {
       }
     }
     debug {
-      storeFile file("./debug.keystore")
+      storeFile file("../debug.keystore")
       storePassword "android"
       keyAlias "androiddebugkey"
       keyPassword "android"
@@ -51,11 +52,17 @@ android {
       zipAlignEnabled true
       signingConfig signingConfigs.release
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+      buildConfigField "boolean", "USE_CRASHLYTICS", "true"
+      ext.enableCrashlytics = true
     }
     debug {
       debuggable true
       zipAlignEnabled false
       signingConfig signingConfigs.debug
+
+      buildConfigField "boolean", "USE_CRASHLYTICS", "false"
+      ext.enableCrashlytics = false
     }
   }
 
@@ -66,6 +73,7 @@ android {
 
 repositories {
   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+  maven { url "https://maven.fabric.io/public"}
 }
 
 dependencies {
@@ -73,6 +81,11 @@ dependencies {
   androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
+
+  compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    transitive = true
+  }
+
   compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
   compile "com.android.support:design:${supportLibraryVersion}"
 

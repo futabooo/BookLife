@@ -42,6 +42,11 @@
         android:name=".screen.bookedit.BookEditActivity">
     </activity>
 
+    <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="f3b67672b3a5cea8877e1d74c3c8d016056f5b88"
+        />
+
   </application>
 
 </manifest>

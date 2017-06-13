@@ -1,10 +1,12 @@
 package com.futabooo.android.booklife;
 
 import android.app.Application;
+import com.crashlytics.android.Crashlytics;
 import com.futabooo.android.booklife.di.components.DaggerNetComponent;
 import com.futabooo.android.booklife.di.components.NetComponent;
 import com.futabooo.android.booklife.di.modules.AppModule;
 import com.futabooo.android.booklife.di.modules.NetModule;
+import io.fabric.sdk.android.Fabric;
 
 public class BookLife extends Application {
 
@@ -14,6 +16,10 @@ public class BookLife extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+
+    if (BuildConfig.USE_CRASHLYTICS) {
+      Fabric.with(this, new Crashlytics());
+    }
 
     // Dagger%COMPONENT_NAME%
     netComponent = DaggerNetComponent.builder()

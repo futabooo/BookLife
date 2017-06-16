@@ -4,50 +4,41 @@
   <string name="app_name">BookLife</string>
   <string name="confirm">confirm</string>
   <string name="cancel">cancel</string>
+  <string name="amazon">Amazon</string>
 
+  <!-- Login -->
+  <string name="login_prompt_email">Email</string>
+  <string name="login_prompt_password">Password</string>
+  <string name="login_sign_in">Sign in</string>
+  <string name="login_error_invalid_email">This email address is invalid</string>
+  <string name="login_error_invalid_password">This password is too short</string>
+  <string name="login_error_incorrect_password">This password is incorrect</string>
+  <string name="login_error_field_required">This field is required</string>
+  <string name="login_forget_password">Forget your password?</string>
+  <string name="login_sign_up">Sign Up</string>
+  <string name="login_create_account">Doesn\'t have an account?</string>
 
-  <!-- LoginActivity -->
-  <string name="prompt_email">Email</string>
-  <string name="prompt_password">Password</string>
-  <string name="action_sign_in">Sign in</string>
-  <string name="action_sign_in_short">Sign in</string>
-  <string name="error_invalid_email">This email address is invalid</string>
-  <string name="error_invalid_password">This password is too short</string>
-  <string name="error_incorrect_password">This password is incorrect</string>
-  <string name="error_field_required">This field is required</string>
-  <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-  <string name="forget_password">Forget your password?</string>
-  <string name="sign_up">Sign Up</string>
-  <string name="create_account">Doesn\'t have an account?</string>
-
-  <!-- MainActivity -->
+  <!-- Search -->
   <string name="home">Home</string>
   <string name="book">Book</string>
   <string name="menu_search">search</string>
   <string name="search_hint">Title・Author</string>
 
-  <!-- SearchActivity -->
-  <string name="register">Register</string>
-  <string name="edit">Edit</string>
-  <string name="registered_book">%s Registered</string>
-
-  <!-- BookListFragment -->
-  <string name="reading_page">%sページ</string>
-  <string name="reading_volume">%s冊</string>
-  <string name="reading_page_par_day">%sページ/日</string>
-
-  <!-- BookDetailActivity -->
-  <string name="amazon">Amazon</string>
-
-  <!-- BookEditActivity -->
-  <string name="spoilers">Spoilers</string>
-  <string name="read_date">Read Date</string>
-  <string name="impressions_review">Impressions・Review</string>
-
-  <!-- Bottom Sheet -->
-  <string name="reading">Reading</string>
-  <string name="read">Read</string>
-  <string name="to_read">To Read</string>
-  <string name="quitted">Quitted</string>
+  <!-- Book -->
+  <string name="book_reading">Reading</string>
+  <string name="book_read">Read</string>
+  <string name="book_to_read">To Read</string>
+  <string name="book_quitted">Quitted</string>
+  <string name="book_register">Register</string>
+  <string name="book_edit">Edit</string>
+  <string name="book_registered">%s Registered</string>
+  <string name="book_reading_page">%spage</string>
+  <string name="book_reading_volume">%svolume</string>
+  <string name="book_reading_page_par_day">%spage/day</string>
+  <string name="book_spoilers">Spoilers</string>
+  <string name="book_read_date">Read Date</string>
+  <string name="book_impressions_review">Impressions・Review</string>
+  <string name="book_current_month_reading_page">Reading volume in%s</string>
+  <string name="book_last_month_reading_page">Reading volume of last month</string>
 
 </resources>

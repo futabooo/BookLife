@@ -1,0 +1,44 @@
+<resources>
+
+  <!-- Common -->
+  <string name="app_name">BookLife</string>
+  <string name="confirm">confirm</string>
+  <string name="cancel">キャンセル</string>
+  <string name="amazon">Amazon</string>
+
+  <!-- Login -->
+  <string name="login_prompt_email">メール</string>
+  <string name="login_prompt_password">パスワード</string>
+  <string name="login_sign_in">サインイン</string>
+  <string name="login_error_invalid_email">メールアドレスが不正です</string>
+  <string name="login_error_invalid_password">パスワードが短すぎます</string>
+  <string name="login_error_incorrect_password">パスワードが正しくありません</string>
+  <string name="login_error_field_required">必須項目です</string>
+  <string name="login_forget_password">パスワードを忘れた場合</string>
+  <string name="login_sign_up">サインアップ</string>
+  <string name="login_create_account">アカウント作成</string>
+
+  <!-- Search -->
+  <string name="home">Home</string>
+  <string name="book">Book</string>
+  <string name="menu_search">検索</string>
+  <string name="search_hint">タイトル・著者名</string>
+
+  <!-- Book -->
+  <string name="book_reading">読んでる本</string>
+  <string name="book_read">読んだ本</string>
+  <string name="book_to_read">読みたい本</string>
+  <string name="book_quitted">積読本</string>
+  <string name="book_register">登録</string>
+  <string name="book_edit">編集</string>
+  <string name="book_registered">%s 登録完了</string>
+  <string name="book_reading_page">%sページ</string>
+  <string name="book_reading_volume">%s冊</string>
+  <string name="book_reading_page_par_day">%sページ/日</string>
+  <string name="book_spoilers">ネタバレ</string>
+  <string name="book_read_date">読了日</string>
+  <string name="book_impressions_review">感想・レビュー</string>
+  <string name="book_current_month_reading_page">%s月の読書量</string>
+  <string name="book_last_month_reading_page">先月の読書量</string>
+
+</resources>

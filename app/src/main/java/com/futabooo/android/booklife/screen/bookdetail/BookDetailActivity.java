@@ -189,7 +189,7 @@ public class BookDetailActivity extends AppCompatActivity
   }
 
   @Override public void onRegister(int bookId) {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.registered_book, String.valueOf(bookId)),
+    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_registered, String.valueOf(bookId)),
         Snackbar.LENGTH_LONG).show();
   }
 }

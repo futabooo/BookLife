@@ -133,18 +133,18 @@ public class LoginActivity extends AppCompatActivity {
 
     // Check for a valid password, if the user entered one.
     if (!TextUtils.isEmpty(password) && !loginPresenter.isPasswordValid(password)) {
-      binding.password.setError(getString(R.string.error_invalid_password));
+      binding.password.setError(getString(R.string.login_error_invalid_password));
       focusView = binding.password;
       cancel = true;
     }
 
     // Check for a valid email address.
     if (TextUtils.isEmpty(email)) {
-      binding.email.setError(getString(R.string.error_field_required));
+      binding.email.setError(getString(R.string.login_error_field_required));
       focusView = binding.email;
       cancel = true;
     } else if (!loginPresenter.isEmailValid(email)) {
-      binding.email.setError(getString(R.string.error_invalid_email));
+      binding.email.setError(getString(R.string.login_error_invalid_email));
       focusView = binding.email;
       cancel = true;
     }

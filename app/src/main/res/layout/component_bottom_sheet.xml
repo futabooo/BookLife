@@ -14,7 +14,7 @@
         android:id="@+id/bottom_sheet_reading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/reading"
+        android:text="@string/book_reading"
         />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/bottom_sheet_reading"
         android:layout_marginTop="@dimen/space_large"
-        android:text="@string/to_read"
+        android:text="@string/book_to_read"
         />
 
     <TextView
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/bottom_sheet_to_read"
         android:layout_marginTop="@dimen/space_large"
-        android:text="@string/read"
+        android:text="@string/book_read"
         />
 
     <TextView
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/bottom_sheet_read"
         android:layout_marginTop="@dimen/space_large"
-        android:text="@string/quitted"
+        android:text="@string/book_quitted"
         />
 
   </RelativeLayout>

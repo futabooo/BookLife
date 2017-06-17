@@ -5,6 +5,7 @@
   <string name="confirm">confirm</string>
   <string name="cancel">キャンセル</string>
   <string name="amazon">Amazon</string>
+  <string name="home">Home</string>
 
   <!-- Login -->
   <string name="login_prompt_email">メール</string>
@@ -19,7 +20,6 @@
   <string name="login_create_account">アカウント作成</string>
 
   <!-- Search -->
-  <string name="home">Home</string>
   <string name="book">Book</string>
   <string name="menu_search">検索</string>
   <string name="search_hint">タイトル・著者名</string>
@@ -38,7 +38,9 @@
   <string name="book_spoilers">ネタバレ</string>
   <string name="book_read_date">読了日</string>
   <string name="book_impressions_review">感想・レビュー</string>
-  <string name="book_current_month_reading_page">%s月の読書量</string>
+  <string name="book_current_month_reading_page">読書量</string>
   <string name="book_last_month_reading_page">先月の読書量</string>
+  <string name="book_page">ページ数</string>
+  <string name="book_volume">冊数</string>
 
 </resources>

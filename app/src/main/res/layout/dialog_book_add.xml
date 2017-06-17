@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/space_large"
         android:background="@android:color/white"
         android:gravity="top|left"
-        android:hint="@string/impressions_review"
+        android:hint="@string/book_impressions_review"
         android:padding="@dimen/space_medium"
         tools:text="ほげほげほげほげほげふがふがふがふがふがふが"
         />
@@ -45,7 +45,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/read_date"
+          android:text="@string/book_read_date"
           android:textColor="@color/primary_text"
           android:textSize="@dimen/app_text_size_large"
           />
@@ -83,7 +83,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/spoilers"
+          android:text="@string/book_spoilers"
           android:textColor="@color/primary_text"
           android:textSize="@dimen/app_text_size_large"
           />
@@ -138,7 +138,7 @@
           android:gravity="center"
           android:paddingLeft="@dimen/space_medium"
           android:paddingRight="@dimen/space_medium"
-          android:text="@string/register"
+          android:text="@string/book_register"
           android:textAllCaps="true"
           android:textColor="@color/accent"
           />

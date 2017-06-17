@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import com.futabooo.android.booklife.MainBottomMenu;
+import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.screen.booklist.BookListFragment;
 import com.futabooo.android.booklife.screen.home.HomeFragment;
 
@@ -49,10 +50,10 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
   @Override public CharSequence getPageTitle(int position) {
     switch (bottomMenu) {
       case HOME:
-        return "home";
+        return context.getString(R.string.home);
       case BOOK:
         BookListMenu bookListMenu = BookListMenu.fromPosition(position);
-        return bookListMenu.getTitle();
+        return context.getString(bookListMenu.getTitleResId());
       default:
         return "";
     }

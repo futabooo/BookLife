@@ -5,6 +5,7 @@
   <string name="confirm">confirm</string>
   <string name="cancel">cancel</string>
   <string name="amazon">Amazon</string>
+  <string name="home">Home</string>
 
   <!-- Login -->
   <string name="login_prompt_email">Email</string>
@@ -19,7 +20,6 @@
   <string name="login_create_account">Doesn\'t have an account?</string>
 
   <!-- Search -->
-  <string name="home">Home</string>
   <string name="book">Book</string>
   <string name="menu_search">search</string>
   <string name="search_hint">Title・Author</string>
@@ -38,7 +38,9 @@
   <string name="book_spoilers">Spoilers</string>
   <string name="book_read_date">Read Date</string>
   <string name="book_impressions_review">Impressions・Review</string>
-  <string name="book_current_month_reading_page">Reading volume in%s</string>
+  <string name="book_current_month_reading_page">Reading volume</string>
   <string name="book_last_month_reading_page">Reading volume of last month</string>
+  <string name="book_page">page</string>
+  <string name="book_volume">volume</string>
 
 </resources>

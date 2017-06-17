@@ -1,18 +1,20 @@
 package com.futabooo.android.booklife.screen;
 
+import com.futabooo.android.booklife.R;
+
 public enum BookListMenu {
-  READ(0, "READ","read"),
-  READING(1,"READING","reading"),
-  TO_READ(2, "TO READ","wish"),
-  QUITTED(3, "QUITTED","stacked");
+  READ(0, R.string.book_read,"read"),
+  READING(1, R.string.book_reading,"reading"),
+  TO_READ(2, R.string.book_to_read,"wish"),
+  QUITTED(3, R.string.book_quitted,"stacked");
 
   private final int position;
-  private final String title;
+  private final int titleResId;
   private final String key;
 
-  BookListMenu(int position, String title, String key){
+  BookListMenu(int position, int titleResId, String key){
     this.position = position;
-    this.title = title;
+    this.titleResId = titleResId;
     this.key = key;
   }
 
@@ -29,8 +31,8 @@ public enum BookListMenu {
     return position;
   }
 
-  public String getTitle() {
-    return title;
+  public int getTitleResId() {
+    return titleResId;
   }
 
   public String getKey() {

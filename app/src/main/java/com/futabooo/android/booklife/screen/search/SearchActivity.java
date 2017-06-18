@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuItem;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.ActivitySearchBinding;
@@ -63,18 +64,21 @@ public class SearchActivity extends AppCompatActivity
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
     setSupportActionBar(binding.activitySearchToolbar);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     binding.activitySearchResultList.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     binding.activitySearchToolbar.inflateMenu(R.menu.activity_search_menu);
-    SearchView searchView =
+    final SearchView searchView =
         (SearchView) binding.activitySearchToolbar.getMenu().findItem(R.id.menu_search).getActionView();
     searchView.setIconified(false);
     searchView.setQueryHint(getString(R.string.search_hint));
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override public boolean onQueryTextSubmit(String query) {
+      @Override public boolean onQueryTextSubmit(String query){
+        searchView.clearFocus();
         searchBooks(query);
         return false;
       }
@@ -84,6 +88,17 @@ public class SearchActivity extends AppCompatActivity
       }
     });
     return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    switch (id) {
+      case android.R.id.home:
+        finish();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   private void searchBooks(final String keyword) {

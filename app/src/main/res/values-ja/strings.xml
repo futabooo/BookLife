@@ -32,15 +32,18 @@
   <string name="book_register">登録</string>
   <string name="book_edit">編集</string>
   <string name="book_registered">%s 登録完了</string>
-  <string name="book_reading_page">%sページ</string>
-  <string name="book_reading_volume">%s冊</string>
-  <string name="book_reading_page_par_day">%sページ/日</string>
   <string name="book_spoilers">ネタバレ</string>
   <string name="book_read_date">読了日</string>
   <string name="book_impressions_review">感想・レビュー</string>
-  <string name="book_current_month_reading_page">読書量</string>
-  <string name="book_last_month_reading_page">先月の読書量</string>
-  <string name="book_page">ページ数</string>
-  <string name="book_volume">冊数</string>
+
+  <!-- Book Record -->
+  <string name="book_record_page">ページ</string>
+  <string name="book_record_page_par_day">ページ/日</string>
+  <string name="book_record_page_number">ページ数</string>
+  <string name="book_record_volume">冊</string>
+  <string name="book_record_volume_number">冊数</string>
+  <string name="book_record_monthly_average">月平均</string>
+  <string name="book_record_reading_volume">読書量</string>
+  <string name="book_record_reading_volume_last_month">先月の読書量</string>
 
 </resources>

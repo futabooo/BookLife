@@ -2,8 +2,8 @@
 
   <!-- Common -->
   <string name="app_name">BookLife</string>
-  <string name="confirm">confirm</string>
-  <string name="cancel">cancel</string>
+  <string name="confirm">Confirm</string>
+  <string name="cancel">Cancel</string>
   <string name="amazon">Amazon</string>
   <string name="home">Home</string>
 
@@ -21,7 +21,7 @@
 
   <!-- Search -->
   <string name="book">Book</string>
-  <string name="menu_search">search</string>
+  <string name="menu_search">Search</string>
   <string name="search_hint">Title・Author</string>
 
   <!-- Book -->
@@ -32,15 +32,18 @@
   <string name="book_register">Register</string>
   <string name="book_edit">Edit</string>
   <string name="book_registered">%s Registered</string>
-  <string name="book_reading_page">%spage</string>
-  <string name="book_reading_volume">%svolume</string>
-  <string name="book_reading_page_par_day">%spage/day</string>
   <string name="book_spoilers">Spoilers</string>
   <string name="book_read_date">Read Date</string>
   <string name="book_impressions_review">Impressions・Review</string>
-  <string name="book_current_month_reading_page">Reading volume</string>
-  <string name="book_last_month_reading_page">Reading volume of last month</string>
-  <string name="book_page">page</string>
-  <string name="book_volume">volume</string>
+
+  <!-- Book Record -->
+  <string name="book_record_page">Page</string>
+  <string name="book_record_page_par_day">Page/Day</string>
+  <string name="book_record_page_number">Page</string>
+  <string name="book_record_volume">Volume</string>
+  <string name="book_record_volume_number">Volume</string>
+  <string name="book_record_monthly_average">Monthly Average</string>
+  <string name="book_record_reading_volume">Reading volume</string>
+  <string name="book_record_reading_volume_last_month">Reading volume of last month</string>
 
 </resources>

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.bumptech.glide.Glide;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
@@ -20,8 +19,9 @@ import io.reactivex.schedulers.Schedulers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.inject.Inject;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -62,6 +62,10 @@ public class HomeFragment extends Fragment {
   @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
+    binding.fragmentHomeDate.setText(dateFormat.format(date));
+
     Observable<ResponseBody> observable = retrofit.create(HomeService.class).home();
     observable.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -93,25 +97,23 @@ public class HomeFragment extends Fragment {
 
             String iconUrl =
                 Jsoup.parse(result.toString()).select("div.home_index__userdata__side a img").attr("src");
-            Glide.with(HomeFragment.this)
-                .load(iconUrl)
-                .bitmapTransform(new CropCircleTransformation(getContext()))
-                .into(binding.icon);
+            //Glide.with(HomeFragment.this)
+            //    .load(iconUrl)
+            //    .bitmapTransform(new CropCircleTransformation(getContext()))
+            //    .into(binding.icon);
 
 
             Elements readingVolumes = Jsoup.parse(result.toString()).select("div.home_index__userdata__main section.home_index__userdata__reading-volume");
 
             Element thisVolume = readingVolumes.get(0);
-            binding.readingVolumeThisMonthTitle.setText(thisVolume.select(".home_index__userdata__reading-volume__title").text());
-            binding.readingPageThisMonth.setText(getString(R.string.reading_page, thisVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
-            binding.readingVolumeThisMonth.setText(getString(R.string.reading_volume, thisVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
-            binding.readingPageParDayThisMonth.setText(getString(R.string.reading_page_par_day, thisVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
+            binding.readingPageCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(0).text());
+            binding.readingVolumeCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(1).text());
+            binding.readingPageParDayCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(2).text());
 
-            Element lastMonthReadingVolume = readingVolumes.get(1);
-            binding.readingVolumeLastMonthTitle.setText(lastMonthReadingVolume.select(".home_index__userdata__reading-volume__title").text());
-            binding.readingPageLastMonth.setText(getString(R.string.reading_page, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
-            binding.readingVolumeLastMonth.setText(getString(R.string.reading_volume, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
-            binding.readingPageParDayLastMonth.setText(getString(R.string.reading_page_par_day, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
+            //Element lastMonthReadingVolume = readingVolumes.get(1);
+            //binding.readingPageLastMonth.setText(getString(R.string.book_reading_page, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
+            //binding.readingVolumeLastMonth.setText(getString(R.string.book_reading_volume, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
+            //binding.readingPageParDayLastMonth.setText(getString(R.string.book_reading_page_par_day, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
           }
 
           @Override public void onError(Throwable e) {

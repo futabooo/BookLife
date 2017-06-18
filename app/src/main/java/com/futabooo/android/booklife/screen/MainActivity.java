@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
     setSupportActionBar(binding.activityMainToolbar);
+    getSupportActionBar().setTitle(R.string.home);
 
     adapter = new MainViewPagerAdapter(MainActivity.this, getSupportFragmentManager());
     binding.activityMainViewpager.setAdapter(adapter);

@@ -8,8 +8,9 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 ext {
-  supportLibraryVersion = '25.3.0'
+  supportLibraryVersion = '25.3.1'
   retrofitVersion = '2.1.0'
+  okhttpVersion = '3.7.0'
 }
 
 android {
@@ -93,8 +94,8 @@ dependencies {
   compile 'com.ekchang.jsouper:retrofit-converter-jsouper:0.0.3-SNAPSHOT'
 
   // http client
-  compile 'com.squareup.okhttp3:okhttp:3.5.0'
-  compile 'com.squareup.okhttp3:okhttp-urlconnection:3.5.0'
+  compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+  compile "com.squareup.okhttp3:okhttp-urlconnection:${okhttpVersion}"
   compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
   compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
   compile "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
@@ -102,14 +103,14 @@ dependencies {
   compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
   compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-  compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+  compile 'io.reactivex.rxjava2:rxjava:2.1.0'
 
   // data store
   compile 'com.kazakago.cryptore:cryptore:1.0.0'
 
   // dagger2
-  compile 'com.google.dagger:dagger:2.8'
-  annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+  compile 'com.google.dagger:dagger:2.11'
+  annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
   // images
   compile 'com.github.bumptech.glide:glide:3.7.0'

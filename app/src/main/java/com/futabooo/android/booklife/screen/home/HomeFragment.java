@@ -5,10 +5,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.crashlytics.android.Crashlytics;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
@@ -88,6 +88,9 @@ public class HomeFragment extends Fragment {
               Timber.e(e);
             }
 
+            // FIXME: このあとの処理で何故か落ちるのを調査してる
+            Timber.log(Log.DEBUG, result.toString());
+
             // user_idが保存されていない場合は取得して保存する
             if(!sharedPreferences.contains("user_id")){
               String href = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href").toString();
@@ -97,8 +100,7 @@ public class HomeFragment extends Fragment {
                 editor.putString("user_id", userId);
                 editor.apply();
               } catch (StringIndexOutOfBoundsException e) {
-                Crashlytics.log(href);
-                Timber.e("ユーザーIDの取得に失敗しました");
+                Timber.e("ユーザーIDの取得に失敗しました", href);
               }
             }
 

@@ -9,6 +9,9 @@
 
 # Add any project specific keep options here:
 
+# Kotlin
+-dontwarn kotlin.**
+
 # BottomBar
 -dontwarn com.roughike.bottombar.**
 

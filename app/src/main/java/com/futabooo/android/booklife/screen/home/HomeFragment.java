@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
 
             // user_idが保存されていない場合は取得して保存する
             if(!sharedPreferences.contains("user_id")){
-              String href = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href").toString();
+              String href = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href");
               try {
                 String userId = href.substring(7);
                 SharedPreferences.Editor editor = sharedPreferences.edit();

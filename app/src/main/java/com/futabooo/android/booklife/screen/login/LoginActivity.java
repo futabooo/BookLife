@@ -239,7 +239,7 @@ public class LoginActivity extends AppCompatActivity {
           }
 
           @Override public void onError(Throwable e) {
-            Timber.e(e);
+
           }
 
           @Override public void onComplete() {

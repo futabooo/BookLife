@@ -7,7 +7,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HostSelectionInterceptor implements Interceptor {
-
   private volatile String scheme;
 
   public void setScheme(String scheme) {
@@ -21,7 +20,6 @@ public class HostSelectionInterceptor implements Interceptor {
       HttpUrl newUrl = request.url().newBuilder().scheme(scheme).build();
       request = request.newBuilder().url(newUrl).build();
     }
-
     return chain.proceed(request);
   }
 }

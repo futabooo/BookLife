@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
 import com.futabooo.android.booklife.model.HomeResource;
-import com.futabooo.android.booklife.model.Resource;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,7 +30,6 @@ import java.util.Date;
 import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import retrofit2.Retrofit;
 import timber.log.Timber;
@@ -100,6 +97,14 @@ public class HomeFragment extends Fragment {
         page = thisVolume.get(0).text();
         volume = thisVolume.get(2).text();
         pageParDay = thisVolume.get(4).text();
+
+        String href = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href");
+        if (!href.equals("") && !sharedPreferences.contains("user_id")) {
+          int userId = Integer.parseInt(href.substring(7));
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putInt("user_id", userId);
+          editor.apply();
+        }
 
         String csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]").get(0).attr("content");
 

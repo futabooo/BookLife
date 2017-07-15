@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity
   @Inject Retrofit retrofit;
   @Inject SharedPreferences sharedPreferences;
 
-  private String userId;
+  private int userId;
   private String csrfToken;
 
   private ActivitySearchBinding binding;
@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((BookLife) getApplication()).getNetComponent().inject(this);
-    userId = sharedPreferences.getString("user_id","");
+    userId = sharedPreferences.getInt("user_id",0);
 
     binding = DataBindingUtil.setContentView(this, R.layout.activity_search);
     setSupportActionBar(binding.activitySearchToolbar);

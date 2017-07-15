@@ -44,7 +44,7 @@ public class BookListFragment extends Fragment {
 
   private static final String EXTRA_BOOK_LIST_MENU = "book_list_menu";
   private BookListMenu bookListMenu;
-  private String userId;
+  private int userId;
 
   private FragmentBookListBinding binding;
   private BookAdapter bookAdapter;
@@ -63,7 +63,7 @@ public class BookListFragment extends Fragment {
   @Override public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((BookLife) getActivity().getApplication()).getNetComponent().inject(this);
-    userId = sharedPreferences.getString("user_id","");
+    userId = sharedPreferences.getInt("user_id", 0);
     bookListMenu = (BookListMenu) getArguments().getSerializable(EXTRA_BOOK_LIST_MENU);
   }
 

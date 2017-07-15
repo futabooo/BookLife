@@ -12,10 +12,17 @@ import android.view.ViewGroup;
 import com.futabooo.android.booklife.BookLife;
 import com.futabooo.android.booklife.R;
 import com.futabooo.android.booklife.databinding.FragmentHomeBinding;
+import com.futabooo.android.booklife.model.HomeResource;
+import com.futabooo.android.booklife.model.Resource;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,6 +43,10 @@ public class HomeFragment extends Fragment {
   @Inject SharedPreferences sharedPreferences;
 
   private FragmentHomeBinding binding;
+
+  private String page;
+  private String volume;
+  private String pageParDay;
 
   public HomeFragment() {
   }
@@ -68,70 +79,62 @@ public class HomeFragment extends Fragment {
     binding.fragmentHomeDate.setText(dateFormat.format(date));
 
     Observable<ResponseBody> observable = retrofit.create(HomeService.class).home();
-    observable.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Observer<ResponseBody>() {
-          @Override public void onSubscribe(Disposable d) {
-
+    observable.subscribeOn(Schedulers.io()).flatMap(new Function<ResponseBody, ObservableSource<JsonObject>>() {
+      @Override public ObservableSource<JsonObject> apply(ResponseBody responseBody) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody.byteStream()));
+        StringBuffer result = null;
+        try {
+          result = new StringBuffer();
+          String line;
+          while ((line = reader.readLine()) != null) {
+            result.append(line);
           }
+        } catch (IOException e) {
+          Timber.e(e);
+        }
 
-          @Override public void onNext(ResponseBody value) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(value.byteStream()));
-            StringBuffer result = null;
-            try {
-              result = new StringBuffer();
-              String line;
-              while ((line = reader.readLine()) != null) {
-                result.append(line);
-              }
-            } catch (IOException e) {
-              Timber.e(e);
-            }
+        Elements readingVolumes = Jsoup.parse(result.toString())
+            .select("div.home_index__userdata__main section.home_index__userdata__reading-volume");
 
-            // FIXME: このあとの処理で何故か落ちるのを調査してる
-            Timber.log(Log.DEBUG, result.toString());
+        Elements thisVolume = readingVolumes.get(0).select("ul span");
+        page = thisVolume.get(0).text();
+        volume = thisVolume.get(2).text();
+        pageParDay = thisVolume.get(4).text();
 
-            // user_idが保存されていない場合は取得して保存する
-            if(!sharedPreferences.contains("user_id")){
-              String href = Jsoup.parse(result.toString()).select("div.home_index__userdata__side a").attr("href");
-              try {
-                String userId = href.substring(7);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("user_id", userId);
-                editor.apply();
-              } catch (StringIndexOutOfBoundsException e) {
-                Timber.e("ユーザーIDの取得に失敗しました", href);
-              }
-            }
+        String csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]").get(0).attr("content");
 
-            //String iconUrl =
-                //Jsoup.parse(result.toString()).select("div.home_index__userdata__side a img").attr("src");
-            //Glide.with(HomeFragment.this)
-            //    .load(iconUrl)
-            //    .bitmapTransform(new CropCircleTransformation(getContext()))
-            //    .into(binding.icon);
+        return retrofit.create(HomeService.class).getJson(csrfToken, 0, 10);
+      }
+    }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<JsonObject>() {
+      @Override public void onSubscribe(Disposable d) {
 
+      }
 
-            Elements readingVolumes = Jsoup.parse(result.toString()).select("div.home_index__userdata__main section.home_index__userdata__reading-volume");
+      @Override public void onNext(JsonObject value) {
 
-            Element thisVolume = readingVolumes.get(0);
-            binding.readingPageCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(0).text());
-            binding.readingVolumeCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(1).text());
-            binding.readingPageParDayCurrentMonth.setText(thisVolume.select(".home_index__userdata__reading-volume__count").get(2).text());
+        //user_idが保存されていない場合は取得して保存する
+        if (!sharedPreferences.contains("user_id")) {
+          JsonArray jsonArray = value.getAsJsonArray("resources");
+          Gson gson = new Gson();
+          HomeResource[] resources = gson.fromJson(jsonArray, HomeResource[].class);
+          int userId = resources[0].getUser().getId();
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putInt("user_id", userId);
+          editor.apply();
+        }
 
-            //Element lastMonthReadingVolume = readingVolumes.get(1);
-            //binding.readingPageLastMonth.setText(getString(R.string.book_reading_page, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(0).text()));
-            //binding.readingVolumeLastMonth.setText(getString(R.string.book_reading_volume, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(1).text()));
-            //binding.readingPageParDayLastMonth.setText(getString(R.string.book_reading_page_par_day, lastMonthReadingVolume.select(".home_index__userdata__reading-volume__count").get(2).text()));
-          }
+        binding.readingPageCurrentMonth.setText(page);
+        binding.readingVolumeCurrentMonth.setText(volume);
+        binding.readingPageParDayCurrentMonth.setText(pageParDay);
+      }
 
-          @Override public void onError(Throwable e) {
-            Timber.e(e);
-          }
+      @Override public void onError(Throwable e) {
+        Timber.e(e);
+      }
 
-          @Override public void onComplete() {
+      @Override public void onComplete() {
 
-          }
-        });
+      }
+    });
   }
 }

@@ -50,7 +50,7 @@ public class BookDetailActivity extends AppCompatActivity
 
   private ActivityBookDetailBinding binding;
 
-  private String userId;
+  private int userId;
   private String csrfToken;
   private String title;
   private String author;
@@ -66,7 +66,7 @@ public class BookDetailActivity extends AppCompatActivity
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((BookLife) getApplication()).getNetComponent().inject(this);
-    userId = sharedPreferences.getString("user_id", "");
+    userId = sharedPreferences.getInt("user_id", 0);
     binding = DataBindingUtil.setContentView(this, R.layout.activity_book_detail);
 
     setSupportActionBar(binding.bookDetailToolbar);

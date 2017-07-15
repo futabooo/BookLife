@@ -46,11 +46,11 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
   public AddBookDialogFragment() {
   }
 
-  public static AddBookDialogFragment newInstance(String csrfToken, String userID, int bookId) {
+  public static AddBookDialogFragment newInstance(String csrfToken, int userID, int bookId) {
     AddBookDialogFragment dialogFragment = new AddBookDialogFragment();
     Bundle args = new Bundle();
     args.putString(EXTRA_CSRF_TOKEN, csrfToken);
-    args.putString(EXTRA_BOOK_USER_ID, userID);
+    args.putInt(EXTRA_BOOK_USER_ID, userID);
     args.putInt(EXTRA_BOOK_ID, bookId);
     dialogFragment.setArguments(args);
     return dialogFragment;
@@ -100,7 +100,7 @@ public class AddBookDialogFragment extends AppCompatDialogFragment implements Da
     binding.dialogBookAddPositive.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         String csrfToken = getArguments().getString(EXTRA_CSRF_TOKEN);
-        String userId = getArguments().getString(EXTRA_BOOK_USER_ID);
+        int userId = getArguments().getInt(EXTRA_BOOK_USER_ID);
         final int bookId = getArguments().getInt(EXTRA_BOOK_ID);
         String impressions = binding.dialogBookAddImpressions.getText().toString();
         int netabare = binding.dialogBookAddSpoiler.isChecked() ? 1 : 0;

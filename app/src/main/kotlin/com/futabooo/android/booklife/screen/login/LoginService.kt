@@ -7,7 +7,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-internal interface LoginService {
+interface LoginService {
   @GET("/login") fun get(): Observable<ResponseBody>
 
   @FormUrlEncoded @POST("/login") fun login(

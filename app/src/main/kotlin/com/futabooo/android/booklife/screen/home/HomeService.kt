@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
-internal interface HomeService {
+interface HomeService {
   @GET("/home") fun home(): Observable<ResponseBody>
 
   @GET("/home.json") fun getJson(

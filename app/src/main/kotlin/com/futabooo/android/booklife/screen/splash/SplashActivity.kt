@@ -24,10 +24,6 @@ class SplashActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     (application as BookLife).netComponent.inject(this)
-    // 有効期限内のcookieがあればそれを使ってそのままHome画面を開く
-    if (false) {
-
-    }
 
     if (sharedPreferences.contains("email") && sharedPreferences.contains("password")) {
       try {

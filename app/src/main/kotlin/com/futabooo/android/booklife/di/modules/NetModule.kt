@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module class NetModule(val baseUrl: String) {
 
-  @Provides @Singleton fun provideOkHttpCache(application: Application): Cache {
+  @Singleton @Provides fun provideOkHttpCache(application: Application): Cache {
     val cacheSize = 10 * 1024 * 1024 // 10 MiB
     val cache = Cache(application.cacheDir, cacheSize.toLong())
     return cache
@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory
       PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(application))
 
 
-  @Provides @Singleton fun provideOkHttpClient(cache: Cache,
+  @Singleton @Provides fun provideOkHttpClient(cache: Cache,
                                                hostSelectionInterceptor: HostSelectionInterceptor,
                                                loggingInterceptor: LoggingInterceptor,
                                                persistentCookieJar: PersistentCookieJar): OkHttpClient {
@@ -46,7 +46,7 @@ import retrofit2.converter.gson.GsonConverterFactory
     return builder.build()
   }
 
-  @Provides @Singleton fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+  @Singleton @Provides fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     val retrofit = Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(
         RxJava2CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create())
         //.addConverterFactory(JsoupConverterFactory.create())

@@ -24,6 +24,7 @@ import com.kazakago.cryptore.Cryptore
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.io.BufferedReader
 import java.io.IOException
@@ -59,9 +60,10 @@ class LoginActivity : AppCompatActivity() {
     val EXTRA_AUTHENTICITY_TOKEN = "authenticity_token"
 
     fun createIntent(context: Context, email: String, password: String): Intent {
-      val intent = Intent(context, LoginActivity::class.java)
-      intent.putExtra(EXTRA_EMAIL, email)
-      intent.putExtra(EXTRA_PASSWORD, password)
+      val intent = Intent(context, LoginActivity::class.java).apply {
+        putExtra(EXTRA_EMAIL, email)
+        putExtra(EXTRA_PASSWORD, password)
+      }
       return intent
     }
   }
@@ -141,8 +143,8 @@ class LoginActivity : AppCompatActivity() {
       // form field with an error.
       focusView?.requestFocus()
     } else {
-      val observable = retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
-      observable.subscribeOn(Schedulers.io())
+      retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
+          .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .doOnSubscribe { showProgress(true) }
           .subscribe(object : Observer<ResponseBody> {
@@ -197,29 +199,20 @@ class LoginActivity : AppCompatActivity() {
   }
 
   private fun getToken() {
-    val observable = retrofit.create(LoginService::class.java).get()
-    observable.subscribeOn(Schedulers.io())
+    retrofit.create(LoginService::class.java).get()
+        .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : Observer<ResponseBody> {
-          override fun onSubscribe(d: Disposable) {
-
-          }
-
-          override fun onNext(value: ResponseBody) {
-            val reader = BufferedReader(InputStreamReader(value.byteStream()))
-            val result = reader.readLines().filter(String::isNotBlank).toList()
-            authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
-                "value")
-          }
-
-          override fun onError(e: Throwable) {
-            Timber.e(e)
-          }
-
-          override fun onComplete() {
-
-          }
-        })
+        .subscribeBy(
+            onNext = {
+              val reader = BufferedReader(InputStreamReader(it.byteStream()))
+              val result = reader.readLines().filter(String::isNotBlank).toList()
+              authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
+                  "value")
+            },
+            onError = {
+              Timber.e(it)
+            }
+        )
   }
 
   /**

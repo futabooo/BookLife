@@ -19,12 +19,12 @@ import timber.log.Timber
 
 @Module class AppModule(val application: Application) {
 
-  @Provides @Singleton fun provideApplication(): Application = application
+  @Singleton @Provides fun provideApplication(): Application = application
 
-  @Provides @Singleton fun provideSharedPreferences(application: Application): SharedPreferences =
+  @Singleton @Provides fun provideSharedPreferences(application: Application): SharedPreferences =
       PreferenceManager.getDefaultSharedPreferences(application)
 
-  @Provides @Singleton fun provideCryptore(application: Application): Cryptore {
+  @Singleton @Provides fun provideCryptore(application: Application): Cryptore {
     val builder = Cryptore.Builder("CIPHER_RSA", CipherAlgorithm.RSA)
     builder.context = application
     try {

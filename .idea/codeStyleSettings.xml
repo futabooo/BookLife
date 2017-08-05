@@ -88,8 +88,8 @@
           <option name="PACKAGES_TO_USE_STAR_IMPORTS">
             <value />
           </option>
-          <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="999" />
-          <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="999" />
+          <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
+          <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
           <option name="IMPORT_NESTED_CLASSES" value="true" />
         </JetCodeStyleSettings>
         <Objective-C-extensions>
@@ -333,9 +333,9 @@
           </arrangement>
         </codeStyleSettings>
         <codeStyleSettings language="kotlin">
-          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+          <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
           <option name="CALL_PARAMETERS_WRAP" value="1" />
-          <option name="METHOD_PARAMETERS_WRAP" value="1" />
+          <option name="METHOD_PARAMETERS_WRAP" value="5" />
           <indentOptions>
             <option name="INDENT_SIZE" value="2" />
             <option name="CONTINUATION_INDENT_SIZE" value="4" />

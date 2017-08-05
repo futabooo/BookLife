@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
@@ -11,6 +13,7 @@ ext {
   supportLibraryVersion = '25.3.1'
   retrofitVersion = '2.1.0'
   okhttpVersion = '3.7.0'
+  rxVersion = '2.1.0'
 }
 
 android {
@@ -70,6 +73,10 @@ android {
   dataBinding {
     enabled = true
   }
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
 }
 
 repositories {
@@ -87,6 +94,7 @@ dependencies {
 
   compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
   compile "com.android.support:design:${supportLibraryVersion}"
+  kapt 'com.android.databinding:compiler:2.5.0-alpha-preview-02'
 
   // jsoup HTML parser library @ http://jsoup.org/
   compile 'org.jsoup:jsoup:1.10.2'
@@ -103,14 +111,15 @@ dependencies {
   compile 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
   compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-  compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+  compile "io.reactivex.rxjava2:rxjava:${rxVersion}"
+  compile "io.reactivex.rxjava2:rxkotlin:${rxVersion}"
 
   // data store
   compile 'com.kazakago.cryptore:cryptore:1.0.0'
 
   // dagger2
   compile 'com.google.dagger:dagger:2.11'
-  annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+  kapt 'com.google.dagger:dagger-compiler:2.11'
 
   // images
   compile 'com.github.bumptech.glide:glide:3.7.0'

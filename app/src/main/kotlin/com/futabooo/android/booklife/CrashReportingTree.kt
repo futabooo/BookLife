@@ -8,7 +8,9 @@ class CrashReportingTree : Timber.Tree() {
 
   override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
     if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-      Crashlytics.log(priority, tag, message)
+      // TODO: tagをいい感じにセットできるようにしたい
+      // Crashlytics.log(priority, tag, message)
+      Crashlytics.log(message)
       return
     }
 

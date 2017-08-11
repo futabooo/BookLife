@@ -124,7 +124,7 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
       }
 
       override fun onError(e: Throwable) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       }
 
       override fun onComplete() {}
@@ -160,7 +160,7 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
               override fun onNext(value: JsonObject) {}
 
               override fun onError(e: Throwable) {
-                Timber.e(e)
+                Timber.e(e, e.message)
               }
 
               override fun onComplete() {}

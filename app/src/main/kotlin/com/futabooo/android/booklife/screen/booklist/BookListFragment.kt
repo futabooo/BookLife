@@ -97,7 +97,7 @@ class BookListFragment : Fragment() {
       }
 
       override fun onError(e: Throwable) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       }
 
       override fun onComplete() {}

@@ -176,21 +176,21 @@ class LoginActivity : AppCompatActivity() {
                   editor.putString("password", Base64.encodeToString(bytes1, Base64.DEFAULT))
                   editor.apply()
                 } catch (e: UnrecoverableEntryException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: NoSuchAlgorithmException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: KeyStoreException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: InvalidKeyException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: InvalidAlgorithmParameterException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: NoSuchPaddingException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: IOException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 } catch (e: NoSuchProviderException) {
-                  Timber.e(e)
+                  Timber.e(e, e.message)
                 }
 
                 startActivity(MainActivity.createIntent(this@LoginActivity))

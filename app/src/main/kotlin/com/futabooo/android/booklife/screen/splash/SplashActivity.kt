@@ -39,17 +39,17 @@ class SplashActivity : AppCompatActivity() {
         finish()
         return
       } catch (e: IOException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       } catch (e: NoSuchAlgorithmException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       } catch (e: UnrecoverableKeyException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       } catch (e: InvalidKeyException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       } catch (e: InvalidAlgorithmParameterException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       } catch (e: KeyStoreException) {
-        Timber.e(e)
+        Timber.e(e, e.message)
       }
 
     }

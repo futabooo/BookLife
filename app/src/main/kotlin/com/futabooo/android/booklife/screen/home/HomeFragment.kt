@@ -98,7 +98,8 @@ class HomeFragment : Fragment() {
               binding.readingVolumeCurrentMonth.text = volume
               binding.readingPageParDayCurrentMonth.text = pageParDay
             },
-            onError = { Timber.e(it) }
+            onError = {
+              Timber.e(it, it.message) }
         )
   }
 }

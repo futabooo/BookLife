@@ -30,19 +30,19 @@ import timber.log.Timber
     try {
       return builder.build()
     } catch (e: IOException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: CertificateException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: NoSuchAlgorithmException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: InvalidAlgorithmParameterException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: NoSuchPaddingException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: NoSuchProviderException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     } catch (e: KeyStoreException) {
-      Timber.e(e)
+      Timber.e(e, e.message)
     }
 
     return builder.build()

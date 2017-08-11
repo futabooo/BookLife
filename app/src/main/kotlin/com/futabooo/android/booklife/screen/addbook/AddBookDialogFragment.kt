@@ -99,7 +99,7 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
                 listener.onRegister(bookId)
                 dismiss()
               },
-              onError = { Timber.e(it) },
+              onError = { Timber.e(it, it.message) },
               onComplete = {}
           )
     }

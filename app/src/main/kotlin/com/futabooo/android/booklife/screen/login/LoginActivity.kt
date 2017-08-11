@@ -51,13 +51,10 @@ class LoginActivity : AppCompatActivity() {
   private lateinit var binding: ActivityLoginBinding
   private lateinit var loginPresenter: LoginPresenterImpl
 
-  private lateinit var authenticityToken: String
-
   companion object {
 
     val EXTRA_EMAIL = "email"
     val EXTRA_PASSWORD = "password"
-    val EXTRA_AUTHENTICITY_TOKEN = "authenticity_token"
 
     fun createIntent(context: Context, email: String, password: String): Intent {
       val intent = Intent(context, LoginActivity::class.java).apply {
@@ -99,8 +96,6 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
       }
     }
-
-    getToken()
   }
 
   /**
@@ -143,76 +138,55 @@ class LoginActivity : AppCompatActivity() {
       // form field with an error.
       focusView?.requestFocus()
     } else {
-      retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
+      retrofit.create(LoginService::class.java).get()
           .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
           .doOnSubscribe { showProgress(true) }
-          .subscribe(object : Observer<ResponseBody> {
-            override fun onSubscribe(d: Disposable) {
+          .flatMap {
+            val reader = BufferedReader(InputStreamReader(it.byteStream()))
+            val result = reader.readLines().filter(String::isNotBlank).toList()
+            val authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
+                "value")
+            retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
+          }
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .subscribeBy(
+              onNext = {
+                try {
+                  val editor = sharedPreferences.edit()
 
-            }
+                  val emailBytes = email.toByteArray()
+                  val (bytes) = cryptore.encrypt(emailBytes)
+                  editor.putString("email", Base64.encodeToString(bytes, Base64.DEFAULT))
+                  editor.apply()
 
-            override fun onNext(value: ResponseBody) {
-              try {
-                val editor = sharedPreferences.edit()
+                  val passwordBytes = password.toByteArray()
+                  val (bytes1) = cryptore.encrypt(passwordBytes)
+                  editor.putString("password", Base64.encodeToString(bytes1, Base64.DEFAULT))
+                  editor.apply()
+                } catch (e: UnrecoverableEntryException) {
+                  Timber.e(e)
+                } catch (e: NoSuchAlgorithmException) {
+                  Timber.e(e)
+                } catch (e: KeyStoreException) {
+                  Timber.e(e)
+                } catch (e: InvalidKeyException) {
+                  Timber.e(e)
+                } catch (e: InvalidAlgorithmParameterException) {
+                  Timber.e(e)
+                } catch (e: NoSuchPaddingException) {
+                  Timber.e(e)
+                } catch (e: IOException) {
+                  Timber.e(e)
+                } catch (e: NoSuchProviderException) {
+                  Timber.e(e)
+                }
 
-                val emailBytes = email.toByteArray()
-                val (bytes) = cryptore.encrypt(emailBytes)
-                editor.putString("email", Base64.encodeToString(bytes, Base64.DEFAULT))
-                editor.apply()
-
-                val passwordBytes = password.toByteArray()
-                val (bytes1) = cryptore.encrypt(passwordBytes)
-                editor.putString("password", Base64.encodeToString(bytes1, Base64.DEFAULT))
-                editor.apply()
-              } catch (e: UnrecoverableEntryException) {
-                Timber.e(e)
-              } catch (e: NoSuchAlgorithmException) {
-                Timber.e(e)
-              } catch (e: KeyStoreException) {
-                Timber.e(e)
-              } catch (e: InvalidKeyException) {
-                Timber.e(e)
-              } catch (e: InvalidAlgorithmParameterException) {
-                Timber.e(e)
-              } catch (e: NoSuchPaddingException) {
-                Timber.e(e)
-              } catch (e: IOException) {
-                Timber.e(e)
-              } catch (e: NoSuchProviderException) {
-                Timber.e(e)
-              }
-
-              startActivity(MainActivity.createIntent(this@LoginActivity))
-              finish()
-            }
-
-            override fun onError(e: Throwable) {
-              Timber.e(e)
-            }
-
-            override fun onComplete() {
-
-            }
-          })
+                startActivity(MainActivity.createIntent(this@LoginActivity))
+                finish()
+              },
+              onError = { Timber.e(it, it.message) }
+          )
     }
-  }
-
-  private fun getToken() {
-    retrofit.create(LoginService::class.java).get()
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeBy(
-            onNext = {
-              val reader = BufferedReader(InputStreamReader(it.byteStream()))
-              val result = reader.readLines().filter(String::isNotBlank).toList()
-              authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
-                  "value")
-            },
-            onError = {
-              Timber.e(it)
-            }
-        )
   }
 
   /**

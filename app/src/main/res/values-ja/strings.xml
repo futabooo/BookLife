@@ -46,4 +46,7 @@
   <string name="book_record_reading_volume">読書量</string>
   <string name="book_record_reading_volume_last_month">先月の読書量</string>
 
+  <!-- Error -->
+  <string name="error_login">メールアドレスまたはパスワードが間違っています</string>
+
 </resources>

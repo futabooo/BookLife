@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableInt
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Base64
@@ -19,11 +21,14 @@ import android.widget.TextView
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivityLoginBinding
+import com.futabooo.android.booklife.extensions.applySchedulers
 import com.futabooo.android.booklife.screen.MainActivity
 import com.kazakago.cryptore.Cryptore
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import java.io.BufferedReader
@@ -139,18 +144,25 @@ class LoginActivity : AppCompatActivity() {
       focusView?.requestFocus()
     } else {
       retrofit.create(LoginService::class.java).get()
-          .subscribeOn(Schedulers.io())
-          .doOnSubscribe { showProgress(true) }
           .flatMap {
             val reader = BufferedReader(InputStreamReader(it.byteStream()))
             val result = reader.readLines().filter(String::isNotBlank).toList()
-            val authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
-                "value")
+            val authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr("value")
             retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
           }
-          .subscribeOn(AndroidSchedulers.mainThread())
+          .applySchedulers()
+          .doOnSubscribe { showProgress(true) }
+          .doFinally { showProgress(false) }
           .subscribeBy(
               onNext = {
+                val reader = BufferedReader(InputStreamReader(it.byteStream()))
+                val result = reader.readLines().filter(String::isNotBlank).toList()
+                val alert = Jsoup.parse(result.toString()).select("div.container li.bm-flash-item--alert").isNotEmpty()
+                if (alert) {
+                  Snackbar.make(binding.root, getString(R.string.error_login), Snackbar.LENGTH_SHORT).show()
+                  return@subscribeBy
+                }
+
                 try {
                   val editor = sharedPreferences.edit()
 

@@ -12,18 +12,16 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.futabooo.android.booklife.BookLife
+import com.futabooo.android.booklife.InfiniteScrollListener
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivitySearchBinding
+import com.futabooo.android.booklife.extensions.applySchedulers
 import com.futabooo.android.booklife.model.SearchResultResource
 import com.futabooo.android.booklife.screen.BookListMenu
 import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity
 import com.google.gson.Gson
-import com.google.gson.JsonObject
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxkotlin.subscribeBy
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
@@ -36,47 +34,65 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
   @Inject lateinit var retrofit: Retrofit
   @Inject lateinit var sharedPreferences: SharedPreferences
 
-  private var userId: Int = 0
-  private lateinit var csrfToken: String
-
   private lateinit var binding: ActivitySearchBinding
   private lateinit var resultAdapter: SearchResultAdapter
 
+  val userId by lazy { sharedPreferences.getInt("user_id", 0) }
+  private lateinit var csrfToken: String
+  private lateinit var keyword: String
+  val limit: Int = 20
+  var offset: Int = 0
+
   companion object {
-    fun createIntent(context: Context): Intent = Intent(context, SearchActivity::class.java)
+    fun createIntent(context: Context) = Intent(context, SearchActivity::class.java)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     (application as BookLife).netComponent.inject(this)
-    userId = sharedPreferences.getInt("user_id", 0)
 
-    binding = DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search)
-    with(binding) {
+    binding = DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search).apply {
       setSupportActionBar(activitySearchToolbar)
       supportActionBar?.setDisplayShowTitleEnabled(false)
       supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-      activitySearchResultList.layoutManager = LinearLayoutManager(this@SearchActivity)
+      val layoutManager = LinearLayoutManager(this@SearchActivity)
+      activitySearchResultList.layoutManager = layoutManager
+      resultAdapter = SearchResultAdapter(mutableListOf(),
+          { view, bookId ->
+            when (view.id) {
+              R.id.search_result_item -> {
+                startActivity(BookDetailActivity.createIntent(this@SearchActivity, bookId))
+              }
+              R.id.search_result_book_action -> {
+                BookRegisterBottomSheetDialogFragment.newInstance(bookId).show(supportFragmentManager, "bottom_sheet")
+              }
+            }
+          })
+      activitySearchResultList.adapter = resultAdapter
+      activitySearchResultList.addOnScrollListener(InfiniteScrollListener({ searchBooks(keyword) }, layoutManager))
     }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     binding.activitySearchToolbar.inflateMenu(R.menu.activity_search_menu)
-    val searchView = binding.activitySearchToolbar.menu.findItem(R.id.menu_search).actionView as SearchView
-    searchView.isIconified = false
-    searchView.queryHint = getString(R.string.search_hint)
-    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-      override fun onQueryTextSubmit(query: String): Boolean {
-        searchView.clearFocus()
-        searchBooks(query)
-        return false
-      }
+    binding.activitySearchToolbar.menu.findItem(R.id.menu_search).actionView.also {
+      it as SearchView
+      it.isIconified = false
+      it.queryHint = getString(R.string.search_hint)
+      it.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+          it.clearFocus()
+          keyword = query
+          searchBooks(keyword)
+          return false
+        }
 
-      override fun onQueryTextChange(newText: String): Boolean {
-        return false
-      }
-    })
+        override fun onQueryTextChange(newText: String): Boolean {
+          return false
+        }
+      })
+    }
     return super.onCreateOptionsMenu(menu)
   }
 
@@ -88,73 +104,43 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
         finish()
         return true
       }
-      else -> {
-      }
     }
     return super.onOptionsItemSelected(item)
   }
 
   private fun searchBooks(keyword: String) {
-    val observable = retrofit.create(SearchService::class.java).get(keyword)
-    observable.subscribeOn(Schedulers.io()).flatMap {
-      val reader = BufferedReader(InputStreamReader(it.byteStream()))
-      val result = reader.readLines().filter(String::isNotBlank).toList()
-      csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
-      retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", 0, 20)
-    }.observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<JsonObject> {
-      override fun onSubscribe(d: Disposable) {}
-
-      override fun onNext(value: JsonObject) {
-        val jsonArray = value.getAsJsonArray("resources")
-        val gson = Gson()
-        val resources = gson.fromJson(jsonArray, Array<SearchResultResource>::class.java)
-        resultAdapter = SearchResultAdapter(resources,
-            { view, bookId ->
-              when (view.id) {
-                R.id.search_result_item -> {
-                  startActivity(BookDetailActivity.createIntent(this@SearchActivity, bookId))
-                }
-                R.id.search_result_book_action -> {
-                  BookRegisterBottomSheetDialogFragment.newInstance(bookId).show(supportFragmentManager, "bottom_sheet")
-                }
-                else -> {
-                }
-              }
-            })
-        binding.activitySearchResultList.adapter = resultAdapter
-      }
-
-      override fun onError(e: Throwable) {
-        Timber.e(e, e.message)
-      }
-
-      override fun onComplete() {}
-    })
+    retrofit.create(SearchService::class.java).get(keyword)
+        .flatMap {
+          val reader = BufferedReader(InputStreamReader(it.byteStream()))
+          val result = reader.readLines().filter(String::isNotBlank).toList()
+          csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
+          retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", offset, limit)
+        }
+        .applySchedulers()
+        .doOnSubscribe { resultAdapter.showProgress(true) }
+        .doFinally { resultAdapter.showProgress(false) }
+        .subscribeBy(
+            onNext = {
+              val jsonArray = it.getAsJsonArray("resources")
+              val resources = Gson().fromJson(jsonArray, Array<SearchResultResource>::class.java)
+              resultAdapter.addAll(resources.toMutableList())
+              offset += limit
+            },
+            onError = { Timber.e(it, it.message) }
+        )
   }
 
   override fun onBottomSheetAction(bookListMenu: BookListMenu, bookId: Int) {
     when (bookListMenu) {
       BookListMenu.READ -> {
-        //startActivity(BookEditActivity.createIntent(SearchActivity.this, asin));
-        val dialogFragment = AddBookDialogFragment.newInstance(csrfToken, userId, bookId)
-        dialogFragment.show(supportFragmentManager, "add_book_dialog")
+        AddBookDialogFragment.newInstance(csrfToken, userId, bookId).show(supportFragmentManager, "add_book_dialog")
       }
       BookListMenu.READING, BookListMenu.TO_READ, BookListMenu.QUITTED -> {
-        val observable = retrofit.create(ActionService::class.java).addBook(csrfToken, userId, bookListMenu.key,
-            bookId)
-        observable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : Observer<JsonObject> {
-              override fun onSubscribe(d: Disposable) {}
-
-              override fun onNext(value: JsonObject) {}
-
-              override fun onError(e: Throwable) {
-                Timber.e(e, e.message)
-              }
-
-              override fun onComplete() {}
-            })
+        retrofit.create(ActionService::class.java).addBook(csrfToken, userId, bookListMenu.key, bookId)
+            .applySchedulers()
+            .subscribeBy(
+                onError = { Timber.e(it, it.message) }
+            )
       }
     }
   }

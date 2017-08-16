@@ -68,6 +68,8 @@ android {
       buildConfigField "boolean", "USE_CRASHLYTICS", "false"
       ext.enableCrashlytics = false
     }
+
+    lintOptions { checkReleaseBuilds false }
   }
 
   dataBinding {
@@ -82,7 +84,7 @@ android {
 repositories {
   mavenCentral()
   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-  maven { url "https://maven.fabric.io/public"}
+  maven { url "https://maven.fabric.io/public" }
 }
 
 dependencies {

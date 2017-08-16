@@ -18,6 +18,7 @@ import android.util.Base64
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.crashlytics.android.core.CrashlyticsCore
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivityLoginBinding
@@ -147,7 +148,8 @@ class LoginActivity : AppCompatActivity() {
           .flatMap {
             val reader = BufferedReader(InputStreamReader(it.byteStream()))
             val result = reader.readLines().filter(String::isNotBlank).toList()
-            val authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr("value")
+            val authenticityToken = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr(
+                "value")
             retrofit.create(LoginService::class.java).login(email, password, authenticityToken)
           }
           .applySchedulers()
@@ -159,6 +161,7 @@ class LoginActivity : AppCompatActivity() {
                 val result = reader.readLines().filter(String::isNotBlank).toList()
                 val alert = Jsoup.parse(result.toString()).select("div.container li.bm-flash-item--alert").isNotEmpty()
                 if (alert) {
+                  CrashlyticsCore.getInstance().log("E-mail or Password is wrong")
                   Snackbar.make(binding.root, getString(R.string.error_login), Snackbar.LENGTH_SHORT).show()
                   return@subscribeBy
                 }

@@ -15,7 +15,8 @@ import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.InfiniteScrollListener
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivitySearchBinding
-import com.futabooo.android.booklife.extensions.applySchedulers
+import com.futabooo.android.booklife.extensions.observeOnUI
+import com.futabooo.android.booklife.extensions.subscribeOnIO
 import com.futabooo.android.booklife.model.SearchResultResource
 import com.futabooo.android.booklife.screen.BookListMenu
 import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment
@@ -116,7 +117,8 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
           csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
           retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", offset, limit)
         }
-        .applySchedulers()
+        .subscribeOnIO
+        .observeOnUI
         .doOnSubscribe { resultAdapter.showProgress(true) }
         .doFinally { resultAdapter.showProgress(false) }
         .subscribeBy(
@@ -137,7 +139,8 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
       }
       BookListMenu.READING, BookListMenu.TO_READ, BookListMenu.QUITTED -> {
         retrofit.create(ActionService::class.java).addBook(csrfToken, userId, bookListMenu.key, bookId)
-            .applySchedulers()
+            .subscribeOnIO
+            .observeOnUI
             .subscribeBy(
                 onError = { Timber.e(it, it.message) }
             )

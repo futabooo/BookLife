@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:drawme="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screen.login.LoginActivity"
     >
+
+  <data>
+
+    <variable
+        name="presenter"
+        type="com.futabooo.android.booklife.screen.login.LoginPresenter"
+        />
+  </data>
 
   <RelativeLayout
       android:layout_width="match_parent"
@@ -11,17 +20,18 @@
       android:gravity="center_horizontal"
       android:orientation="vertical"
       >
+
     <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="@dimen/space_medium"
         android:visibility="gone"
+        tools:visibility="visible"
         style="?android:attr/progressBarStyleLarge"
         />
-
 
     <ImageView
         android:layout_width="240dp"
@@ -40,6 +50,7 @@
         android:paddingLeft="@dimen/space_xlarge"
         android:paddingRight="@dimen/space_xlarge"
         >
+
       <android.support.design.widget.TextInputLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -50,8 +61,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/login_prompt_email"
+            android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:maxLines="1"
+            android:nextFocusForward="@+id/password"
+            android:singleLine="true"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -71,6 +85,7 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
+            android:singleLine="true"
             />
 
       </android.support.design.widget.TextInputLayout>
@@ -83,6 +98,7 @@
           android:layout_marginLeft="@dimen/space_large"
           android:layout_marginRight="@dimen/space_large"
           android:layout_marginTop="36dp"
+          android:onClick="@{() -> presenter.onSignInClick()}"
           android:text="@string/login_sign_in"
           android:textColor="@android:color/white"
           drawme:dm_backColor="@color/accent"
@@ -99,7 +115,7 @@
           android:layout_marginBottom="64dp"
           android:layout_marginTop="@dimen/space_large"
           android:background="?android:attr/selectableItemBackground"
-          android:clickable="true"
+          android:onClick="@{() -> presenter.onForgetPasswordClick()}"
           android:text="@string/login_forget_password"
           android:textColor="@color/secondary_text"
           />
@@ -110,6 +126,7 @@
           android:layout_gravity="center_horizontal"
           android:orientation="horizontal"
           >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,7 +144,7 @@
             android:layout_marginLeft="@dimen/space_small"
             android:layout_marginTop="@dimen/space_medium"
             android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
+            android:onClick="@{() -> presenter.onSignUpClick()}"
             android:text="@string/login_sign_up"
             android:textColor="@color/secondary_text"
             />

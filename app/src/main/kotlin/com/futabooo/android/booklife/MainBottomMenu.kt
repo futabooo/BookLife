@@ -11,8 +11,12 @@ enum class MainBottomMenu constructor(val position: Int,
   BOOK(1, R.string.book, View.VISIBLE, TabLayout.MODE_FIXED);
 
   companion object {
-    fun fromPosition(position: Int): MainBottomMenu? {
-      return values().firstOrNull { position == it.position }
+    fun fromPosition(position: Int): MainBottomMenu {
+      when (position) {
+        HOME.position -> return HOME
+        BOOK.position -> return BOOK
+        else -> throw IndexOutOfBoundsException(position.toString())
+      }
     }
   }
 }

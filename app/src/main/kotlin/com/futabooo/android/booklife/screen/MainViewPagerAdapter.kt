@@ -41,7 +41,7 @@ class MainViewPagerAdapter(private val context: Context, fm: FragmentManager) : 
       MainBottomMenu.HOME -> return context.getString(R.string.home)
       MainBottomMenu.BOOK -> {
         val bookListMenu = BookListMenu.fromPosition(position)
-        return context.getString(bookListMenu!!.titleResId)
+        return context.getString(bookListMenu.titleResId)
       }
       else -> return ""
     }

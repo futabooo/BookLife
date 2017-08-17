@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.InfiniteScrollListener
 import com.futabooo.android.booklife.databinding.FragmentBookListBinding
-import com.futabooo.android.booklife.extensions.applySchedulers
+import com.futabooo.android.booklife.extensions.observeOnUI
+import com.futabooo.android.booklife.extensions.subscribeOnIO
 import com.futabooo.android.booklife.model.Resource
 import com.futabooo.android.booklife.screen.BookListMenu
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity
@@ -82,7 +83,8 @@ class BookListFragment : Fragment() {
           val csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
           retrofit.create(BookListService::class.java).getJson(csrfToken, userId, bookListMenu.key, "true", offset, limit)
         }
-        .applySchedulers()
+        .subscribeOnIO
+        .observeOnUI
         .doOnSubscribe { bookAdapter.showProgress(true) }
         .doFinally { bookAdapter.showProgress(false) }
         .subscribeBy(

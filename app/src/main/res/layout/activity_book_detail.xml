@@ -70,7 +70,7 @@
           android:layout_alignBottom="@id/book_detail_book_thumbnail"
           android:layout_marginLeft="@dimen/space_xlarge"
           android:layout_toRightOf="@+id/book_detail_buy"
-          android:src="@drawable/ic_add_black_24dp"
+          android:src="@drawable/ic_add"
           />
     </RelativeLayout>
 

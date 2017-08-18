@@ -4,51 +4,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-  <android.support.design.widget.CoordinatorLayout
+
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      tools:context=".screen.MainActivity"
       >
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-      <android.support.v7.widget.Toolbar
-          android:id="@+id/activity_main_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="?attr/colorPrimary"
-          android:minHeight="?attr/actionBarSize"
-          app:layout_scrollFlags="scroll|enterAlways"
-          style="@style/BaseToolbar"
-          />
-
-      <android.support.design.widget.TabLayout
-          android:id="@+id/activity_main_tab_layout"
-          android:layout_width="match_parent"
-          android:layout_height="48dp"
-          android:textAllCaps="false"
-          app:tabMode="scrollable"
-          />
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/activity_main_viewpager"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".screen.MainActivity"
+        >
+
+      <android.support.design.widget.AppBarLayout
+          android:id="@+id/activity_main_app_bar_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            style="@style/BaseToolbar"
+            />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/activity_main_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textAllCaps="false"
+            app:tabMode="scrollable"
+            />
+      </android.support.design.widget.AppBarLayout>
+
+      <android.support.v4.view.ViewPager
+          android:id="@+id/activity_main_viewpager"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          app:layout_behavior="@string/appbar_scrolling_view_behavior"
+          />
+
+      <com.roughike.bottombar.BottomBar
+          android:id="@+id/bottom_bar"
+          android:layout_width="match_parent"
+          android:layout_height="60dp"
+          android:layout_gravity="bottom"
+          app:bb_activeTabColor="@color/accent"
+          app:bb_behavior="shy"
+          app:bb_tabXmlResource="@xml/bottom_bar_tabs"
+          />
+    </android.support.design.widget.CoordinatorLayout>
+
+    <include
+        layout="@layout/component_arc_layout"
+        android:id="@+id/activity_main_arc_layout"
         />
 
-    <com.roughike.bottombar.BottomBar
-        android:id="@+id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        app:bb_activeTabColor="@color/accent"
-        app:bb_behavior="shy"
-        app:bb_tabXmlResource="@xml/bottom_bar_tabs"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="13dp"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/primary"
+        app:elevation="2dp"
         />
 
-  </android.support.design.widget.CoordinatorLayout>
+  </FrameLayout>
 </layout>

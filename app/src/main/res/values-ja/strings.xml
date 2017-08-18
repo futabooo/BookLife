@@ -49,4 +49,7 @@
   <!-- Error -->
   <string name="error_login">メールアドレスまたはパスワードが間違っています</string>
 
+  <!-- Feature -->
+  <string name="coming_soon">開発中ですm(_ _)m</string>
+
 </resources>

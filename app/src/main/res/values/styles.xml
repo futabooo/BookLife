@@ -29,4 +29,22 @@
     <item name="android:windowBackground">@drawable/splash_background</item>
   </style>
 
+
+  <style name="Item" parent="">
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="Item.Small">
+    <item name="android:layout_width">@dimen/arc_item_small</item>
+    <item name="android:layout_height">@dimen/arc_item_small</item>
+    <item name="android:textSize">@dimen/app_text_size_small</item>
+    <item name="android:background">@drawable/selector_arc_layout_menu</item>
+  </style>
+
+  <style name="Item.Medium">
+    <item name="android:layout_width">@dimen/arc_item_medium</item>
+    <item name="android:layout_height">@dimen/arc_item_medium</item>
+    <item name="android:textSize">@dimen/app_text_size_medium</item>
+    <item name="android:background">@drawable/selector_arc_layout_menu</item>
+  </style>
 </resources>

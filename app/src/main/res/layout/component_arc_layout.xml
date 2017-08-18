@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+  <FrameLayout
+      android:id="@+id/arc_layout_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/scrim"
+      android:visibility="invisible"
+      >
+
+    <com.ogaclejapan.arclayout.ArcLayout
+        android:id="@+id/arc_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:arc_axisRadius="140dp"
+        app:arc_freeAngle="true"
+        app:arc_origin="bottom"
+        >
+
+      <ImageButton
+          android:id="@+id/arc_layout_menu_barcode_scan"
+          android:src="@drawable/ic_barcode_scan"
+          app:arc_angle="60"
+          style="@style/Item.Medium"
+          />
+
+      <ImageButton
+          android:id="@+id/arc_layout_menu_search"
+          android:src="@drawable/ic_search"
+          app:arc_angle="90"
+          style="@style/Item.Medium"
+          />
+
+      <ImageButton
+          android:id="@+id/arc_layout_menu_record_voice"
+          android:src="@drawable/ic_record_voice"
+          app:arc_angle="120"
+          style="@style/Item.Medium"
+          />
+
+    </com.ogaclejapan.arclayout.ArcLayout>
+
+  </FrameLayout>
+</layout>

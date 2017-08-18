@@ -16,6 +16,11 @@
   <dimen name="app_text_size_large">18sp</dimen>
   <dimen name="app_text_size_xlarge">20sp</dimen>
 
+  <!-- arc layout item -->
+  <dimen name="arc_item_small">36dp</dimen>
+  <dimen name="arc_item_medium">48dp</dimen>
+  <dimen name="arc_item_large">72dp</dimen>
+
   <!-- LoginActivity -->
   <dimen name="logo_margin_top">130dp</dimen>
 </resources>

@@ -29,6 +29,7 @@ import javax.inject.Inject
 import org.jsoup.Jsoup
 import retrofit2.Retrofit
 import timber.log.Timber
+import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
 
 class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener, AddBookDialogFragment.OnAddBookActionListener {
 
@@ -45,7 +46,12 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
   var offset: Int = 0
 
   companion object {
-    fun createIntent(context: Context) = Intent(context, SearchActivity::class.java)
+    private val EXTRA_ISBN = "isbn"
+
+    fun createIntent(context: Context, isbn: String = "") =
+        Intent(context, SearchActivity::class.java).apply {
+          putExtra(EXTRA_ISBN, isbn)
+        }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +79,8 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
       activitySearchResultList.adapter = resultAdapter
       activitySearchResultList.addOnScrollListener(InfiniteScrollListener({ searchBooks(keyword) }, layoutManager))
     }
+
+    intent.getStringExtra(EXTRA_ISBN).let { searchBooks(it) }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -115,7 +123,8 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
           val reader = BufferedReader(InputStreamReader(it.byteStream()))
           val result = reader.readLines().filter(String::isNotBlank).toList()
           csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
-          retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", offset, limit)
+          retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", offset,
+              limit)
         }
         .subscribeOnIO
         .observeOnUI

@@ -36,9 +36,11 @@ class SplashActivity : AppCompatActivity(), SplashPresenter.Contract {
 
   override fun openLoginActivity(email:String, password:String) {
     startActivity(LoginActivity.createIntent(this@SplashActivity, email, password))
+    finish()
   }
 
   override fun openMainActivity() {
     startActivity(MainActivity.createIntent(this@SplashActivity))
+    finish()
   }
 }

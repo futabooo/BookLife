@@ -2,6 +2,7 @@ package com.futabooo.android.booklife
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
 import com.futabooo.android.booklife.di.components.DaggerNetComponent
 import com.futabooo.android.booklife.di.components.NetComponent
 import com.futabooo.android.booklife.di.modules.AppModule
@@ -21,7 +22,7 @@ class BookLife : Application() {
     super.onCreate()
 
     if (BuildConfig.USE_CRASHLYTICS) {
-      Fabric.with(this, Crashlytics())
+      Fabric.with(this, Crashlytics(), Answers())
     }
 
     if (BuildConfig.DEBUG) {

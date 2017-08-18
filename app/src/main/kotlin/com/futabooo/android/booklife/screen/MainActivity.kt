@@ -24,6 +24,9 @@ import android.view.MotionEvent
 import android.widget.FrameLayout
 import android.widget.Toast
 import android.app.Activity
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
+import com.futabooo.android.booklife.BuildConfig
 
 
 class MainActivity : AppCompatActivity() {
@@ -110,14 +113,18 @@ class MainActivity : AppCompatActivity() {
 
         hideMenu()
         binding.floatingActionButton.isSelected = false
+
+        if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Barcode Scan"))
       }
       activityMainArcLayout?.arcLayoutMenuSearch?.setOnClickListener {
         startActivity(SearchActivity.createIntent(this@MainActivity))
         hideMenu()
         binding.floatingActionButton.isSelected = false
+        if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Search"))
       }
       activityMainArcLayout?.arcLayoutMenuRecordVoice?.setOnClickListener {
         Toast.makeText(this@MainActivity, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show()
+        if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Record Voice"))
       }
     }
   }

@@ -46,6 +46,13 @@
   <string name="book_record_reading_volume">Reading volume</string>
   <string name="book_record_reading_volume_last_month">Reading volume of last month</string>
 
+  <!-- Menu -->
+  <string name="licenses">Open Source Licenses</string>
+  <string name="settings">Settings</string>
+
+  <!-- Option -->
+
+
   <!-- Error -->
   <string name="error_login">E-mail or Password is wrong</string>
 

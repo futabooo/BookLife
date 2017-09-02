@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+apply plugin: 'com.cookpad.android.licensetools'
 
 // Load keystore
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -103,8 +104,6 @@ dependencies {
 
   // jsoup HTML parser library @ http://jsoup.org/
   compile 'org.jsoup:jsoup:1.10.2'
-  compile 'com.ekchang.jsouper:jsouper:0.0.3-SNAPSHOT'
-  compile 'com.ekchang.jsouper:retrofit-converter-jsouper:0.0.3-SNAPSHOT'
 
   // http client
   compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"

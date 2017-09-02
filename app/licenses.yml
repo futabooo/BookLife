@@ -1,0 +1,380 @@
+- artifact: com.android.databinding:adapters:+
+  name: adapters
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  skip: true
+
+- artifact: com.android.databinding:baseLibrary:+
+  name: Data Binding Base Library
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://tools.android.com
+  skip: true
+
+- artifact: com.android.databinding:library:+
+  name: library
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  skip: true
+
+- artifact: com.android.support.constraint:constraint-layout-solver:+
+  name: constraint-layout-solver
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support.constraint:constraint-layout:+
+  name: constraint-layout
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:animated-vector-drawable:+
+  name: animated-vector-drawable
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:appcompat-v7:+
+  name: appcompat-v7
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:cardview-v7:+
+  name: cardview-v7
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:design:+
+  name: design
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:recyclerview-v7:+
+  name: recyclerview-v7
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-annotations:+
+  name: support-annotations
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-compat:+
+  name: support-compat
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-core-ui:+
+  name: support-core-ui
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-core-utils:+
+  name: support-core-utils
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-fragment:+
+  name: support-fragment
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-media-compat:+
+  name: support-media-compat
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-v4:+
+  name: support-v4
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:support-vector-drawable:+
+  name: support-vector-drawable
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.android.support:transition:+
+  name: transition
+  copyrightHolder: The Android Open Source Project
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.crashlytics.sdk.android:answers:+
+  name: Android SDK Answers
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: Answers Terms of Service
+  licenseUrl: https://answers.io/terms
+  skip: true
+
+- artifact: com.crashlytics.sdk.android:beta:+
+  name: Android SDK for Beta
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: Crashlytics Terms of Service
+  licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
+  skip: true
+
+- artifact: com.crashlytics.sdk.android:crashlytics-core:+
+  name: Android SDK Crashlytics Core
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: Crashlytics Terms of Service
+  licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
+  skip: true
+
+- artifact: com.crashlytics.sdk.android:crashlytics:+
+  name: Android SDK Crashlytics
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: Crashlytics Terms of Service
+  licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
+  skip: true
+
+- artifact: com.github.bumptech.glide:glide:+
+  name: Glide
+  copyrightHolder: Google Inc.
+  license: Simplified BSD License
+  licenseUrl: http://www.opensource.org/licenses/bsd-license
+  url: https://github.com/bumptech/glide
+
+- artifact: com.github.franmontiel:PersistentCookieJar:+
+  name: franmontiel/PersistentCookieJar
+  copyrightHolder: Francisco José Montiel Navarro
+  license: Apache License 2.0
+  licenseUrl: https://api.github.com/licenses/apache-2.0
+  url: https://github.com/franmontiel/PersistentCookieJar
+
+- artifact: com.github.rafakob:DrawMe:+
+  name: rafakob/DrawMe
+  copyrightHolder: Rafał Kobyłko
+  license: Apache License 2.0
+  licenseUrl: https://api.github.com/licenses/apache-2.0
+  url: https://github.com/rafakob/DrawMe
+
+- artifact: com.google.android.gms:play-services-base:+
+  name: play-services-base
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.android.gms:play-services-basement:+
+  name: play-services-basement
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.android.gms:play-services-tasks:+
+  name: play-services-tasks
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.code.gson:gson:+
+  name: Gson
+  copyrightHolder: Google Inc.
+  license: The Apache Software License, Version 2.0
+
+- artifact: com.google.dagger:dagger:+
+  name: Dagger
+  copyrightHolder: The Dagger Authors
+  license: Apache 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/google/dagger
+
+- artifact: com.google.firebase:firebase-analytics-impl:+
+  name: firebase-analytics-impl
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.firebase:firebase-analytics:+
+  name: firebase-analytics
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.firebase:firebase-common:+
+  name: firebase-common
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.firebase:firebase-core:+
+  name: firebase-core
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.google.firebase:firebase-iid:+
+  name: firebase-iid
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
+  skip: true
+
+- artifact: com.jakewharton.retrofit:retrofit2-rxjava2-adapter:+
+  name: Retrofit 2 OkHttp 2 Adapter
+  copyrightHolder: Jake Wharton
+  license: Apache License Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+
+- artifact: com.jakewharton.timber:timber:+
+  name: Timber
+  copyrightHolder: Jake Wharton
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/JakeWharton/timber
+
+- artifact: com.kazakago.cryptore:cryptore:+
+  name: cryptore
+  copyrightHolder: KazaKago
+  license: The MIT License
+
+- artifact: com.ogaclejapan.arclayout:library:+
+  name: ArcLayout
+  copyrightHolder: ogaclejapan
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ogaclejapan/ArcLayout
+
+- artifact: com.roughike:bottom-bar:+
+  name: bottom-bar
+  copyrightHolder: Iiro Krankka (http://github.com/roughike)
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/roughike/BottomBar
+
+- artifact: com.squareup.okhttp3:okhttp-urlconnection:+
+  name: OkHttp URLConnection
+  copyrightHolder: Square, Inc
+  license: The Apache Software License, Version 2.0
+  skip: true
+
+- artifact: com.squareup.okhttp3:okhttp:+
+  name: OkHttp
+  copyrightHolder: Square, Inc
+  license: The Apache Software License, Version 2.0
+
+- artifact: com.squareup.okio:okio:+
+  name: Okio
+  copyrightHolder: Square, Inc
+  license: The Apache Software License, Version 2.0
+  skip: true
+
+- artifact: com.squareup.retrofit2:converter-gson:+
+  name: Converter Gson
+  copyrightHolder: Square, Inc
+  license: The Apache Software License, Version 2.0
+  skip: true
+
+- artifact: com.squareup.retrofit2:converter-scalars:+
+  name: Converter Java Scalars
+  copyrightHolder: Square, Inc.
+  license: The Apache Software License, Version 2.0
+  skip: true
+
+- artifact: com.squareup.retrofit2:retrofit:+
+  name: Retrofit
+  copyrightHolder: Square, Inc.
+  license: The Apache Software License, Version 2.0
+
+- artifact: io.fabric.sdk.android:fabric:+
+  name: Android SDK Fabric
+  copyrightHolder:  Google Inc.
+  license: Fabric Software and Services Agreement
+  licenseUrl: https://fabric.io/terms
+  skip: true
+
+- artifact: io.reactivex.rxjava2:rxandroid:+
+  name: RxAndroid
+  copyrightHolder: The RxAndroid authors
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ReactiveX/RxAndroid
+
+- artifact: io.reactivex.rxjava2:rxjava:+
+  name: rxjava
+  copyrightHolder: Netflix, Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ReactiveX/RxJava
+
+- artifact: io.reactivex.rxjava2:rxkotlin:+
+  name: rxkotlin
+  copyrightHolder: Netflix, Inc.
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://github.com/ReactiveX/RxKotlin
+
+- artifact: javax.inject:javax.inject:+
+  name: javax.inject
+  copyrightHolder: The JSR-330 Expert Group
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://code.google.com/p/atinject/
+  skip: true
+
+- artifact: jp.wasabeef:glide-transformations:+
+  name: glide-transformations
+  copyrightHolder: Wasabeef
+  license: The Apache Software License, Version 2.0
+
+- artifact: org.jetbrains.kotlin:kotlin-stdlib-jre7:+
+  name: org.jetbrains.kotlin:kotlin-stdlib-jre7
+  copyrightHolder: JetBrains
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
+
+- artifact: org.jetbrains.kotlin:kotlin-stdlib-jre8:+
+  name: org.jetbrains.kotlin:kotlin-stdlib-jre8
+  copyrightHolder: JetBrains
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
+
+- artifact: org.jetbrains.kotlin:kotlin-stdlib:+
+  name: org.jetbrains.kotlin:kotlin-stdlib
+  copyrightHolder: JetBrains
+  license: The Apache License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://kotlinlang.org/
+  skip: true
+
+- artifact: org.jetbrains:annotations:+
+  name: IntelliJ IDEA Annotations
+  copyrightHolder: JetBrains
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: http://www.jetbrains.org
+  skip: true
+
+- artifact: org.jsoup:jsoup:+
+  name: jsoup Java HTML Parser
+  copyrightHolder: Jonathan Hedley
+  license: The MIT License
+  licenseUrl: https://jsoup.org/license
+  url: https://jsoup.org/
+
+- artifact: org.reactivestreams:reactive-streams:+
+  name: reactive-streams
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: CC0
+  licenseUrl: http://creativecommons.org/publicdomain/zero/1.0/
+  url: http://www.reactive-streams.org/
+  skip: true

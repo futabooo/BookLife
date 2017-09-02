@@ -81,7 +81,7 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
       val reader = BufferedReader(InputStreamReader(it.byteStream()))
       val result = reader.readLines().filter(String::isNotBlank).toList()
 
-      title = Jsoup.parse(result!!.toString()).select("h2.bm-headline span.bm-headline__text")[0].text()
+      title = Jsoup.parse(result.toString()).select("h2.bm-headline span.bm-headline__text")[0].text()
       author = Jsoup.parse(result.toString()).select("div.books_show__details ul li")[0].text()
       thumbnail = Jsoup.parse(result.toString())
           .select("div.books_show__details__cover a.books_show__details__cover__link img")

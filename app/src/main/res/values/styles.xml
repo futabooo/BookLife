@@ -1,47 +1,26 @@
 <resources>
 
-  <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light">
-    <item name="colorPrimary">@color/primary</item>
-    <item name="colorPrimaryDark">@color/primary_dark</item>
-    <item name="colorAccent">@color/accent</item>
-    <item name="android:windowBackground">@android:color/white</item>
+  <style name="Widget.BookLife.Toolbar" parent="Widget.AppCompat.Toolbar">
+    <item name="android:theme">@style/Theme.BookLife.Toolbar</item>
   </style>
 
-  <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorPrimary">@color/primary</item>
-    <item name="colorPrimaryDark">@color/primary_dark</item>
-    <item name="colorAccent">@color/accent</item>
-    <item name="android:windowBackground">@android:color/white</item>
+  <style name="Widget.BookLife.ShadowedToolbar" parent="Widget.AppCompat.Toolbar">
+    <item name="android:elevation">@dimen/elevation_small</item>
+    <item name="android:theme">@style/Theme.BookLife.Toolbar</item>
   </style>
 
-  <style name="BaseToolbar" parent="@style/Widget.AppCompat.Toolbar">
-    <item name="android:theme">@style/ToolbarTheme</item>
-  </style>
-
-  <style name="ToolbarTheme" parent="AppThemeNoActionBar">
-    <item name="android:textColorPrimary">@color/accent</item>
-    <item name="android:textColorSecondary">@color/secondary_text</item>
-  </style>
-
-  <!-- Splash Screen theme -->
-  <style name="SplashTheme" parent="AppThemeNoActionBar">
-    <item name="android:windowBackground">@drawable/splash_background</item>
-  </style>
-
-
-  <style name="Item" parent="">
+  <style name="Widget.BookLife.ArcItem" parent="">
     <item name="android:textColor">@android:color/white</item>
   </style>
 
-  <style name="Item.Small">
+  <style name="Widget.BookLife.ArcItem.Small">
     <item name="android:layout_width">@dimen/arc_item_small</item>
     <item name="android:layout_height">@dimen/arc_item_small</item>
     <item name="android:textSize">@dimen/app_text_size_small</item>
     <item name="android:background">@drawable/selector_arc_layout_menu</item>
   </style>
 
-  <style name="Item.Medium">
+  <style name="Widget.BookLife.ArcItem.Medium">
     <item name="android:layout_width">@dimen/arc_item_medium</item>
     <item name="android:layout_height">@dimen/arc_item_medium</item>
     <item name="android:textSize">@dimen/app_text_size_medium</item>

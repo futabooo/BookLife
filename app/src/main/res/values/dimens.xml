@@ -16,6 +16,9 @@
   <dimen name="app_text_size_large">18sp</dimen>
   <dimen name="app_text_size_xlarge">20sp</dimen>
 
+  <!-- Elevation -->
+  <dimen name="elevation_small">4dp</dimen>
+
   <!-- arc layout item -->
   <dimen name="arc_item_small">36dp</dimen>
   <dimen name="arc_item_medium">48dp</dimen>

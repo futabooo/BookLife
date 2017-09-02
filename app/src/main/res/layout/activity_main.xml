@@ -29,7 +29,7 @@
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
-            style="@style/BaseToolbar"
+            style="@style/Widget.BookLife.Toolbar"
             />
 
         <android.support.design.widget.TabLayout

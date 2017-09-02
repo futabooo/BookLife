@@ -26,21 +26,21 @@
           android:id="@+id/arc_layout_menu_barcode_scan"
           android:src="@drawable/ic_barcode_scan"
           app:arc_angle="60"
-          style="@style/Item.Medium"
+          style="@style/Widget.BookLife.ArcItem.Medium"
           />
 
       <ImageButton
           android:id="@+id/arc_layout_menu_search"
           android:src="@drawable/ic_search"
           app:arc_angle="90"
-          style="@style/Item.Medium"
+          style="@style/Widget.BookLife.ArcItem.Medium"
           />
 
       <ImageButton
           android:id="@+id/arc_layout_menu_record_voice"
           android:src="@drawable/ic_record_voice"
           app:arc_angle="120"
-          style="@style/Item.Medium"
+          style="@style/Widget.BookLife.ArcItem.Medium"
           />
 
     </com.ogaclejapan.arclayout.ArcLayout>

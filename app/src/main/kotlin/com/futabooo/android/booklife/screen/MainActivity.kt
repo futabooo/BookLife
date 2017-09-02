@@ -27,6 +27,8 @@ import android.app.Activity
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.futabooo.android.booklife.BuildConfig
+import com.futabooo.android.booklife.screen.licenses.LicensesActivity
+import com.futabooo.android.booklife.screen.option.OptionActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -135,14 +137,15 @@ class MainActivity : AppCompatActivity() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    val id = item.itemId
-
-    if (id == R.id.menu_search) {
-      startActivity(SearchActivity.createIntent(this))
-      return true
+    when (item.itemId) {
+      R.id.menu_licenses -> {
+        startActivity(LicensesActivity.createIntent(this))
+        return true
+      }
+      else -> {
+        return super.onOptionsItemSelected(item)
+      }
     }
-
-    return super.onOptionsItemSelected(item)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

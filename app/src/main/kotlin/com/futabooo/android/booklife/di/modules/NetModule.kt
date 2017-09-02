@@ -49,7 +49,6 @@ import retrofit2.converter.gson.GsonConverterFactory
   @Singleton @Provides fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     val retrofit = Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(
         RxJava2CallAdapterFactory.create()).addConverterFactory(GsonConverterFactory.create())
-        //.addConverterFactory(JsoupConverterFactory.create())
         .build()
     return retrofit
   }

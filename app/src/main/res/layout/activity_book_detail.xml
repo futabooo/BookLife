@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        style="@style/Widget.BookLife.ShadowedToolbar"
+        style="@style/Widget.BookLife.Toolbar.Shadowed"
         />
 
     <RelativeLayout

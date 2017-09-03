@@ -1,29 +1,36 @@
 <resources>
 
   <style name="Widget.BookLife.Toolbar" parent="Widget.AppCompat.Toolbar">
-    <item name="android:theme">@style/Theme.BookLife.Toolbar</item>
+    <item name="titleTextAppearance">@style/TextAppearance.BookLife.Toolbar.Title</item>
+    <item name="subtitleTextAppearance">@style/TextAppearance.BookLife.Toolbar.Subtitle</item>
   </style>
 
-  <style name="Widget.BookLife.ShadowedToolbar" parent="Widget.AppCompat.Toolbar">
+  <style name="Widget.BookLife.Toolbar.Shadowed">
     <item name="android:elevation">@dimen/elevation_small</item>
-    <item name="android:theme">@style/Theme.BookLife.Toolbar</item>
+  </style>
+
+  <style name="TextAppearance.BookLife.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <item name="android:textColor">@color/accent</item>
+  </style>
+
+  <style name="TextAppearance.BookLife.Toolbar.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+    <item name="android:textColor">@color/accent</item>
   </style>
 
   <style name="Widget.BookLife.ArcItem" parent="">
     <item name="android:textColor">@android:color/white</item>
+    <item name="android:background">@drawable/selector_arc_layout_menu</item>
   </style>
 
   <style name="Widget.BookLife.ArcItem.Small">
     <item name="android:layout_width">@dimen/arc_item_small</item>
     <item name="android:layout_height">@dimen/arc_item_small</item>
     <item name="android:textSize">@dimen/app_text_size_small</item>
-    <item name="android:background">@drawable/selector_arc_layout_menu</item>
   </style>
 
   <style name="Widget.BookLife.ArcItem.Medium">
     <item name="android:layout_width">@dimen/arc_item_medium</item>
     <item name="android:layout_height">@dimen/arc_item_medium</item>
     <item name="android:textSize">@dimen/app_text_size_medium</item>
-    <item name="android:background">@drawable/selector_arc_layout_menu</item>
   </style>
 </resources>

@@ -23,13 +23,12 @@ import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import javax.inject.Inject
 import org.jsoup.Jsoup
 import retrofit2.Retrofit
 import timber.log.Timber
-import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener, AddBookDialogFragment.OnAddBookActionListener {
 
@@ -159,6 +158,16 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
 
   override fun onRegister(bookId: Int) {
     Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_registered, bookId.toString()),
+        Snackbar.LENGTH_LONG).show()
+  }
+
+  override fun onUpdate(bookId: Int) {
+    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_update, bookId.toString()),
+        Snackbar.LENGTH_LONG).show()
+  }
+
+  override fun onError() {
+    Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_review_update),
         Snackbar.LENGTH_LONG).show()
   }
 }

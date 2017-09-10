@@ -1,11 +1,13 @@
 package com.futabooo.android.booklife.screen.search
 
 import com.google.gson.JsonObject
+import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ActionService {
@@ -23,4 +25,12 @@ interface ActionService {
       @Field("read_book[read_at]") readAt: String,
       @Field("read_book[review]") review: String,
       @Field("read_book[review_is_netabare]") netabare: Int): Observable<JsonObject>
+
+  @FormUrlEncoded @PUT("/read_books/{id}.json") fun update(
+      @Header("X-CSRF-Token") csrfToken: String,
+      @Path("id") id: Int,
+      @Field("read_book[book_id]") bookId: Int,
+      @Field("read_book[read_at]") readAt: String,
+      @Field("read_book[review]") review: String,
+      @Field("read_book[review_is_netabare]") netabare: Int): Completable
 }

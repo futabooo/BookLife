@@ -7,6 +7,7 @@
   <string name="amazon">Amazon</string>
   <string name="home">Home</string>
   <string name="edit">編集</string>
+  <string name="update">更新</string>
 
   <!-- Login -->
   <string name="login_prompt_email">メール</string>
@@ -33,6 +34,7 @@
   <string name="book_register">登録</string>
   <string name="book_edit">編集</string>
   <string name="book_registered">%s 登録完了</string>
+  <string name="book_update">%s 更新完了</string>
   <string name="book_spoilers">ネタバレ</string>
   <string name="book_read_date">読了日</string>
   <string name="book_impressions_review">感想・レビュー</string>
@@ -53,6 +55,7 @@
 
   <!-- Error -->
   <string name="error_login">メールアドレスまたはパスワードが間違っています</string>
+  <string name="error_review_update">更新失敗</string>
 
   <!-- Feature -->
   <string name="coming_soon">開発中ですm(_ _)m</string>

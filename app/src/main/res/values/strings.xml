@@ -7,6 +7,7 @@
   <string name="amazon">Amazon</string>
   <string name="home">Home</string>
   <string name="edit">Edit</string>
+  <string name="update">Update</string>
 
   <!-- Login -->
   <string name="login_prompt_email">Email</string>
@@ -33,6 +34,7 @@
   <string name="book_register">Register</string>
   <string name="book_edit">Edit</string>
   <string name="book_registered">%s Registered</string>
+  <string name="book_update">%s Updated</string>
   <string name="book_spoilers">Spoilers</string>
   <string name="book_read_date">Read Date</string>
   <string name="book_impressions_review">Impressions・Review</string>
@@ -56,6 +58,7 @@
 
   <!-- Error -->
   <string name="error_login">E-mail or Password is wrong</string>
+  <string name="error_review_update">Update Failed</string>
 
   <!-- Feature -->
   <string name="coming_soon">Coming Soon!!</string>

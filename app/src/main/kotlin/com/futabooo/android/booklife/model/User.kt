@@ -1,3 +1,5 @@
 package com.futabooo.android.booklife.model
 
-class User(var id: Int, var path: String?, var name: String?, var image: String?)
+import java.io.Serializable
+
+class User(var id: Int, var path: String?, var name: String?, var image: String?) : Serializable

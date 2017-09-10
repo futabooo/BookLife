@@ -10,6 +10,7 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.widget.DatePicker
 import com.futabooo.android.booklife.BookLife
+import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.DialogBookAddBinding
 import com.futabooo.android.booklife.model.Review
 import com.futabooo.android.booklife.screen.search.ActionService
@@ -30,6 +31,15 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
   lateinit var listener: OnAddBookActionListener
 
   lateinit var readAt: String
+
+  val review by lazy {
+    val review = arguments.getSerializable(EXTRA_REVIEW)
+    if (review != null) {
+      review as Review
+    } else {
+      null
+    }
+  }
 
   companion object {
 
@@ -68,52 +78,95 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
   @SuppressLint("RestrictedApi")
   override fun setupDialog(dialog: Dialog, style: Int) {
     super.setupDialog(dialog, style)
-    binding = DialogBookAddBinding.inflate(LayoutInflater.from(context), null, false)
-    dialog.setContentView(binding.root)
+    binding = DialogBookAddBinding.inflate(LayoutInflater.from(context), null, false).apply {
+      dialog.setContentView(root)
 
-    val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+      val calendar = Calendar.getInstance()
+      val year = calendar.get(Calendar.YEAR)
+      val month = calendar.get(Calendar.MONTH)
+      val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-    readAt = DateFormat.format("yyyy/M/d", calendar).toString()
-    binding.dialogBookAddReadDate.text = DateFormat.format("yyyy/MM/dd", calendar)
+      readAt = DateFormat.format("yyyy/M/d", calendar).toString()
+      dialogBookAddReadDate.text = DateFormat.format("yyyy/MM/dd", calendar)
 
-    arguments.getSerializable(EXTRA_REVIEW).let {
-      it as Review
-      binding.dialogBookAddImpressions.setText(it.content)
-      binding.dialogBookAddSpoiler.isChecked = it.netabare.netabare
-      binding.dialogBookAddReadDate.text = it.createdAt
-      readAt = it.createdAt.toString()
+      review?.let {
+        dialogBookAddPositive.text = getText(R.string.update)
+        dialogBookAddImpressions.setText(it.content)
+        dialogBookAddSpoiler.isChecked = it.netabare.netabare
+        dialogBookAddReadDate.text = it.createdAt
+        readAt = it.createdAt.toString()
+      }
+
+      dialogBookAddReadDate.setOnClickListener {
+        val datePickerDialog = DatePickerDialog(context, this@AddBookDialogFragment, year, month, dayOfMonth)
+        datePickerDialog.show()
+      }
+
+      dialogBookAddNegative.setOnClickListener { dismiss() }
+
+      dialogBookAddPositive.setOnClickListener {
+        val csrfToken = arguments.getString(EXTRA_CSRF_TOKEN)
+        val userId = arguments.getInt(EXTRA_BOOK_USER_ID)
+        val bookId = arguments.getInt(EXTRA_BOOK_ID)
+        val impressions = dialogBookAddImpressions.text.toString()
+        val netabare = if (dialogBookAddSpoiler.isChecked) 1 else 0
+
+        review?.let {
+          update(csrfToken, it.id, bookId, readAt, impressions, netabare)
+          return@setOnClickListener
+        }
+
+        add(csrfToken, userId, bookId, readAt, impressions, netabare)
+      }
     }
+  }
 
-    binding.dialogBookAddReadDate.setOnClickListener {
-      val datePickerDialog = DatePickerDialog(context, this@AddBookDialogFragment, year, month, dayOfMonth)
-      datePickerDialog.show()
-    }
+  private fun add(csrfToken: String,
+                  userId: Int,
+                  bookId: Int,
+                  readAt: String,
+                  impressions: String,
+                  netabare: Int) {
 
-    binding.dialogBookAddNegative.setOnClickListener { dismiss() }
+    retrofit.create(ActionService::class.java)
+        .read(csrfToken, userId, bookId, readAt, impressions, netabare)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(
+            onNext = {
+              listener.onRegister(bookId)
+              dismiss()
+            },
+            onError = {
+              listener.onError()
+              Timber.e(it, it.message)
+            },
+            onComplete = {}
+        )
+  }
 
-    binding.dialogBookAddPositive.setOnClickListener {
-      val csrfToken = arguments.getString(EXTRA_CSRF_TOKEN)
-      val userId = arguments.getInt(EXTRA_BOOK_USER_ID)
-      val bookId = arguments.getInt(EXTRA_BOOK_ID)
-      val impressions = binding.dialogBookAddImpressions.text.toString()
-      val netabare = if (binding.dialogBookAddSpoiler.isChecked) 1 else 0
+  private fun update(csrfToken: String,
+                     reviewId: Int,
+                     bookId: Int,
+                     readAt: String,
+                     impressions: String,
+                     netabare: Int) {
 
-      retrofit.create(ActionService::class.java)
-          .read(csrfToken!!, userId, bookId, readAt, impressions, netabare)
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribeBy(
-              onNext = {
-                listener.onRegister(bookId)
-                dismiss()
-              },
-              onError = { Timber.e(it, it.message) },
-              onComplete = {}
-          )
-    }
+    retrofit.create(ActionService::class.java)
+        .update(csrfToken, reviewId, bookId, readAt, impressions, netabare)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(
+            onComplete = {
+              listener.onRegister(bookId)
+              dismiss()
+            },
+            onError = {
+              listener.onError()
+              Timber.e(it, it.message)
+            }
+        )
+
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -133,5 +186,7 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
 
   interface OnAddBookActionListener {
     fun onRegister(bookId: Int)
+    fun onUpdate(bookId: Int)
+    fun onError()
   }
 }

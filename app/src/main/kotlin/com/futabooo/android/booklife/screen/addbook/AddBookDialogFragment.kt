@@ -11,14 +11,15 @@ import android.view.LayoutInflater
 import android.widget.DatePicker
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.databinding.DialogBookAddBinding
+import com.futabooo.android.booklife.model.Review
 import com.futabooo.android.booklife.screen.search.ActionService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import java.util.Calendar
-import javax.inject.Inject
 import retrofit2.Retrofit
 import timber.log.Timber
+import java.util.Calendar
+import javax.inject.Inject
 
 class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDateSetListener {
 
@@ -35,13 +36,15 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
     private val EXTRA_CSRF_TOKEN = "csrf_token"
     private val EXTRA_BOOK_USER_ID = "user_id"
     private val EXTRA_BOOK_ID = "book_id"
+    private val EXTRA_REVIEW = "review]"
 
-    fun newInstance(csrfToken: String, userID: Int, bookId: Int): AddBookDialogFragment {
+    fun newInstance(csrfToken: String, userID: Int, bookId: Int, review: Review? = null): AddBookDialogFragment {
       val dialogFragment = AddBookDialogFragment()
       val bundle = Bundle().apply {
         putString(EXTRA_CSRF_TOKEN, csrfToken)
         putInt(EXTRA_BOOK_USER_ID, userID)
         putInt(EXTRA_BOOK_ID, bookId)
+        if (review != null) putSerializable(EXTRA_REVIEW, review)
       }
       dialogFragment.arguments = bundle
       return dialogFragment
@@ -69,12 +72,20 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
     dialog.setContentView(binding.root)
 
     val calendar = Calendar.getInstance()
-    readAt = DateFormat.format("yyyy/M/d", calendar).toString()
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
     val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
+    readAt = DateFormat.format("yyyy/M/d", calendar).toString()
     binding.dialogBookAddReadDate.text = DateFormat.format("yyyy/MM/dd", calendar)
+
+    arguments.getSerializable(EXTRA_REVIEW).let {
+      it as Review
+      binding.dialogBookAddImpressions.setText(it.content)
+      binding.dialogBookAddSpoiler.isChecked = it.netabare.netabare
+      binding.dialogBookAddReadDate.text = it.createdAt
+      readAt = it.createdAt.toString()
+    }
 
     binding.dialogBookAddReadDate.setOnClickListener {
       val datePickerDialog = DatePickerDialog(context, this@AddBookDialogFragment, year, month, dayOfMonth)

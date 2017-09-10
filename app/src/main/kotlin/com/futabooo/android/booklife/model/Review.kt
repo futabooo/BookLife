@@ -1,6 +1,7 @@
 package com.futabooo.android.booklife.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 class Review(var id: Int,
              var path: String?,
@@ -9,6 +10,7 @@ class Review(var id: Int,
              var content: String?,
              @SerializedName("created_at") var createdAt: String?,
              var isHighlight: Boolean,
+             var netabare: Netabare,
              var isNewly: Boolean,
              var contents: Contents?,
-             var owner: Owner?)
+             var user: User) : Serializable

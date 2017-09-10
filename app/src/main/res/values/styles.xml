@@ -33,4 +33,9 @@
     <item name="android:layout_height">@dimen/arc_item_medium</item>
     <item name="android:textSize">@dimen/app_text_size_medium</item>
   </style>
+
+  <style name="Widget.BookLife.Button" parent="Widget.AppCompat.Button">
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:background">@drawable/shape_rounded_corners</item>
+  </style>
 </resources>

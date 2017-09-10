@@ -17,4 +17,11 @@ interface BookDetailService {
       @Path("book_id") bookId: Int,
       @Query("offset") offset: Int,
       @Query("limit") limit: Int): Observable<JsonObject>
+
+  @GET("/books/{book_id}/reviews.json") fun getReviews(
+      @Header("X-CSRF-Token") csrfToken: String,
+      @Path("book_id") bookId: Int,
+      @Query("review_filter") filter: String,
+      @Query("offset") offset: Int,
+      @Query("limit") limit: Int): Observable<JsonObject>
 }

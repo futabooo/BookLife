@@ -2,8 +2,8 @@ package com.futabooo.android.booklife.model
 
 class Owner {
 
-  private val id: Int = 0
-  private val path: String? = null
-  private val name: String? = null
-  private val image: String? = null
+  val id: Int = 0
+  val path: String? = null
+  val name: String? = null
+  val image: String? = null
 }

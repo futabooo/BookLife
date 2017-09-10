@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/item_review_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="@dimen/space_medium"
+        tools:src="@color/accent"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_review_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_small"
+        android:layout_toEndOf="@id/item_review_icon"
+        android:textSize="@dimen/app_text_size_medium"
+        tools:text="ここにはレビューした人の名前が入る"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_review_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_review_name"
+        android:layout_toEndOf="@id/item_review_icon"
+        android:textSize="@dimen/app_text_size_small"
+        tools:text="ここにはレビューが入るここにはレビューが入るここにはレビューが入る"
+        />
+
+  </RelativeLayout>
+</layout>

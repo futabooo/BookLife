@@ -6,6 +6,7 @@
   <string name="cancel">Cancel</string>
   <string name="amazon">Amazon</string>
   <string name="home">Home</string>
+  <string name="edit">Edit</string>
 
   <!-- Login -->
   <string name="login_prompt_email">Email</string>

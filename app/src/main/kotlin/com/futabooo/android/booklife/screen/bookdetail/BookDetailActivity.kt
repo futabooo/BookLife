@@ -89,67 +89,8 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
           .observeOnUI
           .subscribeBy(
               onNext = {
-                retrofit.create(BookDetailService::class.java).getJson(csrfToken, bookId, 0, 1000)
-                    .subscribeOnIO
-                    .observeOnUI
-                    .subscribeBy(
-                        onNext = {
-                          bookDetailToolbar.title = title
-                          bookDetailBookTitle.text = title
-                          bookDetailBookAuthor.text = author
-                          Glide.with(this@BookDetailActivity).load(thumbnail).into(bookDetailBookThumbnail)
-                          bookDetailBuy.setOnClickListener {
-                            val uri = Uri.parse(url)
-                            val intent = Intent(Intent.ACTION_VIEW, uri)
-                            startActivity(intent)
-                          }
-
-                          bookDetailAdd.setOnClickListener {
-                            val dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance(bookId)
-                            dialogFragment.show(supportFragmentManager, "bottom_sheet")
-                          }
-
-                          val jsonArray = it.getAsJsonArray("resources")
-                          if (jsonArray.size() == 0) {
-                            return@subscribeBy
-                          }
-
-                          val resource = Gson().fromJson(jsonArray, Array<BookDetailResource>::class.java)[0]
-                          resource.review.let {
-
-                            bookDetailImpression.text = it?.content
-                            bookDetailImpressionTitle.visibility = View.VISIBLE
-                            bookDetailImpression.visibility = View.VISIBLE
-                            bookDetailImpressionEdit.visibility = View.VISIBLE
-                            bookDetailImpressionSeparator.visibility = View.VISIBLE
-
-                            bookDetailImpressionEdit.setOnClickListener { _ ->
-                              val dialogFragment = AddBookDialogFragment.newInstance(csrfToken, userId, bookId, it)
-                              dialogFragment.show(supportFragmentManager, "add_book_dialog")
-                            }
-                          }
-                        },
-                        onError = { Timber.e(it, it.message) }
-                    )
-                retrofit.create(BookDetailService::class.java).getReviews(csrfToken, bookId, "none", 0, 20)
-                    .subscribeOnIO
-                    .observeOnUI
-                    .subscribeBy(
-                        onNext = {
-                          val jsonArray = it.getAsJsonArray("resources")
-                          if (jsonArray.size() == 0) {
-                            return@subscribeBy
-                          }
-                          val resources = Gson().fromJson(jsonArray, Array<Review>::class.java)
-                          val reviewAdapter = BookReviewAdapter(resources.toMutableList())
-                          bookDetailReviews.layoutManager = LinearLayoutManager(this@BookDetailActivity)
-                          bookDetailReviews.adapter = reviewAdapter
-                          bookDetailReviews.addItemDecoration(
-                              BookReviewItemDecoration((30 * getResources().displayMetrics.density).toInt()))
-                          bookDetailReviews.isNestedScrollingEnabled = false
-                        },
-                        onError = { Timber.e(it, it.message) }
-                    )
+                getJson(csrfToken, bookId)
+                getReview(csrfToken, bookId)
               },
               onError = { Timber.e(it, it.message) }
           )
@@ -201,5 +142,76 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
   override fun onError() {
     Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_review_update),
         Snackbar.LENGTH_LONG).show()
+  }
+
+  private fun getJson(csrfToken: String, bookId: Int) {
+    binding.apply {
+      retrofit.create(BookDetailService::class.java).getJson(csrfToken, bookId, 0, 1000)
+          .subscribeOnIO
+          .observeOnUI
+          .subscribeBy(
+              onNext = {
+                bookDetailToolbar.title = title
+                bookDetailBookTitle.text = title
+                bookDetailBookAuthor.text = author
+                Glide.with(this@BookDetailActivity).load(thumbnail).into(bookDetailBookThumbnail)
+                bookDetailBuy.setOnClickListener {
+                  val uri = Uri.parse(url)
+                  val intent = Intent(Intent.ACTION_VIEW, uri)
+                  startActivity(intent)
+                }
+
+                bookDetailAdd.setOnClickListener {
+                  val dialogFragment = BookRegisterBottomSheetDialogFragment.newInstance(bookId)
+                  dialogFragment.show(supportFragmentManager, "bottom_sheet")
+                }
+
+                val jsonArray = it.getAsJsonArray("resources")
+                if (jsonArray.size() == 0) {
+                  return@subscribeBy
+                }
+
+                val resource = Gson().fromJson(jsonArray, Array<BookDetailResource>::class.java)[0]
+                resource.review.let {
+
+                  bookDetailImpression.text = it?.content
+                  bookDetailImpressionTitle.visibility = View.VISIBLE
+                  bookDetailImpression.visibility = View.VISIBLE
+                  bookDetailImpressionEdit.visibility = View.VISIBLE
+                  bookDetailImpressionSeparator.visibility = View.VISIBLE
+
+                  bookDetailImpressionEdit.setOnClickListener { _ ->
+                    val dialogFragment = AddBookDialogFragment.newInstance(csrfToken, userId, bookId, it)
+                    dialogFragment.show(supportFragmentManager, "add_book_dialog")
+                  }
+                }
+              },
+              onError = { Timber.e(it, it.message) }
+          )
+    }
+  }
+
+  private fun getReview(csrfToken: String, bookId: Int) {
+    binding.apply {
+      retrofit.create(BookDetailService::class.java).getReviews(csrfToken, bookId, "none", 0, 20)
+          .subscribeOnIO
+          .observeOnUI
+          .subscribeBy(
+              onNext = {
+                val jsonArray = it.getAsJsonArray("resources")
+                if (jsonArray.size() == 0) {
+                  return@subscribeBy
+                }
+                val resources = Gson().fromJson(jsonArray, Array<Review>::class.java)
+                val reviewAdapter = BookReviewAdapter(resources.toMutableList())
+                bookDetailReviews.layoutManager = LinearLayoutManager(this@BookDetailActivity)
+                bookDetailReviews.adapter = reviewAdapter
+                bookDetailReviews.addItemDecoration(
+                    BookReviewItemDecoration((30 * getResources().displayMetrics.density).toInt()))
+                bookDetailReviews.isNestedScrollingEnabled = false
+              },
+              onError = { Timber.e(it, it.message) }
+          )
+    }
   }
 }

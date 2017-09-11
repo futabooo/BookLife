@@ -5,6 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivityLisensesBinding
 
@@ -27,5 +28,17 @@ class LicensesActivity : AppCompatActivity() {
       supportActionBar?.setDisplayHomeAsUpEnabled(true)
       activityLicensesWebView.loadUrl("file:///android_asset/licenses.html")
     }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    val id = item.itemId
+
+    when (id) {
+      android.R.id.home -> {
+        finish()
+        return true
+      }
+    }
+    return super.onOptionsItemSelected(item)
   }
 }

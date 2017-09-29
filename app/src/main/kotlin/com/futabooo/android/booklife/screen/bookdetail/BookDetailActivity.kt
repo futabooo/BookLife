@@ -51,9 +51,13 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
   companion object {
 
     private val EXTRA_BOOK_ID = "book_id"
+    private val EXTRA_BOOK_THUMBNAIL_URL = "book_thumbnail_url"
 
-    fun createIntent(context: Context, bookId: Int) =
-        Intent(context, BookDetailActivity::class.java).apply { putExtra(EXTRA_BOOK_ID, bookId) }
+    fun createIntent(context: Context, bookId: Int, bookThumbnailURL: String) =
+        Intent(context, BookDetailActivity::class.java).apply {
+          putExtra(EXTRA_BOOK_THUMBNAIL_URL, bookThumbnailURL)
+          putExtra(EXTRA_BOOK_ID, bookId)
+        }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +71,8 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
         setHomeAsUpIndicator(R.drawable.ic_arrow_left)
         title = ""
       }
+
+      Glide.with(this@BookDetailActivity).load(intent.getStringExtra(EXTRA_BOOK_THUMBNAIL_URL)).into(bookDetailBookThumbnail)
 
       val bookId = intent.extras.getInt(EXTRA_BOOK_ID)
       retrofit.create(BookDetailService::class.java).get(bookId)

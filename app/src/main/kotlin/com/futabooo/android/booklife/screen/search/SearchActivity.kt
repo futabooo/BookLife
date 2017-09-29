@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
@@ -65,13 +66,14 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
       val layoutManager = LinearLayoutManager(this@SearchActivity)
       activitySearchResultList.layoutManager = layoutManager
       resultAdapter = SearchResultAdapter(mutableListOf(),
-          { view, bookId ->
+          { view, book ->
             when (view.id) {
-              R.id.search_result_item -> {
-                startActivity(BookDetailActivity.createIntent(this@SearchActivity, bookId))
+              R.id.search_result_book_thumbnail -> {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@SearchActivity, view, view.transitionName)
+                startActivity(BookDetailActivity.createIntent(this@SearchActivity, book.id, book.imageUrl), options.toBundle())
               }
               R.id.search_result_book_action -> {
-                BookRegisterBottomSheetDialogFragment.newInstance(bookId).show(supportFragmentManager, "bottom_sheet")
+                BookRegisterBottomSheetDialogFragment.newInstance(book.id).show(supportFragmentManager, "bottom_sheet")
               }
             }
           })

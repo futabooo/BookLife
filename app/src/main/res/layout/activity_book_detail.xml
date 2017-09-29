@@ -45,6 +45,7 @@
               android:id="@+id/book_detail_book_thumbnail"
               android:layout_width="120dp"
               android:layout_height="160dp"
+              android:transitionName="book_image"
               tools:src="@color/bb_darkBackgroundColor"
               />
 

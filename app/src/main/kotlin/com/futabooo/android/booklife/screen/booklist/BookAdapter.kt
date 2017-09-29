@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ComponentBookCardViewBinding
 import com.futabooo.android.booklife.databinding.ComponentLoadingBinding
 import com.futabooo.android.booklife.model.Book
 import com.futabooo.android.booklife.model.Resource
 
 class BookAdapter(var resources: MutableList<Resource>,
-                  val listener: (Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+                  val listener: (View, Book) -> Unit) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
   companion object {
     const val LOADING = 0
@@ -27,7 +28,7 @@ class BookAdapter(var resources: MutableList<Resource>,
     } else {
       return ViewHolder(
           ComponentBookCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
-        itemView.setOnClickListener { resources[adapterPosition].book?.let { listener(it) } }
+        itemView.setOnClickListener { v -> resources[adapterPosition].book?.let { listener(v.findViewById(R.id.book_thumbnail), it) } }
       }
     }
   }

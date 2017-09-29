@@ -10,6 +10,7 @@
 
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowBackground">@android:color/white</item>
+    <item name="android:windowSharedElementsUseOverlay">true</item>
   </style>
 
   <style name="Theme.BookLife.Splash">

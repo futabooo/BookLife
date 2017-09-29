@@ -27,6 +27,7 @@
           android:layout_height="140dp"
           android:layout_marginLeft="@dimen/space_large"
           android:layout_marginTop="@dimen/space_large"
+          android:transitionName="book_image"
           card_view:layout_constraintLeft_toLeftOf="parent"
           card_view:layout_constraintTop_toTopOf="parent"
           />

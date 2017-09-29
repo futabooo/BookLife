@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ComponentLoadingBinding
 import com.futabooo.android.booklife.databinding.ComponentSearchResultCardViewBinding
+import com.futabooo.android.booklife.model.Book
 import com.futabooo.android.booklife.model.SearchResultResource
 
-class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val listener: (View, Int) -> Unit)
+class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val listener: (View, Book) -> Unit)
   : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
   companion object {
@@ -28,9 +30,11 @@ class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val 
           ComponentSearchResultCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
           .apply {
             binding as ComponentSearchResultCardViewBinding
-            itemView.setOnClickListener { listener(it, resources[adapterPosition].contents.book.id) }
+            binding.root.setOnClickListener {
+              listener(it.findViewById(R.id.search_result_book_thumbnail), resources[adapterPosition].contents.book)
+            }
             binding.searchResultBookAction.setOnClickListener {
-              listener(it, resources[adapterPosition].contents.book.id)
+              listener(it, resources[adapterPosition].contents.book)
             }
           }
     }

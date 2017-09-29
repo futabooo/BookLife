@@ -32,6 +32,7 @@
           android:layout_height="120dp"
           android:layout_centerVertical="true"
           android:layout_marginRight="@dimen/space_large"
+          android:transitionName="book_image"
           tools:src="@color/accent"
           />
 

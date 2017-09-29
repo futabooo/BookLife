@@ -21,10 +21,10 @@ import timber.log.Timber
 
   @Singleton @Provides fun provideApplication(): Application = application
 
-  @Singleton @Provides fun provideSharedPreferences(application: Application): SharedPreferences =
+  @Singleton @Provides fun provideSharedPreferences(): SharedPreferences =
       PreferenceManager.getDefaultSharedPreferences(application)
 
-  @Singleton @Provides fun provideCryptore(application: Application): Cryptore {
+  @Singleton @Provides fun provideCryptore(): Cryptore {
     val builder = Cryptore.Builder("CIPHER_RSA", CipherAlgorithm.RSA)
     builder.context = application
     try {

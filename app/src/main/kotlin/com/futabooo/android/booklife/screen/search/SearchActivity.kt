@@ -79,7 +79,7 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
       activitySearchResultList.addOnScrollListener(InfiniteScrollListener({ searchBooks(keyword) }, layoutManager))
     }
 
-    intent.getStringExtra(EXTRA_ISBN).let { searchBooks(it) }
+    intent.getStringExtra(EXTRA_ISBN)?.let { searchBooks(it) }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

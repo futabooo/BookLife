@@ -37,6 +37,7 @@
   <string name="book_update">%s 更新完了</string>
   <string name="book_spoilers">ネタバレ</string>
   <string name="book_read_date">読了日</string>
+  <string name="book_read_date_unknown">読了日不明</string>
   <string name="book_impressions_review">感想・レビュー</string>
 
   <!-- Book Record -->

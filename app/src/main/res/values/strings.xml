@@ -37,6 +37,7 @@
   <string name="book_update">%s Updated</string>
   <string name="book_spoilers">Spoilers</string>
   <string name="book_read_date">Read Date</string>
+  <string name="book_read_date_unknown">Read Date Unknown</string>
   <string name="book_impressions_review">Impressions・Review</string>
 
   <!-- Book Record -->

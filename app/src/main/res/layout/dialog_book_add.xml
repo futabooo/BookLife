@@ -71,10 +71,42 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/dialog_book_add_spoiler_layout"
+        android:id="@+id/dialog_book_add_unknown_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dialog_book_add_read_date_layout"
+        android:layout_marginLeft="@dimen/space_large"
+        android:layout_marginRight="@dimen/space_large"
+        android:gravity="center_vertical"
+        >
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/book_read_date_unknown"
+          android:textColor="@color/primary_text"
+          android:textSize="@dimen/app_text_size_large"
+          />
+
+      <android.support.v4.widget.Space
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          />
+
+      <android.support.v7.widget.AppCompatCheckBox
+          android:id="@+id/dialog_book_add_unknown"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="right"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dialog_book_add_spoiler_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_book_add_unknown_layout"
         android:layout_marginLeft="@dimen/space_large"
         android:layout_marginRight="@dimen/space_large"
         android:gravity="center_vertical"

@@ -89,12 +89,17 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
       readAt = DateFormat.format("yyyy/M/d", calendar).toString()
       dialogBookAddReadDate.text = DateFormat.format("yyyy/MM/dd", calendar)
 
+      dialogBookAddUnknown.setOnCheckedChangeListener { _, isChecked ->
+        if (isChecked) readAt = "日付不明" else readAt = dialogBookAddReadDate.text.toString()
+      }
+
       review?.let {
         dialogBookAddPositive.text = getText(R.string.update)
         dialogBookAddImpressions.setText(it.content)
         dialogBookAddSpoiler.isChecked = it.netabare.netabare
         dialogBookAddReadDate.text = it.createdAt
         readAt = it.createdAt.toString()
+        dialogBookAddUnknown.isChecked = readAt == "日付不明"
       }
 
       dialogBookAddReadDate.setOnClickListener {
@@ -112,11 +117,20 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
         val netabare = if (dialogBookAddSpoiler.isChecked) 1 else 0
 
         review?.let {
-          update(csrfToken, it.id, bookId, readAt, impressions, netabare)
+          if (readAt == "日付不明") {
+            updateUnknown(csrfToken, it.id, bookId, impressions, netabare)
+          } else {
+            update(csrfToken, it.id, bookId, readAt, impressions, netabare)
+          }
+
           return@setOnClickListener
         }
 
-        add(csrfToken, userId, bookId, readAt, impressions, netabare)
+        if (readAt == "日付不明") {
+          addUnknown(csrfToken, userId, bookId, impressions, netabare)
+        } else {
+          add(csrfToken, userId, bookId, readAt, impressions, netabare)
+        }
       }
     }
   }
@@ -145,6 +159,29 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
         )
   }
 
+  private fun addUnknown(csrfToken: String,
+                         userId: Int,
+                         bookId: Int,
+                         impressions: String,
+                         netabare: Int) {
+
+    retrofit.create(ActionService::class.java)
+        .readUnknown(csrfToken, userId, bookId, "on", impressions, netabare)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(
+            onNext = {
+              listener.onRegister(bookId)
+              dismiss()
+            },
+            onError = {
+              listener.onError()
+              Timber.e(it, it.message)
+            },
+            onComplete = {}
+        )
+  }
+
   private fun update(csrfToken: String,
                      reviewId: Int,
                      bookId: Int,
@@ -154,6 +191,29 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
 
     retrofit.create(ActionService::class.java)
         .update(csrfToken, reviewId, bookId, readAt, impressions, netabare)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(
+            onComplete = {
+              listener.onRegister(bookId)
+              dismiss()
+            },
+            onError = {
+              listener.onError()
+              Timber.e(it, it.message)
+            }
+        )
+
+  }
+
+  private fun updateUnknown(csrfToken: String,
+                            reviewId: Int,
+                            bookId: Int,
+                            impressions: String,
+                            netabare: Int) {
+
+    retrofit.create(ActionService::class.java)
+        .updateUnknown(csrfToken, reviewId, bookId, "on", impressions, netabare)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(

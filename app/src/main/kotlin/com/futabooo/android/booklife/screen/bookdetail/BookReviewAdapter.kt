@@ -2,6 +2,7 @@ package com.futabooo.android.booklife.screen.bookdetail
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.futabooo.android.booklife.databinding.ItemReviewBinding
@@ -21,7 +22,11 @@ class BookReviewAdapter(var reviews: MutableList<Review>) : RecyclerView.Adapter
           .into(itemReviewIcon)
       itemReviewName.text = review.user.name
       itemReviewReview.text = review.content
+
+      if (review.netabare.netabare) itemReviewNetabare.visibility = View.VISIBLE else View.GONE
+
     }
+
   }
 
   override fun getItemCount() = reviews.size

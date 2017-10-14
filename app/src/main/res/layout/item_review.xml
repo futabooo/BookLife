@@ -28,10 +28,26 @@
         />
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/item_review_review"
+        android:id="@+id/item_review_netabare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_review_name"
+        android:layout_marginBottom="@dimen/space_small"
+        android:layout_toEndOf="@id/item_review_icon"
+        android:background="@color/attention"
+        android:padding="@dimen/space_x_small"
+        android:text="@string/book_spoilers"
+        android:textColor="@color/attention_text"
+        android:textSize="@dimen/app_text_size_xsmall"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/item_review_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_review_netabare"
         android:layout_toEndOf="@id/item_review_icon"
         android:textSize="@dimen/app_text_size_small"
         tools:text="ここにはレビューが入るここにはレビューが入るここにはレビューが入る"

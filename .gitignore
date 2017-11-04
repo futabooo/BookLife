@@ -16,6 +16,7 @@ bin/
 gen/
 out/
 app/release/
+app/src/main/assets/licenses.html
 
 # Gradle files
 .gradle/

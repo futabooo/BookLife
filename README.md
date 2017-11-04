@@ -56,7 +56,7 @@ Japanese document [Androidのリモートビルドにmainframerを使ってみ�
 - [OkHttp](https://github.com/square/okhttp)
 - [Retrofit](https://github.com/square/retrofit)
 - [RxJava2 Adapter](https://github.com/square/retrofit/tree/master/retrofit-adapters/rxjava2)
--[Gson Converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson)
+- [Gson Converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson)
 - [jsoup](https://jsoup.org/)
 - [PersistentCookieJar](https://github.com/franmontiel/PersistentCookieJar)
 - [RxJava2](https://github.com/ReactiveX/RxJava)
@@ -70,3 +70,6 @@ Japanese document [Androidのリモートビルドにmainframerを使ってみ�
 - [DrawMe](https://github.com/rafakob/DrawMe)
 - [ArcLayout](https://github.com/ogaclejapan/ArcLayout)
 - [Timber](https://github.com/JakeWharton/timber)
+
+## Licenses
+https://github.com/futabooo/BookLife/blob/master/LICENSE

@@ -65,7 +65,7 @@ class SplashPresenter constructor(val contract: Contract,
   fun getEmail() =
       try {
         String(cryptore.decrypt(Base64.decode(sharedPreferences.getString("email", "")?.toByteArray(), Base64.DEFAULT),
-            null).bytes!!)
+            null).bytes)
       } catch (e: Exception) {
         Timber.d("failure decrypt email")
         ""
@@ -75,7 +75,7 @@ class SplashPresenter constructor(val contract: Contract,
       try {
         String(
             cryptore.decrypt(Base64.decode(sharedPreferences.getString("password", "")?.toByteArray(), Base64.DEFAULT),
-                null).bytes!!)
+                null).bytes)
       } catch (e: Exception) {
         Timber.d("failure decrypt password")
         ""

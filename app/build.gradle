@@ -119,7 +119,7 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxkotlin:${rxVersion}"
 
   // data store
-  implementation 'com.kazakago.cryptore:cryptore:1.0.0'
+  implementation 'com.kazakago.cryptore:cryptore:1.2.1'
 
   // dagger2
   implementation 'com.google.dagger:dagger:2.11'

@@ -63,13 +63,13 @@ class LoginPresenter constructor(val contract: Contract,
                 val editor = sharedPreferences.edit()
 
                 val emailBytes = email.toByteArray()
-                val (bytes) = cryptore.encrypt(emailBytes)
-                editor.putString("email", Base64.encodeToString(bytes, Base64.DEFAULT))
+                val emailResult = cryptore.encrypt(emailBytes)
+                editor.putString("email", Base64.encodeToString(emailResult.bytes, Base64.DEFAULT))
                 editor.apply()
 
                 val passwordBytes = password.toByteArray()
-                val (bytes1) = cryptore.encrypt(passwordBytes)
-                editor.putString("password", Base64.encodeToString(bytes1, Base64.DEFAULT))
+                val passwordResult = cryptore.encrypt(passwordBytes)
+                editor.putString("password", Base64.encodeToString(passwordResult.bytes, Base64.DEFAULT))
                 editor.apply()
               } catch (e: UnrecoverableEntryException) {
                 Timber.e(e, e.message)

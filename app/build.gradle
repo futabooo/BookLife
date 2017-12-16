@@ -25,8 +25,8 @@ android {
     applicationId "com.futabooo.android.booklife"
     minSdkVersion 21
     targetSdkVersion 25
-    versionCode 13
-    versionName "1.1.2"
+    versionCode 14
+    versionName "1.2.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 

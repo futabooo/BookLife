@@ -34,7 +34,7 @@ class BookListFragment : Fragment() {
   lateinit var binding: FragmentBookListBinding
   lateinit var bookAdapter: BookAdapter
 
-  val bookListMenu by lazy { arguments.getSerializable(EXTRA_BOOK_LIST_MENU) as BookListMenu }
+  val bookListMenu by lazy { arguments?.getSerializable(EXTRA_BOOK_LIST_MENU) as BookListMenu }
   val userId by lazy { sharedPreferences.getInt("user_id", 0) }
 
   val limit: Int = 10
@@ -55,7 +55,7 @@ class BookListFragment : Fragment() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    (activity.application as BookLife).netComponent.inject(this)
+    (activity?.application as BookLife).netComponent.inject(this)
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,15 +63,15 @@ class BookListFragment : Fragment() {
     return binding.root
   }
 
-  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     binding.bookList.setHasFixedSize(true)
     val layoutManager = LinearLayoutManager(activity).apply { orientation = LinearLayoutManager.VERTICAL }
     binding.bookList.layoutManager = layoutManager
     bookAdapter = BookAdapter(mutableListOf(), { v, book ->
-      val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, v, v.transitionName)
-      startActivity(BookDetailActivity.createIntent(context, book.id, book.imageUrl), options.toBundle())
+      val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, v, v.transitionName)
+      startActivity(BookDetailActivity.createIntent(context!!, book.id, book.imageUrl), options.toBundle())
     })
     binding.bookList.adapter = bookAdapter
     binding.bookList.addOnScrollListener(InfiniteScrollListener({ getBookList() }, layoutManager))

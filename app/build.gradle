@@ -11,20 +11,20 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 ext {
-  supportLibraryVersion = '25.3.1'
+  supportLibraryVersion = '27.1.0'
   retrofitVersion = '2.1.0'
   okhttpVersion = '3.7.0'
   rxVersion = '2.1.0'
 }
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion '26.0.2'
+  compileSdkVersion 27
+  buildToolsVersion '27.0.3'
 
   defaultConfig {
     applicationId "com.futabooo.android.booklife"
     minSdkVersion 21
-    targetSdkVersion 25
+    targetSdkVersion 27
     versionCode 14
     versionName "1.2.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -100,7 +100,7 @@ dependencies {
 
   implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
   implementation "com.android.support:design:${supportLibraryVersion}"
-  kapt 'com.android.databinding:compiler:2.5.0-alpha-preview-02'
+  kapt 'com.android.databinding:compiler:3.1.0'
 
   // jsoup HTML parser library @ http://jsoup.org/
   implementation 'org.jsoup:jsoup:1.10.2'
@@ -126,7 +126,7 @@ dependencies {
   kapt 'com.google.dagger:dagger-compiler:2.11'
 
   // images
-  implementation 'com.github.bumptech.glide:glide:3.7.0'
+  implementation 'com.github.bumptech.glide:glide:4.5.0'
   implementation 'jp.wasabeef:glide-transformations:2.0.1'
 
   // views
@@ -138,7 +138,7 @@ dependencies {
   implementation 'com.ogaclejapan.arclayout:library:1.1.0@aar'
 
   // util
-  implementation 'com.jakewharton.timber:timber:4.5.1'
+  implementation 'com.jakewharton.timber:timber:4.6.0'
 
   androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'

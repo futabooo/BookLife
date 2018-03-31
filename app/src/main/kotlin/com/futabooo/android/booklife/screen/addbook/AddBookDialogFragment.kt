@@ -33,7 +33,7 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
   lateinit var readAt: String
 
   val review by lazy {
-    val review = arguments.getSerializable(EXTRA_REVIEW)
+    val review = arguments?.getSerializable(EXTRA_REVIEW)
     if (review != null) {
       review as Review
     } else {
@@ -43,10 +43,10 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
 
   companion object {
 
-    private val EXTRA_CSRF_TOKEN = "csrf_token"
-    private val EXTRA_BOOK_USER_ID = "user_id"
-    private val EXTRA_BOOK_ID = "book_id"
-    private val EXTRA_REVIEW = "review]"
+    private const val EXTRA_CSRF_TOKEN = "csrf_token"
+    private const val EXTRA_BOOK_USER_ID = "user_id"
+    private const val EXTRA_BOOK_ID = "book_id"
+    private const val EXTRA_REVIEW = "review"
 
     fun newInstance(csrfToken: String, userID: Int, bookId: Int, review: Review? = null): AddBookDialogFragment {
       val dialogFragment = AddBookDialogFragment()
@@ -72,7 +72,7 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    (activity.application as BookLife).netComponent.inject(this)
+    (activity?.application as BookLife).netComponent.inject(this)
   }
 
   @SuppressLint("RestrictedApi")
@@ -105,9 +105,9 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
       dialogBookAddNegative.setOnClickListener { dismiss() }
 
       dialogBookAddPositive.setOnClickListener {
-        val csrfToken = arguments.getString(EXTRA_CSRF_TOKEN)
-        val userId = arguments.getInt(EXTRA_BOOK_USER_ID)
-        val bookId = arguments.getInt(EXTRA_BOOK_ID)
+        val csrfToken = arguments!!.getString(EXTRA_CSRF_TOKEN)
+        val userId = arguments!!.getInt(EXTRA_BOOK_USER_ID)
+        val bookId = arguments!!.getInt(EXTRA_BOOK_ID)
         val impressions = dialogBookAddImpressions.text.toString()
         val netabare = if (dialogBookAddSpoiler.isChecked) 1 else 0
 

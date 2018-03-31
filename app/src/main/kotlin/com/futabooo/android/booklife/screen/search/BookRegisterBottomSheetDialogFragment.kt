@@ -74,7 +74,7 @@ class BookRegisterBottomSheetDialogFragment : BottomSheetDialogFragment(), View.
   }
 
   override fun onClick(v: View) {
-    val bookId = arguments.getInt(EXTRA_BOOK_ID)
+    val bookId = arguments!!.getInt(EXTRA_BOOK_ID)
     when (v.id) {
       R.id.bottom_sheet_reading -> listener.onBottomSheetAction(BookListMenu.READING, bookId)
       R.id.bottom_sheet_to_read -> listener.onBottomSheetAction(BookListMenu.TO_READ, bookId)

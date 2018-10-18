@@ -1,20 +1,19 @@
-- artifact: com.android.databinding:adapters:+
+- artifact: android.arch.core:+:+
+  name: Android Arch-Runtime
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+
+- artifact: android.arch.lifecycle:+:+
+  name: Android Lifecycle ViewModel
+  copyrightHolder: The Android Open Source Project
+  license: The Apache Software License, Version 2.0
+  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
+  url: https://developer.android.com/topic/libraries/architecture/index.html
+
+- artifact: com.android.databinding:+:+
   name: adapters
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  skip: true
-
-- artifact: com.android.databinding:baseLibrary:+
-  name: Data Binding Base Library
-  copyrightHolder: The Android Open Source Project
-  license: The Apache Software License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: http://tools.android.com
-  skip: true
-
-- artifact: com.android.databinding:library:+
-  name: library
   copyrightHolder: The Android Open Source Project
   license: The Apache Software License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -32,119 +31,20 @@
   license: #LICENSE#
   skip: true
 
-- artifact: com.android.support:animated-vector-drawable:+
+- artifact: com.android.support:+:+
   name: animated-vector-drawable
   copyrightHolder: The Android Open Source Project
   license: #LICENSE#
   skip: true
 
-- artifact: com.android.support:appcompat-v7:+
-  name: appcompat-v7
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:cardview-v7:+
-  name: cardview-v7
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:design:+
-  name: design
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:recyclerview-v7:+
-  name: recyclerview-v7
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-annotations:+
-  name: support-annotations
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-compat:+
-  name: support-compat
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-core-ui:+
-  name: support-core-ui
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-core-utils:+
-  name: support-core-utils
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-fragment:+
-  name: support-fragment
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-media-compat:+
-  name: support-media-compat
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-v4:+
-  name: support-v4
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:support-vector-drawable:+
-  name: support-vector-drawable
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.android.support:transition:+
-  name: transition
-  copyrightHolder: The Android Open Source Project
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.crashlytics.sdk.android:answers:+
+- artifact: com.crashlytics.sdk.android:+:+
   name: Android SDK Answers
   copyrightHolder: #COPYRIGHT_HOLDER#
   license: Answers Terms of Service
-  licenseUrl: https://answers.io/terms
-  skip: true
-
-- artifact: com.crashlytics.sdk.android:beta:+
-  name: Android SDK for Beta
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: Crashlytics Terms of Service
   licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
   skip: true
 
-- artifact: com.crashlytics.sdk.android:crashlytics-core:+
-  name: Android SDK Crashlytics Core
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: Crashlytics Terms of Service
-  licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
-  skip: true
-
-- artifact: com.crashlytics.sdk.android:crashlytics:+
-  name: Android SDK Crashlytics
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: Crashlytics Terms of Service
-  licenseUrl: http://try.crashlytics.com/terms/terms-of-service.pdf
-  skip: true
-
-- artifact: com.github.bumptech.glide:glide:+
+- artifact: com.github.bumptech.glide:+:+
   name: Glide
   copyrightHolder: Google Inc.
   license: Simplified BSD License
@@ -201,26 +101,8 @@
   license: #LICENSE#
   skip: true
 
-- artifact: com.google.firebase:firebase-analytics:+
+- artifact: com.google.firebase:+:+
   name: firebase-analytics
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.google.firebase:firebase-common:+
-  name: firebase-common
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.google.firebase:firebase-core:+
-  name: firebase-core
-  copyrightHolder: #COPYRIGHT_HOLDER#
-  license: #LICENSE#
-  skip: true
-
-- artifact: com.google.firebase:firebase-iid:+
-  name: firebase-iid
   copyrightHolder: #COPYRIGHT_HOLDER#
   license: #LICENSE#
   skip: true
@@ -332,24 +214,7 @@
   copyrightHolder: Wasabeef
   license: The Apache Software License, Version 2.0
 
-- artifact: org.jetbrains.kotlin:kotlin-stdlib-jre7:+
-  name: org.jetbrains.kotlin:kotlin-stdlib-jre7
-  copyrightHolder: JetBrains
-  license: The Apache License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://kotlinlang.org/
-  skip: true
-
-- artifact: org.jetbrains.kotlin:kotlin-stdlib-jre8:+
-  name: org.jetbrains.kotlin:kotlin-stdlib-jre8
-  copyrightHolder: JetBrains
-  license: The Apache License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://kotlinlang.org/
-  skip: true
-
-- artifact: org.jetbrains.kotlin:kotlin-stdlib:+
-  name: org.jetbrains.kotlin:kotlin-stdlib
+- artifact: org.jetbrains.kotlin:+:+
   copyrightHolder: JetBrains
   license: The Apache License, Version 2.0
   licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -377,4 +242,18 @@
   license: CC0
   licenseUrl: http://creativecommons.org/publicdomain/zero/1.0/
   url: http://www.reactive-streams.org/
+  skip: true
+
+- artifact: junit:junit:+
+  name: JUnit
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: Eclipse Public License 1.0
+  licenseUrl: http://www.eclipse.org/legal/epl-v10.html
+  url: http://junit.org
+  skip: true
+
+- artifact: org.hamcrest:hamcrest-core:+
+  name: Hamcrest Core
+  copyrightHolder: #COPYRIGHT_HOLDER#
+  license: #LICENSE#
   skip: true

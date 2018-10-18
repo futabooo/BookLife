@@ -15,6 +15,11 @@
       android:theme="@style/Theme.BookLife"
       >
 
+    <uses-library
+        android:name="org.apache.http.legacy"
+        android:required="false"
+        />
+
     <activity
         android:name=".screen.splash.SplashActivity"
         android:theme="@style/Theme.BookLife.Splash"

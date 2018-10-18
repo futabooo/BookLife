@@ -1,35 +1,34 @@
 package com.futabooo.android.booklife.screen
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.futabooo.android.booklife.MainBottomMenu
-import com.futabooo.android.booklife.R
-import com.futabooo.android.booklife.databinding.ActivityMainBinding
-import com.futabooo.android.booklife.screen.search.SearchActivity
-import android.view.animation.OvershootInterpolator
-import android.animation.AnimatorSet
-import android.view.View
-import android.animation.AnimatorListenerAdapter
-import android.view.animation.AnticipateInterpolator
-import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.net.Uri
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AnticipateInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.Toast
-import android.app.Activity
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.futabooo.android.booklife.BuildConfig
+import com.futabooo.android.booklife.MainBottomMenu
+import com.futabooo.android.booklife.R
+import com.futabooo.android.booklife.databinding.ActivityMainBinding
 import com.futabooo.android.booklife.screen.licenses.LicensesActivity
-import com.futabooo.android.booklife.screen.option.OptionActivity
-
+import com.futabooo.android.booklife.screen.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,20 +75,20 @@ class MainActivity : AppCompatActivity() {
         // do reselected
       }
 
-      activityMainAppBarLayout.addOnOffsetChangedListener { appBarLayout, _ ->
+      activityMainAppBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, _ ->
         val lp = floatingActionButton.layoutParams as FrameLayout.LayoutParams
         val fabBottomMargin = lp.bottomMargin
         val distanceToScroll = floatingActionButton.height + fabBottomMargin
         val ratio = appBarLayout.y / toolBarHeight
         floatingActionButton.translationY = -distanceToScroll * ratio
-      }
+      })
 
       floatingActionButton.setOnClickListener {
         if (it.isSelected) hideMenu() else showMenu()
         it.isSelected = !it.isSelected
       }
 
-      activityMainArcLayout?.arcLayoutContainer?.setOnTouchListener { _, event ->
+      activityMainArcLayout.arcLayoutContainer.setOnTouchListener { _, event ->
         when (event.action) {
           MotionEvent.ACTION_DOWN -> {
             if (binding.floatingActionButton.isSelected) hideMenu() else showMenu()
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
       }
 
-      activityMainArcLayout?.arcLayoutMenuBarcodeScan?.setOnClickListener {
+      activityMainArcLayout.arcLayoutMenuBarcodeScan.setOnClickListener {
         try {
           val intent = Intent("com.google.zxing.client.android.SCAN")
           intent.putExtra("SCAN_MODE", "PRODUCT_MODE") // "PRODUCT_MODE for bar codes
@@ -118,13 +117,13 @@ class MainActivity : AppCompatActivity() {
 
         if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Barcode Scan"))
       }
-      activityMainArcLayout?.arcLayoutMenuSearch?.setOnClickListener {
+      activityMainArcLayout.arcLayoutMenuSearch.setOnClickListener {
         startActivity(SearchActivity.createIntent(this@MainActivity))
         hideMenu()
         binding.floatingActionButton.isSelected = false
         if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Search"))
       }
-      activityMainArcLayout?.arcLayoutMenuRecordVoice?.setOnClickListener {
+      activityMainArcLayout.arcLayoutMenuRecordVoice.setOnClickListener {
         Toast.makeText(this@MainActivity, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show()
         if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Record Voice"))
       }
@@ -173,8 +172,8 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun showMenu() {
-    binding.activityMainArcLayout?.arcLayoutContainer?.visibility = View.VISIBLE
-    val arcLayout = binding.activityMainArcLayout?.arcLayout!!
+    binding.activityMainArcLayout.arcLayoutContainer.visibility = View.VISIBLE
+    val arcLayout = binding.activityMainArcLayout.arcLayout
     val animList = mutableListOf<Animator>()
     var count = 0
     val len = arcLayout.childCount
@@ -193,7 +192,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun hideMenu() {
-    val arcLayout = binding.activityMainArcLayout?.arcLayout!!
+    val arcLayout = binding.activityMainArcLayout.arcLayout
 
     val animList = (arcLayout.childCount - 1 downTo 0).map {
       createHideItemAnimator(arcLayout.getChildAt(it))
@@ -207,7 +206,7 @@ class MainActivity : AppCompatActivity() {
     animSet.addListener(object : AnimatorListenerAdapter() {
       override fun onAnimationEnd(animation: Animator) {
         super.onAnimationEnd(animation)
-        binding.activityMainArcLayout?.arcLayoutContainer?.visibility = View.INVISIBLE
+        binding.activityMainArcLayout.arcLayoutContainer.visibility = View.INVISIBLE
       }
     })
     animSet.start()

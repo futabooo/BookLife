@@ -51,9 +51,16 @@ keystore.properties
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
+booklife-play-release-manager.json
 
 # Fabric
 fabric.properties
 
 # Firebase
 .firebase/
+
+# Gem
+vendor/bundle
+
+# Fastlane
+fastlane/report.xml

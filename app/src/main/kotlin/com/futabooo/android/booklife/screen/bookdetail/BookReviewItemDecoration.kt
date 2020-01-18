@@ -1,8 +1,8 @@
 package com.futabooo.android.booklife.screen.bookdetail
 
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.State
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.State
 import android.view.View
 
 class BookReviewItemDecoration(private val verticalSpaceHeight: Int) : RecyclerView.ItemDecoration() {

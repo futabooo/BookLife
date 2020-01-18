@@ -1,14 +1,12 @@
 package com.futabooo.android.booklife.screen.bookdetail
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.futabooo.android.booklife.databinding.ItemReviewBinding
 import com.futabooo.android.booklife.model.Review
-import jp.wasabeef.glide.transformations.CropCircleTransformation
 
 class BookReviewAdapter(var reviews: MutableList<Review>) : RecyclerView.Adapter<BookReviewAdapter.ViewHolder>() {
 
@@ -19,7 +17,7 @@ class BookReviewAdapter(var reviews: MutableList<Review>) : RecyclerView.Adapter
     val review = reviews[position]
     holder.binding.apply {
       Glide.with(root.context).load(review.user.image)
-          .apply(RequestOptions.bitmapTransform(CropCircleTransformation(root.context)))
+          .circleCrop()
           .into(itemReviewIcon)
       itemReviewName.text = review.user.name
       itemReviewReview.text = review.content

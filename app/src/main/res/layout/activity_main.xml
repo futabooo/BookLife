@@ -10,19 +10,19 @@
       android:layout_height="match_parent"
       >
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".screen.MainActivity"
         >
 
-      <android.support.design.widget.AppBarLayout
+      <com.google.android.material.appbar.AppBarLayout
           android:id="@+id/activity_main_app_bar_layout"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           >
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/activity_main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,16 +32,16 @@
             style="@style/Widget.BookLife.Toolbar"
             />
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:id="@+id/activity_main_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:textAllCaps="false"
             app:tabMode="scrollable"
             />
-      </android.support.design.widget.AppBarLayout>
+      </com.google.android.material.appbar.AppBarLayout>
 
-      <android.support.v4.view.ViewPager
+      <androidx.viewpager.widget.ViewPager
           android:id="@+id/activity_main_viewpager"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -57,14 +57,14 @@
           app:bb_behavior="shy"
           app:bb_tabXmlResource="@xml/bottom_bar_tabs"
           />
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <include
         layout="@layout/component_arc_layout"
         android:id="@+id/activity_main_arc_layout"
         />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

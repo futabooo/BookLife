@@ -12,7 +12,7 @@
       android:orientation="vertical"
       >
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/book_detail_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         style="@style/Widget.BookLife.Toolbar.Shadowed"
         />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -88,7 +88,7 @@
               drawme:dm_textColor="@android:color/white"
               />
 
-          <android.support.v7.widget.AppCompatImageButton
+          <androidx.appcompat.widget.AppCompatImageButton
               android:id="@+id/book_detail_add"
               android:layout_width="30dp"
               android:layout_height="30dp"
@@ -133,7 +133,7 @@
             tools:visibility="visible"
             />
 
-        <android.support.v7.widget.AppCompatImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/book_detail_impression_edit"
             android:layout_width="42dp"
             android:layout_height="24dp"
@@ -159,7 +159,7 @@
             tools:visibility="visible"
             />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/book_detail_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -169,6 +169,6 @@
             tools:listitem="@layout/item_review"
             />
       </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
   </LinearLayout>
 </layout>

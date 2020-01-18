@@ -8,11 +8,8 @@ import android.animation.PropertyValuesHolder
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -21,6 +18,8 @@ import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.futabooo.android.booklife.BuildConfig
@@ -29,6 +28,7 @@ import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ActivityMainBinding
 import com.futabooo.android.booklife.screen.licenses.LicensesActivity
 import com.futabooo.android.booklife.screen.search.SearchActivity
+import com.google.android.material.appbar.AppBarLayout
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
   private var toolBarHeight: Int = 0
   private val BarcodeScan = 0
 
-
   companion object {
     fun createIntent(context: Context) = Intent(context, MainActivity::class.java)
   }
@@ -47,7 +46,8 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     val styledAttributes = theme.obtainStyledAttributes(intArrayOf(R.attr.actionBarSize))
-    toolBarHeight = styledAttributes.getDimension(0, 0f).toInt()
+    toolBarHeight = styledAttributes.getDimension(0, 0f)
+        .toInt()
     styledAttributes.recycle()
 
     binding.apply {
@@ -75,13 +75,14 @@ class MainActivity : AppCompatActivity() {
         // do reselected
       }
 
-      activityMainAppBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, _ ->
-        val lp = floatingActionButton.layoutParams as FrameLayout.LayoutParams
-        val fabBottomMargin = lp.bottomMargin
-        val distanceToScroll = floatingActionButton.height + fabBottomMargin
-        val ratio = appBarLayout.y / toolBarHeight
-        floatingActionButton.translationY = -distanceToScroll * ratio
-      })
+      activityMainAppBarLayout.addOnOffsetChangedListener(
+          AppBarLayout.OnOffsetChangedListener { appBarLayout, _ ->
+            val lp = floatingActionButton.layoutParams as FrameLayout.LayoutParams
+            val fabBottomMargin = lp.bottomMargin
+            val distanceToScroll = floatingActionButton.height + fabBottomMargin
+            val ratio = appBarLayout.y / toolBarHeight
+            floatingActionButton.translationY = -distanceToScroll * ratio
+          })
 
       floatingActionButton.setOnClickListener {
         if (it.isSelected) hideMenu() else showMenu()
@@ -124,7 +125,8 @@ class MainActivity : AppCompatActivity() {
         if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Search"))
       }
       activityMainArcLayout.arcLayoutMenuRecordVoice.setOnClickListener {
-        Toast.makeText(this@MainActivity, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@MainActivity, getString(R.string.coming_soon), Toast.LENGTH_SHORT)
+            .show()
         if (!BuildConfig.DEBUG) Answers.getInstance().logCustom(CustomEvent("Record Voice"))
       }
     }
@@ -147,7 +149,11 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
     super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == BarcodeScan) {
       when (resultCode) {
@@ -216,8 +222,10 @@ class MainActivity : AppCompatActivity() {
   private fun createFABClickAnimator(rotation: Float): Animator {
     val anim = ObjectAnimator.ofPropertyValuesHolder(
         binding.floatingActionButton,
-        PropertyValuesHolder.ofFloat("rotation", binding.floatingActionButton.rotation,
-            binding.floatingActionButton.rotation + rotation)
+        PropertyValuesHolder.ofFloat(
+            "rotation", binding.floatingActionButton.rotation,
+            binding.floatingActionButton.rotation + rotation
+        )
     )
     return anim
   }

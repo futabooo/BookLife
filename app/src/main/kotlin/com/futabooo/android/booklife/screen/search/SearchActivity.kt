@@ -3,15 +3,14 @@ package com.futabooo.android.booklife.screen.search
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.InfiniteScrollListener
 import com.futabooo.android.booklife.R
@@ -22,6 +21,7 @@ import com.futabooo.android.booklife.model.SearchResultResource
 import com.futabooo.android.booklife.screen.BookListMenu
 import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment
 import com.futabooo.android.booklife.screen.bookdetail.BookDetailActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
 import org.jsoup.Jsoup
@@ -31,7 +31,9 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
 
-class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener, AddBookDialogFragment.OnAddBookActionListener {
+class SearchActivity : AppCompatActivity(),
+    BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener,
+    AddBookDialogFragment.OnAddBookActionListener {
 
   @Inject lateinit var retrofit: Retrofit
   @Inject lateinit var sharedPreferences: SharedPreferences
@@ -39,60 +41,70 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
   private lateinit var binding: ActivitySearchBinding
   private lateinit var resultAdapter: SearchResultAdapter
 
-  val userId by lazy { sharedPreferences.getInt("user_id", 0) }
+  private val userId by lazy { sharedPreferences.getInt("user_id", 0) }
   private lateinit var csrfToken: String
   private lateinit var keyword: String
-  val limit: Int = 20
-  var offset: Int = 0
+  private val limit: Int = 20
+  private var offset: Int = 0
 
   companion object {
     private val EXTRA_ISBN = "isbn"
 
-    fun createIntent(context: Context, isbn: String = "") =
-        Intent(context, SearchActivity::class.java).apply {
-          putExtra(EXTRA_ISBN, isbn)
-        }
+    fun createIntent(
+      context: Context,
+      isbn: String = ""
+    ) =
+      Intent(context, SearchActivity::class.java).apply {
+        putExtra(EXTRA_ISBN, isbn)
+      }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     (application as BookLife).netComponent.inject(this)
 
-    binding = DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search).apply {
-      setSupportActionBar(activitySearchToolbar)
-      supportActionBar?.setDisplayShowTitleEnabled(false)
-      supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    binding = DataBindingUtil.setContentView<ActivitySearchBinding>(this, R.layout.activity_search)
+        .apply {
+          setSupportActionBar(activitySearchToolbar)
+          supportActionBar?.setDisplayShowTitleEnabled(false)
+          supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-      val layoutManager = LinearLayoutManager(this@SearchActivity)
-      activitySearchResultList.layoutManager = layoutManager
-      resultAdapter = SearchResultAdapter(mutableListOf(),
-          { view, book ->
+          val layoutManager = LinearLayoutManager(this@SearchActivity)
+          activitySearchResultList.layoutManager = layoutManager
+          resultAdapter = SearchResultAdapter(
+              mutableListOf()
+          ) { view, book ->
             when (view.id) {
               R.id.search_result_book_thumbnail -> {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@SearchActivity, view, view.transitionName)
                 startActivity(BookDetailActivity.createIntent(this@SearchActivity, book.id, book.imageUrl), options.toBundle())
               }
               R.id.search_result_book_action -> {
-                BookRegisterBottomSheetDialogFragment.newInstance(book.id).show(supportFragmentManager, "bottom_sheet")
+                BookRegisterBottomSheetDialogFragment.newInstance(book.id)
+                    .show(supportFragmentManager, "bottom_sheet")
               }
             }
-          })
-      activitySearchResultList.adapter = resultAdapter
-      activitySearchResultList.addOnScrollListener(InfiniteScrollListener({ searchBooks(keyword) }, layoutManager))
-    }
+          }
+          activitySearchResultList.adapter = resultAdapter
+          activitySearchResultList.addOnScrollListener(InfiniteScrollListener({ searchBooks(keyword) }, layoutManager))
+        }
 
-    intent.getStringExtra(EXTRA_ISBN)?.let { searchBooks(it) }
+    intent.getStringExtra(EXTRA_ISBN)
+        ?.let { searchBooks(it) }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     binding.activitySearchToolbar.inflateMenu(R.menu.activity_search_menu)
-    binding.activitySearchToolbar.menu.findItem(R.id.menu_search).actionView.also {
+    binding.activitySearchToolbar.menu.findItem(R.id.menu_search)
+        .actionView.also {
       it as SearchView
       it.isIconified = false
       it.queryHint = getString(R.string.search_hint)
       it.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
           it.clearFocus()
+          resultAdapter.clear()
+          offset = 0
           keyword = query
           searchBooks(keyword)
           return false
@@ -119,13 +131,19 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
   }
 
   private fun searchBooks(keyword: String) {
-    retrofit.create(SearchService::class.java).get(keyword)
+    retrofit.create(SearchService::class.java)
+        .get(keyword)
         .flatMap {
           val reader = BufferedReader(InputStreamReader(it.byteStream()))
-          val result = reader.readLines().filter(String::isNotBlank).toList()
+          val result = reader.readLines()
+              .filter(String::isNotBlank)
+              .toList()
           csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
-          retrofit.create(SearchService::class.java).getJson(csrfToken, keyword, "recommended", "japanese", offset,
-              limit)
+          retrofit.create(SearchService::class.java)
+              .getJson(
+                  csrfToken, keyword, "recommended", "japanese", offset,
+                  limit
+              )
         }
         .subscribeOnIO
         .observeOnUI
@@ -142,13 +160,18 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
         )
   }
 
-  override fun onBottomSheetAction(bookListMenu: BookListMenu, bookId: Int) {
+  override fun onBottomSheetAction(
+    bookListMenu: BookListMenu,
+    bookId: Int
+  ) {
     when (bookListMenu) {
       BookListMenu.READ -> {
-        AddBookDialogFragment.newInstance(csrfToken, userId, bookId).show(supportFragmentManager, "add_book_dialog")
+        AddBookDialogFragment.newInstance(csrfToken, userId, bookId)
+            .show(supportFragmentManager, "add_book_dialog")
       }
       BookListMenu.READING, BookListMenu.TO_READ, BookListMenu.QUITTED -> {
-        retrofit.create(ActionService::class.java).addBook(csrfToken, userId, bookListMenu.key, bookId)
+        retrofit.create(ActionService::class.java)
+            .addBook(csrfToken, userId, bookListMenu.key, bookId)
             .subscribeOnIO
             .observeOnUI
             .subscribeBy(
@@ -159,17 +182,26 @@ class SearchActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragmen
   }
 
   override fun onRegister(bookId: Int) {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_registered, bookId.toString()),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.book_registered, bookId.toString()),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 
   override fun onUpdate(bookId: Int) {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_update, bookId.toString()),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.book_update, bookId.toString()),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 
   override fun onError() {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_review_update),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.error_review_update),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 }

@@ -1,10 +1,10 @@
 package com.futabooo.android.booklife.screen.search
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.databinding.ComponentLoadingBinding
@@ -12,8 +12,10 @@ import com.futabooo.android.booklife.databinding.ComponentSearchResultCardViewBi
 import com.futabooo.android.booklife.model.Book
 import com.futabooo.android.booklife.model.SearchResultResource
 
-class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val listener: (View, Book) -> Unit)
-  : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+class SearchResultAdapter(
+  val resources: MutableList<SearchResultResource>,
+  val listener: (View, Book) -> Unit
+) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
   companion object {
     const val LOADING = 0
@@ -22,12 +24,16 @@ class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val 
 
   private var showProgress = false
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): ViewHolder {
     if (viewType == LOADING) {
       return ViewHolder(ComponentLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     } else {
       return ViewHolder(
-          ComponentSearchResultCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+          ComponentSearchResultCardViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+      )
           .apply {
             binding as ComponentSearchResultCardViewBinding
             binding.root.setOnClickListener {
@@ -40,7 +46,10 @@ class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val 
     }
   }
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: ViewHolder,
+    position: Int
+  ) {
     when (holder.binding) {
       is ComponentLoadingBinding -> {
         with(holder.binding) {
@@ -50,7 +59,9 @@ class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val 
       is ComponentSearchResultCardViewBinding -> {
         val book = resources[position].contents.book
         with(holder.binding) {
-          Glide.with(root.context).load(book.imageUrl).into(searchResultBookThumbnail)
+          Glide.with(root.context)
+              .load(book.imageUrl)
+              .into(searchResultBookThumbnail)
           searchResultBookTitle.text = book.title
           searchResultBookAuthor.text = book.author.name
           searchResultBookReaders.text = book.registrationCount.toString()
@@ -69,16 +80,20 @@ class SearchResultAdapter(val resources: MutableList<SearchResultResource>, val 
   override fun getItemCount() = if (resources.size == 0) 0 else resources.size + 1
 
   override fun getItemId(position: Int) =
-      if (position != 0 && position == itemCount - 1) -1 else super.getItemId(position)
+    if (position != 0 && position == itemCount - 1) -1 else super.getItemId(position)
 
   override fun getItemViewType(position: Int) =
-      if (position != 0 && position == itemCount - 1) LOADING else CONTENTS
-
+    if (position != 0 && position == itemCount - 1) LOADING else CONTENTS
 
   fun addAll(list: MutableList<SearchResultResource>) {
     val addIndex = if (resources.lastIndex < 0) 0 else resources.lastIndex + 1
     resources.addAll(addIndex, list)
     notifyItemRangeInserted(addIndex, list.size)
+  }
+
+  fun clear() {
+    resources.clear()
+    notifyDataSetChanged()
   }
 
   fun showProgress(show: Boolean) {

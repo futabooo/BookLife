@@ -1,10 +1,10 @@
 package com.futabooo.android.booklife.screen
 
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import com.futabooo.android.booklife.MainBottomMenu
 import com.futabooo.android.booklife.R
 import com.futabooo.android.booklife.screen.booklist.BookListFragment

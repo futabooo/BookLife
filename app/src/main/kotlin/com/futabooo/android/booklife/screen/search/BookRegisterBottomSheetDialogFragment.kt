@@ -2,11 +2,11 @@ package com.futabooo.android.booklife.screen.search
 
 import android.app.Dialog
 import android.content.Context
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.design.widget.CoordinatorLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import android.view.LayoutInflater
 import android.view.View
 import com.futabooo.android.booklife.R
@@ -44,7 +44,7 @@ class BookRegisterBottomSheetDialogFragment : BottomSheetDialogFragment(), View.
     }
   }
 
-  override fun onAttach(context: Context?) {
+  override fun onAttach(context: Context) {
     super.onAttach(context)
 
     if (context !is OnBottomSheetActionListener) {

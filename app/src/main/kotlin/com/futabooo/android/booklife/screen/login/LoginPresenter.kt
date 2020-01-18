@@ -22,10 +22,12 @@ import java.security.NoSuchProviderException
 import java.security.UnrecoverableEntryException
 import javax.crypto.NoSuchPaddingException
 
-class LoginPresenter constructor(val contract: Contract,
-                                 val retrofit: Retrofit,
-                                 val sharedPreferences: SharedPreferences,
-                                 val cryptore: Cryptore) : Presenter {
+class LoginPresenter constructor(
+  val contract: Contract,
+  val retrofit: Retrofit,
+  val sharedPreferences: SharedPreferences,
+  val cryptore: Cryptore
+) : Presenter {
   override fun bind() {
   }
 
@@ -36,13 +38,22 @@ class LoginPresenter constructor(val contract: Contract,
 
   fun isValidPassword(password: String): Boolean = password.isNotEmpty()
 
-  fun login(email: String, password: String) {
-    retrofit.create(LoginService::class.java).get()
+  fun login(
+    email: String,
+    password: String
+  ) {
+    retrofit.create(LoginService::class.java)
+        .get()
         .flatMap {
           val reader = BufferedReader(InputStreamReader(it.byteStream()))
-          val result = reader.readLines().filter(String::isNotBlank).toList()
-          val token = Jsoup.parse(result.toString()).select("form input[name=authenticity_token]").attr("value")
-          retrofit.create(LoginService::class.java).login(email, password, token)
+          val result = reader.readLines()
+              .filter(String::isNotBlank)
+              .toList()
+          val token = Jsoup.parse(result.toString())
+              .select("form input[name=authenticity_token]")
+              .attr("value")
+          retrofit.create(LoginService::class.java)
+              .login(email, password, token)
         }
         .subscribeOnIO
         .observeOnUI
@@ -51,8 +62,12 @@ class LoginPresenter constructor(val contract: Contract,
         .subscribeBy(
             onNext = {
               val reader = BufferedReader(InputStreamReader(it.byteStream()))
-              val result = reader.readLines().filter(String::isNotBlank).toList()
-              val alert = Jsoup.parse(result.toString()).select("div.container li.bm-flash-item--alert").isNotEmpty()
+              val result = reader.readLines()
+                  .filter(String::isNotBlank)
+                  .toList()
+              val alert = Jsoup.parse(result.toString())
+                  .select("div.container li.bm-flash-item--alert")
+                  .isNotEmpty()
               if (alert) {
                 Timber.i("E-mail or Password is wrong")
                 contract.failureLogin()
@@ -91,18 +106,19 @@ class LoginPresenter constructor(val contract: Contract,
 
               contract.successLogin()
             },
-            onError = { Timber.e(it, it.message) }
+            onError = {
+              Timber.e(it, it.message)
+            }
         )
   }
 
   fun onSignInClick() = contract.attemptLogin()
 
   fun onForgetPasswordClick() =
-      contract.openBrowser(Uri.parse("https://i.bookmeter.com/account/password/tokens/new"))
+    contract.openBrowser(Uri.parse("https://i.bookmeter.com/account/password/tokens/new"))
 
   fun onSignUpClick() =
-      contract.openBrowser(Uri.parse("https://i.bookmeter.com/signup"))
-
+    contract.openBrowser(Uri.parse("https://i.bookmeter.com/signup"))
 
   interface Contract {
     fun openBrowser(uri: Uri)

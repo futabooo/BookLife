@@ -5,7 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatDialogFragment
+import androidx.appcompat.app.AppCompatDialogFragment
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.widget.DatePicker
@@ -61,7 +61,7 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
     }
   }
 
-  override fun onAttach(context: Context?) {
+  override fun onAttach(context: Context) {
     super.onAttach(context)
 
     if (context !is OnAddBookActionListener) {
@@ -171,10 +171,10 @@ class AddBookDialogFragment : AppCompatDialogFragment(), DatePickerDialog.OnDate
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    val lp = dialog.window?.attributes
+    val lp = dialog?.window?.attributes
     val metrics = resources.displayMetrics
     lp?.width = metrics.widthPixels
-    dialog.window?.attributes = lp
+    dialog?.window?.attributes = lp
   }
 
   override fun onDateSet(view: DatePicker, year: Int, month: Int, dayOfMonth: Int) {

@@ -2,12 +2,12 @@ package com.futabooo.android.booklife.screen.booklist
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.InfiniteScrollListener
 import com.futabooo.android.booklife.databinding.FragmentBookListBinding
@@ -25,7 +25,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
 
-
 class BookListFragment : Fragment() {
 
   @Inject lateinit var retrofit: Retrofit
@@ -40,17 +39,16 @@ class BookListFragment : Fragment() {
   val limit: Int = 10
   var offset: Int = 0
 
-
   companion object {
 
     private val EXTRA_BOOK_LIST_MENU = "book_list_menu"
 
     fun newInstance(bookListMenu: BookListMenu): BookListFragment =
-        BookListFragment().apply {
-          arguments = Bundle().apply {
-            putSerializable(EXTRA_BOOK_LIST_MENU, bookListMenu)
-          }
+      BookListFragment().apply {
+        arguments = Bundle().apply {
+          putSerializable(EXTRA_BOOK_LIST_MENU, bookListMenu)
         }
+      }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,21 +56,29 @@ class BookListFragment : Fragment() {
     (activity?.application as BookLife).netComponent.inject(this)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     binding = FragmentBookListBinding.inflate(inflater, container, false)
     return binding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
     super.onViewCreated(view, savedInstanceState)
 
     binding.bookList.setHasFixedSize(true)
-    val layoutManager = LinearLayoutManager(activity).apply { orientation = LinearLayoutManager.VERTICAL }
+    val layoutManager = LinearLayoutManager(activity)
+        .apply { orientation = LinearLayoutManager.VERTICAL }
     binding.bookList.layoutManager = layoutManager
-    bookAdapter = BookAdapter(mutableListOf(), { v, book ->
+    bookAdapter = BookAdapter(mutableListOf()) { v, book ->
       val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, v, v.transitionName)
       startActivity(BookDetailActivity.createIntent(context!!, book.id, book.imageUrl), options.toBundle())
-    })
+    }
     binding.bookList.adapter = bookAdapter
     binding.bookList.addOnScrollListener(InfiniteScrollListener({ getBookList() }, layoutManager))
 
@@ -80,14 +86,20 @@ class BookListFragment : Fragment() {
   }
 
   private fun getBookList() {
-    retrofit.create(BookListService::class.java).get(userId, bookListMenu.key)
+    retrofit.create(BookListService::class.java)
+        .get(userId, bookListMenu.key)
         .flatMap {
           val reader = BufferedReader(InputStreamReader(it.byteStream()))
-          val result = reader.readLines().filter(String::isNotBlank).toList()
+          val result = reader.readLines()
+              .filter(String::isNotBlank)
+              .toList()
 
           val csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
-          retrofit.create(BookListService::class.java).getJson(csrfToken, userId, bookListMenu.key, "true", offset,
-              limit)
+          retrofit.create(BookListService::class.java)
+              .getJson(
+                  csrfToken, userId, bookListMenu.key, "true", offset,
+                  limit
+              )
         }
         .subscribeOnIO
         .observeOnUI
@@ -100,7 +112,9 @@ class BookListFragment : Fragment() {
               bookAdapter.addAll(resources.toMutableList())
               offset += limit
             },
-            onError = { Timber.e(it, it.message) }
+            onError = {
+              Timber.e(it, it.message)
+            }
         )
   }
 }

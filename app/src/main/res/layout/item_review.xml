@@ -9,7 +9,7 @@
       android:layout_height="wrap_content"
       >
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/item_review_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -17,7 +17,7 @@
         tools:src="@color/accent"
         />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_review_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         tools:text="ここにはレビューした人の名前が入る"
         />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_review_netabare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         tools:visibility="visible"
         />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_review_review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

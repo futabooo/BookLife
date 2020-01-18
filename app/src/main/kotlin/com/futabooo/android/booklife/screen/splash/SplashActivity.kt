@@ -2,7 +2,7 @@ package com.futabooo.android.booklife.screen.splash
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.screen.MainActivity
 import com.futabooo.android.booklife.screen.login.LoginActivity

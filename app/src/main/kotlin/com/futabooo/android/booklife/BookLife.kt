@@ -2,7 +2,7 @@ package com.futabooo.android.booklife
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.core.CrashlyticsCore
 import com.futabooo.android.booklife.di.components.DaggerNetComponent
 import com.futabooo.android.booklife.di.components.NetComponent
 import com.futabooo.android.booklife.di.modules.AppModule
@@ -15,15 +15,20 @@ class BookLife : Application() {
   lateinit var netComponent: NetComponent
 
   companion object {
-    private val BASE_URL = "https://i.bookmeter.com"
+    private val BASE_URL = "https://bookmeter.com"
   }
 
   override fun onCreate() {
     super.onCreate()
 
-    if (BuildConfig.USE_CRASHLYTICS) {
-      Fabric.with(this, Crashlytics(), Answers())
-    }
+    val crashlytics = Crashlytics.Builder()
+        .core(
+            CrashlyticsCore.Builder()
+                .disabled(BuildConfig.DEBUG)
+                .build()
+        )
+        .build()
+    Fabric.with(this, crashlytics)
 
     if (BuildConfig.DEBUG) {
       Timber.plant(Timber.DebugTree())

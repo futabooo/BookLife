@@ -3,14 +3,13 @@ package com.futabooo.android.booklife.screen.bookdetail
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.futabooo.android.booklife.BookLife
 import com.futabooo.android.booklife.R
@@ -23,6 +22,7 @@ import com.futabooo.android.booklife.screen.BookListMenu
 import com.futabooo.android.booklife.screen.addbook.AddBookDialogFragment
 import com.futabooo.android.booklife.screen.search.ActionService
 import com.futabooo.android.booklife.screen.search.BookRegisterBottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import io.reactivex.rxkotlin.subscribeBy
 import org.jsoup.Jsoup
@@ -32,7 +32,9 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.inject.Inject
 
-class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener, AddBookDialogFragment.OnAddBookActionListener {
+class BookDetailActivity : AppCompatActivity(),
+    BookRegisterBottomSheetDialogFragment.OnBottomSheetActionListener,
+    AddBookDialogFragment.OnAddBookActionListener {
 
   @Inject lateinit var retrofit: Retrofit
   @Inject lateinit var sharedPreferences: SharedPreferences
@@ -53,11 +55,15 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
     private val EXTRA_BOOK_ID = "book_id"
     private val EXTRA_BOOK_THUMBNAIL_URL = "book_thumbnail_url"
 
-    fun createIntent(context: Context, bookId: Int, bookThumbnailURL: String) =
-        Intent(context, BookDetailActivity::class.java).apply {
-          putExtra(EXTRA_BOOK_THUMBNAIL_URL, bookThumbnailURL)
-          putExtra(EXTRA_BOOK_ID, bookId)
-        }
+    fun createIntent(
+      context: Context,
+      bookId: Int,
+      bookThumbnailURL: String
+    ) =
+      Intent(context, BookDetailActivity::class.java).apply {
+        putExtra(EXTRA_BOOK_THUMBNAIL_URL, bookThumbnailURL)
+        putExtra(EXTRA_BOOK_ID, bookId)
+      }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,23 +78,24 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
         title = ""
       }
 
-      Glide.with(this@BookDetailActivity).load(intent.getStringExtra(EXTRA_BOOK_THUMBNAIL_URL)).into(bookDetailBookThumbnail)
+      Glide.with(this@BookDetailActivity)
+          .load(intent.getStringExtra(EXTRA_BOOK_THUMBNAIL_URL))
+          .into(bookDetailBookThumbnail)
 
-      val bookId = intent.extras.getInt(EXTRA_BOOK_ID)
-      retrofit.create(BookDetailService::class.java).get(bookId)
+      val bookId = intent.extras!!.getInt(EXTRA_BOOK_ID)
+      retrofit.create(BookDetailService::class.java)
+          .get(bookId)
           .subscribeOnIO
           .map {
             val reader = BufferedReader(InputStreamReader(it.byteStream()))
-            val result = reader.readLines().filter(String::isNotBlank).toList()
+            val result = reader.readLines()
+                .filter(String::isNotBlank)
+                .toList()
 
-            title = Jsoup.parse(result.toString()).select("h2.bm-headline span.bm-headline__text")[0].text()
-            author = Jsoup.parse(result.toString()).select("div.books_show__details ul li")[0].text()
-            thumbnail = Jsoup.parse(result.toString())
-                .select("div.books_show__details__cover a.books_show__details__cover__link img")
-                .attr("src")
-            url = Jsoup.parse(result.toString())
-                .select("div.books_show__details__cover a.books_show__details__cover__link")
-                .attr("href")
+            title = Jsoup.parse(result.toString()).select("div.header__inner h1.inner__title").text()
+            author = Jsoup.parse(result.toString()).select("div.header__inner ul.header__authors").text()
+            thumbnail = Jsoup.parse(result.toString()).select("div.group__image img").attr("src")
+            url = Jsoup.parse(result.toString()).select("div.group__image a").attr("href")
 
             csrfToken = Jsoup.parse(result.toString()).select("meta[name=csrf-token]")[0].attr("content")
           }
@@ -98,7 +105,9 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
                 getJson(csrfToken, bookId)
                 getReview(csrfToken, bookId)
               },
-              onError = { Timber.e(it, it.message) }
+              onError = {
+                Timber.e(it, it.message)
+              }
           )
     }
   }
@@ -115,7 +124,10 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onBottomSheetAction(bookListMenu: BookListMenu, bookId: Int) {
+  override fun onBottomSheetAction(
+    bookListMenu: BookListMenu,
+    bookId: Int
+  ) {
     when (bookListMenu) {
       BookListMenu.READ -> {
         val dialogFragment = AddBookDialogFragment.newInstance(csrfToken, userId, bookId)
@@ -124,7 +136,8 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
       BookListMenu.READING,
       BookListMenu.TO_READ,
       BookListMenu.QUITTED -> {
-        retrofit.create(ActionService::class.java).addBook(csrfToken, userId, bookListMenu.key, bookId)
+        retrofit.create(ActionService::class.java)
+            .addBook(csrfToken, userId, bookListMenu.key, bookId)
             .subscribeOnIO
             .observeOnUI
             .subscribeBy(
@@ -136,23 +149,36 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
   }
 
   override fun onRegister(bookId: Int) {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_registered, bookId.toString()),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.book_registered, bookId.toString()),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 
   override fun onUpdate(bookId: Int) {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.book_update, bookId.toString()),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.book_update, bookId.toString()),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 
   override fun onError() {
-    Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_review_update),
-        Snackbar.LENGTH_LONG).show()
+    Snackbar.make(
+        findViewById(android.R.id.content), getString(R.string.error_review_update),
+        Snackbar.LENGTH_LONG
+    )
+        .show()
   }
 
-  private fun getJson(csrfToken: String, bookId: Int) {
+  private fun getJson(
+    csrfToken: String,
+    bookId: Int
+  ) {
     binding.apply {
-      retrofit.create(BookDetailService::class.java).getJson(csrfToken, bookId, 0, 1000)
+      retrofit.create(BookDetailService::class.java)
+          .getJson(csrfToken, bookId, 0, 1000)
           .subscribeOnIO
           .observeOnUI
           .subscribeBy(
@@ -160,7 +186,9 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
                 bookDetailToolbar.title = title
                 bookDetailBookTitle.text = title
                 bookDetailBookAuthor.text = author
-                Glide.with(this@BookDetailActivity).load(thumbnail).into(bookDetailBookThumbnail)
+                Glide.with(this@BookDetailActivity)
+                    .load(thumbnail)
+                    .into(bookDetailBookThumbnail)
                 bookDetailBuy.setOnClickListener {
                   val uri = Uri.parse(url)
                   val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -197,9 +225,13 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
     }
   }
 
-  private fun getReview(csrfToken: String, bookId: Int) {
+  private fun getReview(
+    csrfToken: String,
+    bookId: Int
+  ) {
     binding.apply {
-      retrofit.create(BookDetailService::class.java).getReviews(csrfToken, bookId, "none", 0, 20)
+      retrofit.create(BookDetailService::class.java)
+          .getReviews(csrfToken, bookId, "none", 0, 20)
           .subscribeOnIO
           .observeOnUI
           .subscribeBy(
@@ -210,10 +242,12 @@ class BookDetailActivity : AppCompatActivity(), BookRegisterBottomSheetDialogFra
                 }
                 val resources = Gson().fromJson(jsonArray, Array<Review>::class.java)
                 val reviewAdapter = BookReviewAdapter(resources.toMutableList())
-                bookDetailReviews.layoutManager = LinearLayoutManager(this@BookDetailActivity)
+                bookDetailReviews.layoutManager =
+                  LinearLayoutManager(this@BookDetailActivity)
                 bookDetailReviews.adapter = reviewAdapter
                 bookDetailReviews.addItemDecoration(
-                    BookReviewItemDecoration((30 * getResources().displayMetrics.density).toInt()))
+                    BookReviewItemDecoration((30 * getResources().displayMetrics.density).toInt())
+                )
                 bookDetailReviews.isNestedScrollingEnabled = false
               },
               onError = { Timber.e(it, it.message) }

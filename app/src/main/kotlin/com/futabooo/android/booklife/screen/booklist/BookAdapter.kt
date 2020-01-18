@@ -1,7 +1,7 @@
 package com.futabooo.android.booklife.screen.booklist
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

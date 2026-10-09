@@ -1,6 +1,9 @@
 package com.futabooo.android.booklife.ui.common
 
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.scene.DialogSceneStrategy
 import com.futabooo.android.booklife.ui.navigation.BottomSheetSceneStrategy
 import com.futabooo.android.booklife.ui.navigation.EntryProviderInstaller
@@ -36,19 +39,24 @@ object BookActionEntries {
             metadata = DialogSceneStrategy.dialog(DialogProperties(usePlatformDefaultWidth = false)),
         ) { key ->
             val editing = key.reviewId != null
+            val inFlight by coordinator.inFlight.collectAsStateWithLifecycle()
+            val failed by coordinator.dialogError.collectAsStateWithLifecycle()
+            DisposableEffect(Unit) { onDispose { coordinator.clearDialogError() } }
             AddReadBookDialog(
                 isEditing = editing,
                 initialReview = key.initialReview.orEmpty(),
                 initialReadAt = key.initialReadAt,
                 initialNetabare = key.initialNetabare,
+                enabled = !inFlight,
+                showError = failed,
                 onDismiss = { navigator.goBack() },
                 onSubmit = { review, readAt, netabare ->
                     if (key.reviewId != null) {
-                        coordinator.updateReadBook(
-                            key.csrfToken, key.reviewId, key.bookId, review, readAt, netabare,
-                        )
+                        coordinator.updateReadBook(key.reviewId, key.bookId, review, readAt, netabare)
                     } else {
-                        coordinator.submitReadBook(key.csrfToken, key.bookId, review, readAt, netabare)
+                        coordinator.submitReadBook(
+                            key.bookId, review, readAt ?: ReadDates.submit(ReadDates.todayMillis()), netabare,
+                        )
                     }
                 },
             )

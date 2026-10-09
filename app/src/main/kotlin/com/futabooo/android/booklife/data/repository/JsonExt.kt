@@ -1,5 +1,7 @@
 package com.futabooo.android.booklife.data.repository
 
+import com.futabooo.android.booklife.data.network.SessionExpiredException
+import com.futabooo.android.booklife.data.parser.HtmlParsers
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
@@ -12,5 +14,11 @@ internal fun <T> JsonObject.decodeResources(json: Json, serializer: KSerializer<
     return json.decodeFromJsonElement(ListSerializer(serializer), array)
 }
 
-internal fun requireCsrfToken(token: String?): String =
-    token ?: throw IllegalStateException("csrf-token meta tag not found")
+/**
+ * The `csrf-token` meta tag of [html]. Throws [SessionExpiredException] when the page is the login
+ * form (the session is gone) and [IllegalStateException] when there is no token.
+ */
+internal fun csrfTokenOrThrow(html: String): String {
+    if (HtmlParsers.isLoginPage(html)) throw SessionExpiredException()
+    return HtmlParsers.csrfToken(html) ?: throw IllegalStateException("csrf-token meta tag not found")
+}

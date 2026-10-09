@@ -1,7 +1,8 @@
 package com.futabooo.android.booklife.data.repository
 
-import com.futabooo.android.booklife.data.model.HomeResource
 import com.futabooo.android.booklife.data.network.BookmeterApi
+import com.futabooo.android.booklife.data.network.CsrfTokenProvider
+import com.futabooo.android.booklife.data.network.SessionExpiredException
 import com.futabooo.android.booklife.data.parser.HtmlParsers
 import com.futabooo.android.booklife.data.prefs.UserPreferences
 import javax.inject.Inject
@@ -9,7 +10,6 @@ import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 
 /** This month's reading stats, as displayed text. */
 data class HomeStats(val pages: String, val volumes: String, val pagesPerDay: String)
@@ -18,24 +18,22 @@ data class HomeStats(val pages: String, val volumes: String, val pagesPerDay: St
 class HomeRepository @Inject constructor(
     private val api: BookmeterApi,
     private val userPreferences: UserPreferences,
-    private val json: Json,
+    private val session: SessionRepository,
+    private val csrfTokenProvider: CsrfTokenProvider,
 ) {
     /**
-     * GET /home (HTML: stats + user id) then /home.json (csrf, offset 0, limit 10). The user id is
-     * stored when absent. Throws on network/parse errors.
+     * One GET /home (HTML: stats, user id, csrf token). The user id is resolved through
+     * [SessionRepository] only when it is not stored yet (normally from this very page; `/home.json`
+     * is only a last-resort fallback inside it). Throws on network/parse errors and
+     * [SessionExpiredException] when /home is the login page.
      */
     suspend fun fetchHomeStats(): HomeStats = withContext(Dispatchers.IO) {
         val html = api.home().string()
+        if (HtmlParsers.isLoginPage(html)) throw SessionExpiredException()
         val stats = HtmlParsers.homeStats(html)
             ?: throw IllegalStateException("home stats not found")
-        if (userPreferences.userId.first() == null) {
-            HtmlParsers.userId(html)?.let { userPreferences.setUserId(it) }
-        }
-        val csrf = requireCsrfToken(HtmlParsers.csrfToken(html))
-        val resources = api.homeJson(csrf, 0, 10).decodeResources(json, HomeResource.serializer())
-        if (userPreferences.userId.first() == null) {
-            resources.firstOrNull()?.let { userPreferences.setUserId(it.user.id) }
-        }
+        HtmlParsers.csrfToken(html)?.let(csrfTokenProvider::update)
+        if (userPreferences.userId.first() == null) session.resolveUserIdFromHome(html)
         HomeStats(stats.pages, stats.volumes, stats.pagesPerDay)
     }
 }

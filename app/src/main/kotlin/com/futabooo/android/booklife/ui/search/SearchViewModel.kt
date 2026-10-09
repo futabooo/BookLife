@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.futabooo.android.booklife.data.model.SearchResultResource
 import com.futabooo.android.booklife.data.repository.SearchRepository
 import com.futabooo.android.booklife.ui.navigation.Search
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -45,6 +46,7 @@ data class SearchUiState(
 class SearchViewModel @AssistedInject constructor(
     @Assisted key: Search,
     private val source: SearchSource,
+    private val sessionExpiry: SessionExpiryHandler,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -105,9 +107,11 @@ class SearchViewModel @AssistedInject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Timber.e(e, e.message)
                 _state.update { it.copy(isLoading = false) }
-                _errors.trySend(e)
+                if (!sessionExpiry.handle(e)) {
+                    Timber.e(e, e.message)
+                    _errors.trySend(e)
+                }
             }
         }
     }

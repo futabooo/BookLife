@@ -50,6 +50,10 @@ class PersistentCookieJar(
         cookies.filter { it.matches(url) }
     }
 
+    /** True when at least one non-expired cookie would be sent to https://[host]. */
+    fun hasCookiesFor(host: String): Boolean =
+        loadForRequest(HttpUrl.Builder().scheme("https").host(host).build()).isNotEmpty()
+
     /** Removes every stored cookie (sign-out). */
     fun clear() {
         synchronized(lock) {

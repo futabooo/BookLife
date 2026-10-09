@@ -70,6 +70,8 @@ data class Review(
     @SerialName("content_tag") val contentTag: String? = null,
     val content: String? = null,
     @SerialName("created_at") val createdAt: String? = null,
+    /** The read date, when the server includes it (reviews.json items may not carry it). */
+    @SerialName("read_at") val readAt: String? = null,
     val isHighlight: Boolean = false,
     val netabare: Netabare = Netabare(),
     val isNewly: Boolean = false,

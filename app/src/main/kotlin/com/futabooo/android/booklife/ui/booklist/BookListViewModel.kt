@@ -6,6 +6,7 @@ import com.futabooo.android.booklife.data.model.BookListMenu
 import com.futabooo.android.booklife.data.model.Resource
 import com.futabooo.android.booklife.ui.navigation.BookDetail
 import com.futabooo.android.booklife.ui.navigation.Navigator
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -31,6 +32,7 @@ class BookListViewModel @AssistedInject constructor(
     @Assisted private val menu: BookListMenu,
     private val source: BookListSource,
     private val navigator: Navigator,
+    private val sessionExpiry: SessionExpiryHandler,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -66,7 +68,7 @@ class BookListViewModel @AssistedInject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Timber.e(e, e.message)
+                if (!sessionExpiry.handle(e)) Timber.e(e, e.message)
                 _state.update { it.copy(isLoading = false, error = true) }
             }
         }

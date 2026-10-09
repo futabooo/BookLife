@@ -7,7 +7,9 @@ import com.futabooo.android.booklife.ui.navigation.Login
 import com.futabooo.android.booklife.ui.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 class SettingsViewModel internal constructor(
@@ -23,7 +25,14 @@ class SettingsViewModel internal constructor(
 
     fun signOut() {
         viewModelScope.launch {
-            logout()
+            try {
+                logout()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Local state is cleared best-effort; the user still ends up on the login screen.
+                Timber.w(e, "sign-out cleanup failed")
+            }
             onSignedOut()
         }
     }

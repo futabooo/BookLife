@@ -20,8 +20,8 @@ import kotlinx.coroutines.flow.Flow
 /** Data seam of [BookDetailViewModel] (delegates to [BookDetailRepository]); fakeable in tests. */
 interface BookDetailSource {
     suspend fun fetchDetail(bookId: Int): BookDetail
-    suspend fun fetchMyReview(csrfToken: String, bookId: Int): BookDetailResource?
-    suspend fun fetchReviews(csrfToken: String, bookId: Int): List<Review>
+    suspend fun fetchMyReview(bookId: Int): BookDetailResource?
+    suspend fun fetchReviews(bookId: Int): List<Review>
 }
 
 /** Event seam over [BookActionCoordinator.events]. */
@@ -39,11 +39,9 @@ class RepositoryBookDetailSource @Inject constructor(
 ) : BookDetailSource {
     override suspend fun fetchDetail(bookId: Int) = repository.fetchDetail(bookId)
 
-    override suspend fun fetchMyReview(csrfToken: String, bookId: Int) =
-        repository.fetchMyReview(csrfToken, bookId)
+    override suspend fun fetchMyReview(bookId: Int) = repository.fetchMyReview(bookId)
 
-    override suspend fun fetchReviews(csrfToken: String, bookId: Int) =
-        repository.fetchReviews(csrfToken, bookId)
+    override suspend fun fetchReviews(bookId: Int) = repository.fetchReviews(bookId)
 }
 
 class CoordinatorBookActionEvents @Inject constructor(

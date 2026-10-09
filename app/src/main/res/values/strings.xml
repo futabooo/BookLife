@@ -76,6 +76,7 @@
   <string name="main_add_menu">Add book</string>
   <string name="main_menu_barcode_scan">Scan barcode</string>
   <string name="main_menu_record_voice">Voice record</string>
+  <string name="session_expired">Session expired. Please sign in again.</string>
   <string name="load_error">Failed to load</string>
   <string name="search_no_results">No results</string>
   <string name="search_error">Search failed</string>

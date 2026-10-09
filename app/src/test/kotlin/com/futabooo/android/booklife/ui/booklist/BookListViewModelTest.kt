@@ -4,6 +4,7 @@ import com.futabooo.android.booklife.data.model.Book
 import com.futabooo.android.booklife.data.model.BookListMenu
 import com.futabooo.android.booklife.data.model.Resource
 import com.futabooo.android.booklife.ui.navigation.Navigator
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,7 +46,7 @@ class BookListViewModelTest {
     @Test
     fun `loads first page on init and increments offset by 10`() {
         val source = FakeSource(total = 35)
-        val vm = BookListViewModel(BookListMenu.READ, source, Navigator())
+        val vm = BookListViewModel(BookListMenu.READ, source, Navigator(), SessionExpiryHandler(onExpired = {}))
         assertEquals(10, vm.state.value.items.size)
         vm.loadMore()
         vm.loadMore()
@@ -57,7 +58,7 @@ class BookListViewModelTest {
     @Test
     fun `stops at a short page`() {
         val source = FakeSource(total = 15)
-        val vm = BookListViewModel(BookListMenu.READING, source, Navigator())
+        val vm = BookListViewModel(BookListMenu.READING, source, Navigator(), SessionExpiryHandler(onExpired = {}))
         vm.loadMore()
         assertTrue(vm.state.value.endReached)
         assertEquals(15, vm.state.value.items.size)
@@ -68,7 +69,7 @@ class BookListViewModelTest {
     @Test
     fun `does not load concurrently`() {
         val source = FakeSource(total = 100).apply { gate = CompletableDeferred() }
-        val vm = BookListViewModel(BookListMenu.TO_READ, source, Navigator())
+        val vm = BookListViewModel(BookListMenu.TO_READ, source, Navigator(), SessionExpiryHandler(onExpired = {}))
         assertTrue(vm.state.value.isLoading)
         vm.loadMore()
         vm.loadMore()
@@ -81,7 +82,7 @@ class BookListViewModelTest {
     @Test
     fun `error keeps offset and can be retried`() {
         val source = FakeSource(total = 100).apply { failNext = true }
-        val vm = BookListViewModel(BookListMenu.QUITTED, source, Navigator())
+        val vm = BookListViewModel(BookListMenu.QUITTED, source, Navigator(), SessionExpiryHandler(onExpired = {}))
         assertTrue(vm.state.value.error)
         assertFalse(vm.state.value.isLoading)
         vm.loadMore()

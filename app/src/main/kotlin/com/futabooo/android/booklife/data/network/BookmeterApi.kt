@@ -24,10 +24,12 @@ interface BookmeterApi {
     // ---- Login ---------------------------------------------------------------------------
 
     @GET("/login")
+    @Headers("${AuthFlow.HEADER}: 1")
     suspend fun loginPage(): ResponseBody
 
     @FormUrlEncoded
     @POST("/login")
+    @Headers("${AuthFlow.HEADER}: 1")
     suspend fun login(
         @Field("session[email_address]") email: String,
         @Field("session[password]") password: String,
@@ -40,8 +42,12 @@ interface BookmeterApi {
     @GET("/home")
     suspend fun home(): ResponseBody
 
-    /** Same page as [home] but keeps the HTTP response (needed to inspect the final URL). */
+    /**
+     * Same page as [home] but keeps the HTTP response (needed to inspect the final URL). Part of the
+     * auth flow: the session-expiry interceptor must not throw for it.
+     */
     @GET("/home")
+    @Headers("${AuthFlow.HEADER}: 1")
     suspend fun homeResponse(): Response<ResponseBody>
 
     @GET("/home.json")
@@ -141,13 +147,14 @@ interface BookmeterApi {
     ): Response<ResponseBody>
 
     @FormUrlEncoded
+    /** A null [readAt] is not sent at all (Retrofit skips null `@Field`s), which keeps the stored date. */
     @PUT("/read_books/{id}.json")
     @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun updateReadBook(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("id") id: Int,
         @Field("read_book[book_id]") bookId: Int,
-        @Field("read_book[read_at]") readAt: String,
+        @Field("read_book[read_at]") readAt: String?,
         @Field("read_book[review]") review: String,
         @Field("read_book[review_is_netabare]") netabare: Int,
     )

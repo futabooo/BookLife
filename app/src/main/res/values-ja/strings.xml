@@ -73,6 +73,7 @@
   <string name="main_add_menu">本を追加</string>
   <string name="main_menu_barcode_scan">バーコードを読み取る</string>
   <string name="main_menu_record_voice">音声入力</string>
+  <string name="session_expired">セッションの有効期限が切れました。再度サインインしてください。</string>
   <string name="load_error">読み込みに失敗しました</string>
   <string name="search_no_results">見つかりませんでした</string>
   <string name="search_error">検索に失敗しました</string>

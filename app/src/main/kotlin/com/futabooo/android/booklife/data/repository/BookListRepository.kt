@@ -3,7 +3,7 @@ package com.futabooo.android.booklife.data.repository
 import com.futabooo.android.booklife.data.model.BookListMenu
 import com.futabooo.android.booklife.data.model.Resource
 import com.futabooo.android.booklife.data.network.BookmeterApi
-import com.futabooo.android.booklife.data.parser.HtmlParsers
+import com.futabooo.android.booklife.data.network.CsrfTokenProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -14,18 +14,18 @@ import kotlinx.serialization.json.Json
 class BookListRepository @Inject constructor(
     private val api: BookmeterApi,
     private val session: SessionRepository,
+    private val csrfTokenProvider: CsrfTokenProvider,
     private val json: Json,
 ) {
     /**
-     * One page of [menu]. HTML first (csrf token), then JSON with `attach_review=true`.
-     * The page is empty when [offset] is past the end.
+     * One page of [menu] as JSON with `attach_review=true` (the CSRF token comes from the shared
+     * [CsrfTokenProvider]; the first call primes it). The page is empty when [offset] is past the end.
      */
     suspend fun fetch(menu: BookListMenu, offset: Int, limit: Int = 10): List<Resource> =
         withContext(Dispatchers.IO) {
             val userId = session.resolveUserId()
-            val html = api.bookList(userId, menu.key).string()
-            val csrf = requireCsrfToken(HtmlParsers.csrfToken(html))
-            api.bookListJson(csrf, userId, menu.key, "true", offset, limit)
-                .decodeResources(json, Resource.serializer())
+            csrfTokenProvider.withToken { csrf ->
+                api.bookListJson(csrf, userId, menu.key, "true", offset, limit)
+            }.decodeResources(json, Resource.serializer())
         }
 }

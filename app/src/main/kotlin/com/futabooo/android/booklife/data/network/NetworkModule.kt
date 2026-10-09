@@ -48,6 +48,7 @@ object NetworkModule {
             .cache(Cache(File(context.cacheDir, "http"), CACHE_SIZE_BYTES))
             .followRedirects(true)
             .followSslRedirects(true)
+            .addInterceptor(SessionExpiryInterceptor())
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(
                 HttpLoggingInterceptor().apply {

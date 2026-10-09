@@ -25,11 +25,11 @@ import kotlinx.serialization.Serializable
 /**
  * Shown as a dialog. Add a new read book ([reviewId] == null) or edit an existing review
  * ([reviewId] = `Review.id`, with [initialReview] / [initialReadAt] / [initialNetabare] prefilled).
+ * A null [initialReadAt] while editing means the read date is unknown and is left untouched.
  */
 @Serializable
 data class ReadBookDialog(
     val bookId: Int,
-    val csrfToken: String,
     val reviewId: Int? = null,
     val initialReview: String? = null,
     val initialReadAt: String? = null,

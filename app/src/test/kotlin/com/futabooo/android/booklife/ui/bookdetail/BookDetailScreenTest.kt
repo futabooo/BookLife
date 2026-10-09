@@ -24,7 +24,7 @@ class BookDetailScreenTest {
     @Test
     fun spoilerBadgeOnlyForNetabareReviews() {
         val state = BookDetailUiState(
-            detail = BookDetail("Title X", "Author", "", "", "csrf"),
+            detail = BookDetail("Title X", "Author", "", ""),
             reviews = listOf(
                 Review(id = 1, content = "spoiler review", netabare = Netabare(netabare = true), user = User(name = "A")),
                 Review(id = 2, content = "clean review", user = User(name = "B")),

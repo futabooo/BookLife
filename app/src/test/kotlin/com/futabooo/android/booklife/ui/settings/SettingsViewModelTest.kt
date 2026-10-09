@@ -26,4 +26,12 @@ class SettingsViewModelTest {
         vm.signOut()
         assertEquals(listOf("logout", "login"), events)
     }
+
+    @Test
+    fun signOut_failureStillNavigatesToLogin() {
+        val events = mutableListOf<String>()
+        val vm = SettingsViewModel({ throw java.io.IOException("disk") }, { events += "login" })
+        vm.signOut()
+        assertEquals(listOf("login"), events)
+    }
 }

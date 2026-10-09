@@ -40,19 +40,22 @@ import com.futabooo.android.booklife.ui.theme.BookLifeTheme
 
 /**
  * "Register as read" / "edit review" form (old `dialog_book_add.xml`). Stateless w.r.t. the network:
- * the submit callback receives `(review, readAt, netabare)` where `readAt` is formatted `yyyy/M/d`
- * (or the untouched [initialReadAt] when the user did not pick another date).
+ * the submit callback receives `(review, readAt, netabare)` where `readAt` is formatted `yyyy/M/d`.
+ * When editing, `readAt` is null unless the user picked a date (the stored date is then left alone,
+ * which also covers an unknown [initialReadAt]).
  *
  * Display it through the [com.futabooo.android.booklife.ui.navigation.ReadBookDialog] key (wired in
  * `BookActionEntries`); this composable only draws the dialog card.
  *
- * @param initialReadAt `yyyy/M/d` date, or any display string coming from the server; today if null.
+ * @param initialReadAt `yyyy/M/d` date of the existing review; null = unknown (today when adding,
+ *   an untouched "-" when editing).
  * @param isEditing true shows "Update" instead of "Register" on the confirm button.
  * @param enabled false while a submit is in flight (disables the buttons).
+ * @param showError shows the "update failed" text below the buttons.
  */
 @Composable
 fun AddReadBookDialog(
-    onSubmit: (review: String, readAt: String, netabare: Boolean) -> Unit,
+    onSubmit: (review: String, readAt: String?, netabare: Boolean) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     initialReview: String = "",
@@ -60,18 +63,25 @@ fun AddReadBookDialog(
     initialNetabare: Boolean = false,
     isEditing: Boolean = false,
     enabled: Boolean = true,
+    showError: Boolean = false,
 ) {
     var review by rememberSaveable { mutableStateOf(initialReview) }
     var netabare by rememberSaveable { mutableStateOf(initialNetabare) }
-    // Selected date as UTC millis; null = keep the server-provided text as it is.
-    val initialMillis = remember(initialReadAt) {
-        if (initialReadAt == null) ReadDates.todayMillis() else ReadDates.parse(initialReadAt)
+    // Selected date as UTC millis. Adding defaults to today; editing keeps the stored (possibly
+    // unknown) date unless the user picks one.
+    val initialMillis = remember(initialReadAt, isEditing) {
+        when {
+            initialReadAt != null -> ReadDates.parse(initialReadAt)
+            isEditing -> null
+            else -> ReadDates.todayMillis()
+        }
     }
     var dateMillis by rememberSaveable { mutableStateOf(initialMillis) }
+    var datePicked by rememberSaveable { mutableStateOf(false) }
     var showPicker by rememberSaveable { mutableStateOf(false) }
 
-    val dateDisplay = dateMillis?.let(ReadDates::display) ?: initialReadAt.orEmpty()
-    val dateSubmit = dateMillis?.let(ReadDates::submit) ?: initialReadAt.orEmpty()
+    val dateDisplay = dateMillis?.let(ReadDates::display) ?: initialReadAt ?: UNKNOWN_DATE
+    val dateSubmit: String? = if (isEditing && !datePicked) null else dateMillis?.let(ReadDates::submit)
 
     Surface(
         modifier = modifier
@@ -84,6 +94,7 @@ fun AddReadBookDialog(
             TextField(
                 value = review,
                 onValueChange = { review = it },
+                enabled = enabled,
                 placeholder = { Text(stringResource(R.string.book_impressions_review)) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = BookLifeColors.primary,
@@ -140,7 +151,7 @@ fun AddReadBookDialog(
                     color = BookLifeColors.primaryText,
                     fontSize = BookLifeTextSizes.Large,
                 )
-                Checkbox(checked = netabare, onCheckedChange = { netabare = it })
+                Checkbox(checked = netabare, onCheckedChange = { netabare = it }, enabled = enabled)
             }
             Row(
                 modifier = Modifier
@@ -164,6 +175,18 @@ fun AddReadBookDialog(
                     Text(stringResource(label).uppercase())
                 }
             }
+            if (showError) {
+                Text(
+                    text = stringResource(R.string.error_review_update),
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = BookLifeTextSizes.Small,
+                    modifier = Modifier.padding(
+                        start = BookLifeSpacing.Large,
+                        end = BookLifeSpacing.Large,
+                        bottom = BookLifeSpacing.Large,
+                    ),
+                )
+            }
         }
     }
 
@@ -173,7 +196,10 @@ fun AddReadBookDialog(
             onDismissRequest = { showPicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    pickerState.selectedDateMillis?.let { dateMillis = it }
+                    pickerState.selectedDateMillis?.let {
+                        dateMillis = it
+                        datePicked = true
+                    }
                     showPicker = false
                 }) { Text(stringResource(R.string.confirm).uppercase()) }
             },
@@ -195,3 +221,5 @@ private fun AddReadBookDialogPreview() {
         AddReadBookDialog(onSubmit = { _, _, _ -> }, onDismiss = {}, initialReadAt = "2017/5/7")
     }
 }
+
+private const val UNKNOWN_DATE = "-"

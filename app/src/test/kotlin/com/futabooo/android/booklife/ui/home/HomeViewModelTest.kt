@@ -1,6 +1,7 @@
 package com.futabooo.android.booklife.ui.home
 
 import com.futabooo.android.booklife.data.repository.HomeStats
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -32,7 +33,7 @@ class HomeViewModelTest {
 
     @Test
     fun loadsStats_loadingThenSuccess() = runTest(dispatcher) {
-        val vm = HomeViewModel(FakeLoader(mutableListOf(Result.success(stats))))
+        val vm = HomeViewModel(FakeLoader(mutableListOf(Result.success(stats))), SessionExpiryHandler(onExpired = {}))
         assertEquals(HomeUiState.Loading, vm.state.value)
         advanceUntilIdle()
         assertEquals(HomeUiState.Success(stats), vm.state.value)
@@ -42,6 +43,7 @@ class HomeViewModelTest {
     fun loadFailure_loadingThenError_retrySucceeds() = runTest(dispatcher) {
         val vm = HomeViewModel(
             FakeLoader(mutableListOf(Result.failure(RuntimeException("boom")), Result.success(stats))),
+            SessionExpiryHandler(onExpired = {}),
         )
         assertEquals(HomeUiState.Loading, vm.state.value)
         advanceUntilIdle()
@@ -50,5 +52,17 @@ class HomeViewModelTest {
         assertEquals(HomeUiState.Loading, vm.state.value)
         advanceUntilIdle()
         assertEquals(HomeUiState.Success(stats), vm.state.value)
+    }
+
+    @Test
+    fun sessionExpiry_isHandledCentrally() = runTest(dispatcher) {
+        var expired = 0
+        val vm = HomeViewModel(
+            FakeLoader(mutableListOf(Result.failure(com.futabooo.android.booklife.data.network.SessionExpiredException()))),
+            SessionExpiryHandler(onExpired = { expired++ }),
+        )
+        advanceUntilIdle()
+        assertEquals(1, expired)
+        assertEquals(HomeUiState.Error, vm.state.value)
     }
 }

@@ -33,7 +33,8 @@ class SearchRepositoryTest {
             .client(OkHttpClient())
             .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))
             .build()
-        repository = SearchRepository(retrofit.create(BookmeterApi::class.java))
+        val api = retrofit.create(BookmeterApi::class.java)
+        repository = SearchRepository(api, com.futabooo.android.booklife.data.network.CsrfTokenProvider(api))
     }
 
     @After
@@ -52,7 +53,7 @@ class SearchRepositoryTest {
         assertEquals(20, first.items.size)
         repository.search("kotlin", 20)
 
-        assertTrue(server.takeRequest().path!!.startsWith("/search?keyword=kotlin"))
+        assertEquals("/home", server.takeRequest().path)
         val r1 = server.takeRequest()
         val p1 = r1.path!!
         assertTrue(p1, p1.contains("partial=true"))
@@ -61,7 +62,7 @@ class SearchRepositoryTest {
         assertTrue(p1, p1.contains("page=1"))
         assertEquals("csrfX", r1.getHeader("X-CSRF-Token"))
         assertEquals("XMLHttpRequest", r1.getHeader("X-Requested-With"))
-        // csrf token is cached: no second HTML page fetch.
+        // csrf token is cached: no second /home fetch.
         val p2 = server.takeRequest().path!!
         assertTrue(p2, p2.contains("page=2"))
     }

@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -86,15 +87,15 @@ fun BookDetailScreen(
             }
         },
         onAdd = { navigator.goTo(RegisterBook(key.bookId)) },
+        onRetry = viewModel::retry,
         onEditReview = { review ->
-            val csrf = state.detail?.csrfToken ?: return@BookDetailContent
             navigator.goTo(
                 ReadBookDialog(
                     bookId = key.bookId,
-                    csrfToken = csrf,
                     reviewId = review.id,
                     initialReview = review.content,
-                    initialReadAt = review.createdAt,
+                    // Only a real read date; createdAt is the posting time, not the read date.
+                    initialReadAt = review.readAt,
                     initialNetabare = review.netabare.netabare,
                 ),
             )
@@ -114,6 +115,7 @@ internal fun BookDetailContent(
     onEditReview: (Review) -> Unit,
     modifier: Modifier = Modifier,
     bookId: Int? = null,
+    onRetry: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -142,6 +144,10 @@ internal fun BookDetailContent(
             )
         },
     ) { innerPadding ->
+        if (state.detail == null && state.error) {
+            LoadError(onRetry = onRetry, modifier = Modifier.padding(innerPadding).fillMaxSize())
+            return@Scaffold
+        }
         LazyColumn(
             contentPadding = innerPadding,
             modifier = Modifier.fillMaxSize(),
@@ -160,6 +166,24 @@ internal fun BookDetailContent(
                 )
             }
             item { Box(Modifier.height(BookLifeSpacing.ActivityMargin)) }
+        }
+    }
+}
+
+@Composable
+private fun LoadError(onRetry: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.load_error),
+            color = BookLifeColors.primaryText,
+            fontSize = BookLifeTextSizes.Large,
+        )
+        TextButton(onClick = onRetry, modifier = Modifier.padding(top = BookLifeSpacing.Medium)) {
+            Text(stringResource(R.string.retry))
         }
     }
 }
@@ -317,7 +341,6 @@ private fun previewState() = BookDetailUiState(
         author = "本の著者",
         thumbnail = "",
         amazonUrl = "https://example.com",
-        csrfToken = "token",
     ),
     myReview = Review(id = 1, content = "自分の感想です。", netabare = Netabare(netabare = false)),
     reviews = listOf(

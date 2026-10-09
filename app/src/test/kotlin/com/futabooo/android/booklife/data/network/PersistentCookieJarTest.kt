@@ -85,4 +85,15 @@ class PersistentCookieJarTest {
         assertTrue(jar.loadForRequest(url).isEmpty())
         assertTrue(newJar().loadForRequest(url).isEmpty())
     }
+
+    @Test
+    fun hasCookiesFor_trueOnlyWithLiveCookies() {
+        val jar = newJar()
+        assertTrue(!jar.hasCookiesFor("bookmeter.com"))
+        jar.saveFromResponse(url, listOf(cookie("_session", "abc")))
+        assertTrue(jar.hasCookiesFor("bookmeter.com"))
+        assertTrue(!jar.hasCookiesFor("example.com"))
+        now += 120_000
+        assertTrue(!jar.hasCookiesFor("bookmeter.com"))
+    }
 }

@@ -30,6 +30,9 @@ class Navigator @Inject constructor() {
 
     private var backStack: NavBackStack<NavKey>? = null
 
+    /** The top-most key of the back stack (null before [attach]). */
+    internal val top: NavKey? get() = backStack?.lastOrNull()
+
     internal fun attach(backStack: NavBackStack<NavKey>) {
         this.backStack = backStack
     }

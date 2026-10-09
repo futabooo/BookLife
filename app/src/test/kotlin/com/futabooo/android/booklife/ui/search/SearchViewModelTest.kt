@@ -4,6 +4,7 @@ import com.futabooo.android.booklife.data.model.Book
 import com.futabooo.android.booklife.data.model.SearchResultContents
 import com.futabooo.android.booklife.data.model.SearchResultResource
 import com.futabooo.android.booklife.ui.navigation.Search
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -37,7 +38,7 @@ class SearchViewModelTest {
     @Test
     fun newQueryResetsResultsAndOffset() {
         val source = FakeSource(total = 100)
-        val vm = SearchViewModel(Search(), source)
+        val vm = SearchViewModel(Search(), source, SessionExpiryHandler(onExpired = {}))
 
         vm.onQueryChange("a")
         vm.submit()
@@ -53,7 +54,7 @@ class SearchViewModelTest {
     @Test
     fun paginationStopsOnShortPage() {
         val source = FakeSource(total = 25)
-        val vm = SearchViewModel(Search(), source)
+        val vm = SearchViewModel(Search(), source, SessionExpiryHandler(onExpired = {}))
 
         vm.onQueryChange("a")
         vm.submit()
@@ -69,7 +70,7 @@ class SearchViewModelTest {
     @Test
     fun isbnKeyTriggersInitialSearch() {
         val source = FakeSource(total = 1)
-        val vm = SearchViewModel(Search(isbn = "9784000000000"), source)
+        val vm = SearchViewModel(Search(isbn = "9784000000000"), source, SessionExpiryHandler(onExpired = {}))
 
         assertEquals(listOf(Triple("9784000000000", 0, 20)), source.calls)
         assertEquals("9784000000000", vm.state.value.query)
@@ -80,7 +81,7 @@ class SearchViewModelTest {
     @Test
     fun noInitialSearchWithoutIsbn() {
         val source = FakeSource(total = 1)
-        SearchViewModel(Search(), source)
+        SearchViewModel(Search(), source, SessionExpiryHandler(onExpired = {}))
         assertTrue(source.calls.isEmpty())
     }
 }

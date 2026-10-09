@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.test.core.app.ApplicationProvider
 import com.futabooo.android.booklife.data.network.BookmeterApi
+import com.futabooo.android.booklife.data.network.CsrfTokenProvider
 import com.futabooo.android.booklife.data.network.PersistentCookieJar
 import com.futabooo.android.booklife.data.prefs.UserPreferences
 import java.io.File
@@ -42,6 +43,7 @@ class SessionRepositoryTest {
     private lateinit var prefs: UserPreferences
     private lateinit var repository: SessionRepository
     private lateinit var scope: CoroutineScope
+    private lateinit var csrf: CsrfTokenProvider
 
     private val loginForm = """
         <html><head><meta name="csrf-token" content="csrf123"/></head><body>
@@ -72,7 +74,9 @@ class SessionRepositoryTest {
             .client(client)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
-        repository = SessionRepository(retrofit.create(BookmeterApi::class.java), cookieJar, prefs, json)
+        val api = retrofit.create(BookmeterApi::class.java)
+        csrf = CsrfTokenProvider(api)
+        repository = SessionRepository(api, cookieJar, prefs, json, csrf)
     }
 
     @After
@@ -134,22 +138,78 @@ class SessionRepositoryTest {
     }
 
     @Test
-    fun isLoggedIn_trueWhenHomeIsServed() = runBlocking {
+    fun checkSession_loggedInWhenHomeIsServed() = runBlocking {
         server.enqueue(html(homeHtml))
-        assertTrue(repository.isLoggedIn())
+        assertEquals(SessionState.LoggedIn, repository.checkSession())
     }
 
     @Test
-    fun isLoggedIn_falseWhenRedirectedToLogin() = runBlocking {
+    fun checkSession_loggedOutWhenRedirectedToLogin() = runBlocking {
         server.enqueue(MockResponse().setResponseCode(302).setHeader("Location", "/login"))
         server.enqueue(html(loginForm))
-        assertFalse(repository.isLoggedIn())
+        assertEquals(SessionState.LoggedOut, repository.checkSession())
     }
 
     @Test
-    fun isLoggedIn_falseWhenBodyIsLoginForm() = runBlocking {
+    fun checkSession_loggedOutWhenBodyIsLoginForm() = runBlocking {
         server.enqueue(html(loginForm))
-        assertFalse(repository.isLoggedIn())
+        assertEquals(SessionState.LoggedOut, repository.checkSession())
+    }
+
+    @Test
+    fun checkSession_loggedOutOn401And403() = runBlocking {
+        server.enqueue(MockResponse().setResponseCode(401).setBody("nope"))
+        assertEquals(SessionState.LoggedOut, repository.checkSession())
+        server.enqueue(MockResponse().setResponseCode(403))
+        assertEquals(SessionState.LoggedOut, repository.checkSession())
+    }
+
+    @Test
+    fun checkSession_unknownOn5xx() = runBlocking {
+        server.enqueue(MockResponse().setResponseCode(503))
+        assertTrue(repository.checkSession() is SessionState.Unknown)
+    }
+
+    @Test
+    fun checkSession_unknownWhenOffline() = runBlocking {
+        server.shutdown()
+        val state = repository.checkSession()
+        assertTrue(state.toString(), state is SessionState.Unknown)
+        assertTrue((state as SessionState.Unknown).cause is java.io.IOException)
+    }
+
+    @Test
+    fun checkSession_unknownOnTimeout() = runBlocking {
+        server.enqueue(MockResponse().setSocketPolicy(okhttp3.mockwebserver.SocketPolicy.NO_RESPONSE))
+        val client = OkHttpClient.Builder().cookieJar(cookieJar).readTimeout(200, java.util.concurrent.TimeUnit.MILLISECONDS).build()
+        val json = Json { ignoreUnknownKeys = true }
+        val api = Retrofit.Builder().baseUrl(server.url("/")).client(client)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build().create(BookmeterApi::class.java)
+        val repo = SessionRepository(api, cookieJar, prefs, json, CsrfTokenProvider(api))
+        assertTrue(repo.checkSession() is SessionState.Unknown)
+    }
+
+    @Test
+    fun checkSession_isNotRejectedBySessionExpiryInterceptor() = runBlocking {
+        // /home redirecting to /login would throw SessionExpiredException for normal requests.
+        val client = OkHttpClient.Builder().cookieJar(cookieJar)
+            .addInterceptor(com.futabooo.android.booklife.data.network.SessionExpiryInterceptor()).build()
+        val json = Json { ignoreUnknownKeys = true }
+        val api = Retrofit.Builder().baseUrl(server.url("/")).client(client)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build().create(BookmeterApi::class.java)
+        val repo = SessionRepository(api, cookieJar, prefs, json, CsrfTokenProvider(api))
+        server.enqueue(MockResponse().setResponseCode(302).setHeader("Location", "/login"))
+        server.enqueue(html(loginForm))
+        assertEquals(SessionState.LoggedOut, repo.checkSession())
+        // The marker header is not sent to the server.
+        assertNull(server.takeRequest().getHeader(com.futabooo.android.booklife.data.network.AuthFlow.HEADER))
+    }
+
+    @Test
+    fun hasSessionCookie_reflectsCookieJar() {
+        assertFalse(repository.hasSessionCookie())
     }
 
     @Test
@@ -165,5 +225,47 @@ class SessionRepositoryTest {
 
         assertTrue(cookieJar.loadForRequest(server.url("/")).isEmpty())
         assertNull(prefs.userId.first())
+    }
+
+    @Test
+    fun logout_invalidatesCsrfToken() = runBlocking {
+        server.enqueue(html(homeHtml))
+        assertEquals("csrf789", csrf.get())
+        repository.logout()
+        server.enqueue(html(homeHtml.replace("csrf789", "csrfNew")))
+        assertEquals("csrfNew", csrf.get())
+    }
+
+    @Test
+    fun logout_clearsPreferencesEvenIfCookiesFail() = runBlocking {
+        prefs.setUserId(5)
+        val real = ApplicationProvider.getApplicationContext<Context>()
+            .getSharedPreferences("test_cookies_f", Context.MODE_PRIVATE)
+        val throwingPrefs = java.lang.reflect.Proxy.newProxyInstance(
+            javaClass.classLoader,
+            arrayOf(android.content.SharedPreferences::class.java),
+        ) { _, method, args ->
+            if (method.name == "edit") throw IllegalStateException("disk full")
+            method.invoke(real, *(args ?: emptyArray()))
+        } as android.content.SharedPreferences
+        val api = Retrofit.Builder().baseUrl(server.url("/")).build().create(BookmeterApi::class.java)
+        val repo = SessionRepository(
+            api, PersistentCookieJar(throwingPrefs), prefs, Json { ignoreUnknownKeys = true }, CsrfTokenProvider(api),
+        )
+
+        repo.logout() // must not throw
+
+        assertNull(prefs.userId.first())
+    }
+
+    @Test
+    fun login_invalidatesCsrfToken() = runBlocking {
+        server.enqueue(html(homeHtml))
+        csrf.get()
+        server.enqueue(html(loginForm))
+        server.enqueue(html(homeHtml))
+        assertEquals(LoginResult.Success, repository.login("a@example.com", "secret"))
+        server.enqueue(html(homeHtml.replace("csrf789", "csrfAfterLogin")))
+        assertEquals("csrfAfterLogin", csrf.get())
     }
 }

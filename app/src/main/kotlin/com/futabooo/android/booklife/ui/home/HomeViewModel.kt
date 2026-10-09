@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futabooo.android.booklife.data.repository.HomeRepository
 import com.futabooo.android.booklife.data.repository.HomeStats
+import com.futabooo.android.booklife.ui.navigation.SessionExpiryHandler
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -44,6 +45,7 @@ sealed interface HomeUiState {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val loader: HomeStatsLoader,
+    private val sessionExpiry: SessionExpiryHandler,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
@@ -63,7 +65,7 @@ class HomeViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Timber.e(e, "failed to load home stats")
+                if (!sessionExpiry.handle(e)) Timber.e(e, "failed to load home stats")
                 HomeUiState.Error
             }
         }

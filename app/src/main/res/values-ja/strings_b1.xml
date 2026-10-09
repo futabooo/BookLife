@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="privacy_policy">プライバシーポリシー</string>
+  <string name="sign_out">サインアウト</string>
+  <string name="sign_out_confirm">サインアウトしますか？</string>
+  <string name="version">バージョン</string>
+  <string name="back">戻る</string>
+</resources>

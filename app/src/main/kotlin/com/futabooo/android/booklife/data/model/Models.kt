@@ -123,7 +123,7 @@ data class SearchResultContents(
     val book: Book = Book(),
 )
 
-/** An element of `resources` in `/search.json`. */
+/** An element of `resources` in the partial `/search` HTML (see `HtmlParsers.searchResults`). */
 @Serializable
 data class SearchResultResource(
     val contents: SearchResultContents = SearchResultContents(),

@@ -7,6 +7,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -94,15 +95,21 @@ interface BookmeterApi {
     @GET("/search")
     suspend fun search(@Query("keyword") keyword: String): ResponseBody
 
-    @GET("/search.json")
-    suspend fun searchJson(
+    /**
+     * Partial HTML search results (20 `li.group__book` items per [page], 1-based); this is what the
+     * website loads via XHR. An empty page means the end of the results.
+     */
+    @GET("/search")
+    @Headers("X-Requested-With: XMLHttpRequest", "Accept: */*")
+    suspend fun searchPartial(
         @Header("X-CSRF-Token") csrfToken: String,
+        @Query("author") author: String = "",
         @Query("keyword") keyword: String,
+        @Query("partial") partial: Boolean = true,
         @Query("sort") sort: String,
         @Query("type") type: String,
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int,
-    ): JsonObject
+        @Query("page") page: Int,
+    ): ResponseBody
 
     // ---- Actions -------------------------------------------------------------------------
 

@@ -82,4 +82,28 @@ class HtmlParsersTest {
         assertEquals("https://img.example/t.jpg", detail.thumbnail)
         assertEquals("https://amazon.example/x", detail.amazonUrl)
     }
+
+    private val searchPartialHtml: String =
+        javaClass.classLoader!!.getResourceAsStream("search_partial.html")!!
+            .bufferedReader().use { it.readText() }
+
+    @Test
+    fun searchResults_parsesFixture() {
+        val items = HtmlParsers.searchResults(searchPartialHtml)
+        assertEquals(20, items.size)
+        val book = items.first().contents.book
+        assertEquals(12901965, book.id)
+        assertEquals("やさしいKotlin入門", book.title)
+        assertEquals("野崎 英一", book.author.name)
+        assertEquals(17, book.registrationCount)
+        assertEquals(315, book.page)
+        assertEquals("https://m.media-amazon.com/images/I/51qL1Vv2URL._SL500_.jpg", book.imageUrl)
+        assertEquals("", items.first().status)
+        assertTrue(items.all { it.contents.book.id != 0 })
+    }
+
+    @Test
+    fun searchResults_empty() {
+        assertTrue(HtmlParsers.searchResults("<span id=\"contents\"></span>").isEmpty())
+    }
 }

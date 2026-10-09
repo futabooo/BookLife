@@ -1,5 +1,9 @@
 package com.futabooo.android.booklife.data.parser
 
+import com.futabooo.android.booklife.data.model.Author
+import com.futabooo.android.booklife.data.model.Book
+import com.futabooo.android.booklife.data.model.SearchResultContents
+import com.futabooo.android.booklife.data.model.SearchResultResource
 import org.jsoup.Jsoup
 
 /** Pure functions that scrape bookmeter.com HTML pages. Selectors are ported from the old app. */
@@ -56,4 +60,41 @@ object HtmlParsers {
             amazonUrl = doc.select("div.group__image a").attr("href"),
         )
     }
+
+    private const val DEFAULT_ACTION_TEXT = "本を登録する"
+
+    /**
+     * Items of the partial search response (`li.group__book`). Empty list = no (more) results.
+     * The read-status mark is taken from `div.cover__icon` text, else `span.action__text` when it is
+     * not the default "本を登録する", else "".
+     */
+    fun searchResults(html: String): List<SearchResultResource> =
+        Jsoup.parse(html).select("li.group__book").mapNotNull { li ->
+            val href = li.select("div.detail__title a").attr("href")
+                .ifEmpty { li.select("div.thumbnail__cover a").attr("href") }
+            val path = href.substringBefore('?').trimEnd('/')
+            val id = path.substringAfterLast('/').toIntOrNull() ?: return@mapNotNull null
+            val authorLink = li.select("ul.detail__authors li a").firstOrNull()
+            val authorName = li.select("ul.detail__authors li").firstOrNull()?.text()?.trim()
+            val iconText = li.select("div.cover__icon").text().trim()
+            val actionText = li.select("span.action__text").text().trim()
+            val status = iconText.ifEmpty { actionText.takeUnless { it == DEFAULT_ACTION_TEXT }.orEmpty() }
+            SearchResultResource(
+                contents = SearchResultContents(
+                    book = Book(
+                        id = id,
+                        title = li.select("div.detail__title a").text().trim()
+                            .ifEmpty { li.select("img.cover__image").attr("alt") },
+                        imageUrl = li.select("img.cover__image").attr("src"),
+                        path = path,
+                        page = li.select("div.detail__page").text().trim().toIntOrNull() ?: 0,
+                        registrationCount = li.select("dl.detail__options dd.options__item").firstOrNull()
+                            ?.text()?.trim()?.replace(",", "")?.toIntOrNull() ?: 0,
+                        author = Author(name = authorName, path = authorLink?.attr("href")),
+                    ),
+                ),
+                status = status,
+                statusText = status,
+            )
+        }
 }

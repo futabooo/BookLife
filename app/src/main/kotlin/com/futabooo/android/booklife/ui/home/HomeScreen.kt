@@ -89,7 +89,7 @@ fun HomeContent(
                     textAlign = TextAlign.Center,
                 )
                 Button(onClick = onRetry, modifier = Modifier.testTag("home_retry")) {
-                    Text(stringResource(R.string.home_retry))
+                    Text(stringResource(R.string.retry))
                 }
             }
             is HomeUiState.Success -> Stats(state.stats)

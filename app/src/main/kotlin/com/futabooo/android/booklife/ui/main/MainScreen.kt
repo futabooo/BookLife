@@ -89,6 +89,8 @@ fun MainScreen(
     homeContent: @Composable (PaddingValues) -> Unit = { padding -> HomeScreen(contentPadding = padding) },
 ) {
     val context = LocalContext.current
+    val barcodeErrorMessage = stringResource(R.string.error_barcode_scan)
+    val comingSoonMessage = stringResource(R.string.coming_soon)
     val scope = rememberCoroutineScope()
     var selectedTab by rememberSaveable { mutableIntStateOf(TAB_HOME) }
     var menuOpen by rememberSaveable { mutableStateOf(false) }
@@ -212,7 +214,7 @@ fun MainScreen(
                         startBarcodeScan(
                             context = context,
                             onIsbn = { isbn -> navigator.goTo(Search(isbn = isbn)) },
-                            onFailure = { onShowMessage(context.getString(R.string.error_barcode_scan)) },
+                            onFailure = { onShowMessage(barcodeErrorMessage) },
                         )
                     }
                 },
@@ -225,7 +227,7 @@ fun MainScreen(
                 onRecordVoice = {
                     closeMenuThen {
                         analytics.logEvent("record_voice")
-                        onShowMessage(context.getString(R.string.coming_soon))
+                        onShowMessage(comingSoonMessage)
                     }
                 },
             )

@@ -51,6 +51,7 @@ import com.futabooo.android.booklife.ui.navigation.BookDetail as BookDetailKey
 import com.futabooo.android.booklife.ui.navigation.Navigator
 import com.futabooo.android.booklife.ui.navigation.ReadBookDialog
 import com.futabooo.android.booklife.ui.navigation.RegisterBook
+import com.futabooo.android.booklife.ui.common.bookImageSharedElement
 import com.futabooo.android.booklife.ui.theme.BookLifeColors
 import com.futabooo.android.booklife.ui.theme.BookLifeSpacing
 import com.futabooo.android.booklife.ui.theme.BookLifeTextSizes
@@ -71,6 +72,7 @@ fun BookDetailScreen(
     BookDetailContent(
         state = state,
         imageUrl = key.imageUrl,
+        bookId = key.bookId,
         onBack = navigator::goBack,
         onAmazon = { url ->
             try {
@@ -107,6 +109,7 @@ internal fun BookDetailContent(
     onAdd: () -> Unit,
     onEditReview: (Review) -> Unit,
     modifier: Modifier = Modifier,
+    bookId: Int? = null,
 ) {
     Scaffold(
         modifier = modifier,
@@ -139,7 +142,7 @@ internal fun BookDetailContent(
             contentPadding = innerPadding,
             modifier = Modifier.fillMaxSize(),
         ) {
-            item { Header(state.detail, imageUrl, onAmazon, onAdd) }
+            item { Header(state.detail, imageUrl, bookId, onAmazon, onAdd) }
             item { Divider(bottom = BookLifeSpacing.Large) }
             state.myReview?.let { review ->
                 item { MyReview(review, onEdit = { onEditReview(review) }) }
@@ -161,6 +164,7 @@ internal fun BookDetailContent(
 private fun Header(
     detail: BookDetail?,
     imageUrl: String,
+    bookId: Int?,
     onAmazon: (String) -> Unit,
     onAdd: () -> Unit,
 ) {
@@ -174,7 +178,7 @@ private fun Header(
             AsyncImage(
                 model = detail?.thumbnail?.takeIf { it.isNotEmpty() } ?: imageUrl,
                 contentDescription = null,
-                modifier = Modifier.size(width = 120.dp, height = 160.dp),
+                modifier = Modifier.bookImageSharedElement(bookId).size(width = 120.dp, height = 160.dp),
             )
             Column(modifier = Modifier.padding(start = BookLifeSpacing.Large)) {
                 Text(

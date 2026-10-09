@@ -25,4 +25,12 @@ class LicensesScreenTest {
         val title = ApplicationProvider.getApplicationContext<Context>().getString(R.string.licenses)
         composeRule.onNodeWithText(title).assertExists()
     }
+
+    @Test
+    fun realScreenShowsTitle() {
+        composeRule.setContent { BookLifeTheme { LicensesScreen(onBack = {}) } }
+        composeRule.waitForIdle()
+        val title = ApplicationProvider.getApplicationContext<Context>().getString(R.string.licenses)
+        composeRule.onNodeWithText(title).assertExists()
+    }
 }

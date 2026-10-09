@@ -41,7 +41,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -65,6 +64,7 @@ import com.futabooo.android.booklife.ui.navigation.BookDetail
 import com.futabooo.android.booklife.ui.navigation.Navigator
 import com.futabooo.android.booklife.ui.navigation.RegisterBook
 import com.futabooo.android.booklife.ui.navigation.Search
+import com.futabooo.android.booklife.ui.common.bookImageSharedElement
 import com.futabooo.android.booklife.ui.theme.BookLifeColors
 import com.futabooo.android.booklife.ui.theme.BookLifeSpacing
 import com.futabooo.android.booklife.ui.theme.BookLifeTextSizes
@@ -81,9 +81,9 @@ fun SearchScreen(
     viewModel: SearchViewModel,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    LaunchedEffect(viewModel) {
-        viewModel.errors.collect { snackbar.show(context.getString(R.string.search_error)) }
+    val searchErrorMessage = stringResource(R.string.search_error)
+    LaunchedEffect(viewModel, searchErrorMessage) {
+        viewModel.errors.collect { snackbar.show(searchErrorMessage) }
     }
     SearchContent(
         state = state,
@@ -141,7 +141,7 @@ fun SearchContent(
                     IconButton(onClick = onBack) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_left),
-                            contentDescription = stringResource(R.string.search_back),
+                            contentDescription = stringResource(R.string.back),
                         )
                     }
                 },
@@ -247,6 +247,7 @@ fun SearchResultItem(
                     contentDescription = null,
                     modifier = Modifier
                         .padding(end = BookLifeSpacing.Large)
+                        .bookImageSharedElement(book.id)
                         .size(width = 80.dp, height = 120.dp)
                         .align(Alignment.CenterVertically),
                 )
@@ -297,7 +298,7 @@ fun SearchResultItem(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.search_register),
+                    contentDescription = stringResource(R.string.book_register),
                     modifier = Modifier.size(24.dp),
                 )
             }

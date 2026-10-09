@@ -39,6 +39,7 @@ import com.futabooo.android.booklife.data.model.Book
 import com.futabooo.android.booklife.data.model.BookListMenu
 import com.futabooo.android.booklife.data.model.Resource
 import com.futabooo.android.booklife.ui.common.LoadingItem
+import com.futabooo.android.booklife.ui.common.bookImageSharedElement
 import com.futabooo.android.booklife.ui.theme.BookLifeColors
 import com.futabooo.android.booklife.ui.theme.BookLifeSpacing
 import com.futabooo.android.booklife.ui.theme.BookLifeTheme
@@ -53,8 +54,8 @@ private const val VISIBLE_THRESHOLD = 2
 @Composable
 fun BookListScreen(
     menu: BookListMenu,
-    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val viewModel = hiltViewModel<BookListViewModel, BookListViewModel.Factory>(
         key = menu.name,
@@ -117,10 +118,10 @@ internal fun BookListContent(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = stringResource(R.string.b3_load_error),
+                        text = stringResource(R.string.load_error),
                         color = BookLifeColors.secondaryText,
                     )
-                    TextButton(onClick = onLoadMore) { Text(stringResource(R.string.b3_retry)) }
+                    TextButton(onClick = onLoadMore) { Text(stringResource(R.string.retry)) }
                 }
             }
         }
@@ -147,6 +148,7 @@ private fun BookCard(resource: Resource, onClick: () -> Unit, modifier: Modifier
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = BookLifeSpacing.Large, top = BookLifeSpacing.Large)
+                    .bookImageSharedElement(book?.id)
                     .size(width = 100.dp, height = 140.dp),
             )
             Text(

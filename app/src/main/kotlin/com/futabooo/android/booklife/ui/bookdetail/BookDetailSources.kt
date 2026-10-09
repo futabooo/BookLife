@@ -56,7 +56,7 @@ class SnackbarBookDetailErrorReporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val snackbar: SnackbarController,
 ) : BookDetailErrorReporter {
-    override fun showLoadError() = snackbar.show(context.getString(R.string.b3_load_error))
+    override fun showLoadError() = snackbar.show(context.getString(R.string.load_error))
 }
 
 @Module

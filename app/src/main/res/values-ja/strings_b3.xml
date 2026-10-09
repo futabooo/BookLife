@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <string name="b3_load_error">読み込みに失敗しました</string>
-  <string name="b3_retry">再試行</string>
-</resources>

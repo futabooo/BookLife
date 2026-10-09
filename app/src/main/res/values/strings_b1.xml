@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <string name="privacy_policy">Privacy Policy</string>
-  <string name="sign_out">Sign out</string>
-  <string name="sign_out_confirm">Do you want to sign out?</string>
-  <string name="version">Version</string>
-  <string name="back">Back</string>
-</resources>

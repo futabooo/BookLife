@@ -51,7 +51,7 @@ private data class ArcItem(
 
 private val ArcItems = listOf(
     ArcItem("arc_barcode_scan", 60f, R.drawable.ic_barcode_scan, R.string.main_menu_barcode_scan),
-    ArcItem("arc_search", 90f, R.drawable.ic_search, R.string.main_menu_search),
+    ArcItem("arc_search", 90f, R.drawable.ic_search, R.string.menu_search),
     ArcItem("arc_record_voice", 120f, R.drawable.ic_record_voice, R.string.main_menu_record_voice),
 )
 

@@ -1,0 +1,8 @@
+<resources>
+  <!-- Search -->
+  <string name="search_no_results">見つかりませんでした</string>
+  <string name="search_error">検索に失敗しました</string>
+  <string name="search_back">戻る</string>
+  <string name="search_clear">クリア</string>
+  <string name="search_register">登録</string>
+</resources>

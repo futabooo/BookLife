@@ -1,0 +1,8 @@
+<resources>
+  <!-- Search -->
+  <string name="search_no_results">No results</string>
+  <string name="search_error">Search failed</string>
+  <string name="search_back">Back</string>
+  <string name="search_clear">Clear</string>
+  <string name="search_register">Register</string>
+</resources>

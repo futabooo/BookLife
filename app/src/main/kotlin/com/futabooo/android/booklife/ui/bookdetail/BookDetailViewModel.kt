@@ -10,7 +10,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,14 +55,17 @@ class BookDetailViewModel @AssistedInject constructor(
         try {
             val detail = source.fetchDetail(key.bookId)
             _state.update { it.copy(detail = detail) }
-            coroutineScope {
+            supervisorScope {
+                launch { loadMyReview(detail.csrfToken) }
                 launch {
-                    val mine = source.fetchMyReview(detail.csrfToken, key.bookId)?.review
-                    _state.update { it.copy(myReview = mine) }
-                }
-                launch {
-                    val reviews = source.fetchReviews(detail.csrfToken, key.bookId)
-                    _state.update { it.copy(reviews = reviews) }
+                    try {
+                        val reviews = source.fetchReviews(detail.csrfToken, key.bookId)
+                        _state.update { it.copy(reviews = reviews) }
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Timber.w(e, "Failed to load reviews")
+                    }
                 }
             }
         } catch (e: CancellationException) {
@@ -74,13 +77,18 @@ class BookDetailViewModel @AssistedInject constructor(
 
     private suspend fun reloadMyReview() {
         val csrf = _state.value.detail?.csrfToken ?: return
+        loadMyReview(csrf)
+    }
+
+    /** Secondary load: failures are logged, never shown, and leave the current state untouched. */
+    private suspend fun loadMyReview(csrf: String) {
         try {
             val mine = source.fetchMyReview(csrf, key.bookId)?.review
             _state.update { it.copy(myReview = mine) }
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            reportError(e)
+            Timber.w(e, "Failed to load my review")
         }
     }
 

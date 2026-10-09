@@ -1,5 +1,6 @@
 package com.futabooo.android.booklife.data.network
 
+import com.futabooo.android.booklife.data.model.BookRegistrationStatus
 import kotlinx.serialization.json.JsonObject
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -44,6 +45,7 @@ interface BookmeterApi {
     suspend fun homeResponse(): Response<ResponseBody>
 
     @GET("/home.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun homeJson(
         @Header("X-CSRF-Token") csrfToken: String,
         @Query("offset") offset: Int,
@@ -59,6 +61,7 @@ interface BookmeterApi {
     ): ResponseBody
 
     @GET("/users/{user_id}/books/{book_list_menu}.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun bookListJson(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("user_id") userId: Int,
@@ -73,15 +76,17 @@ interface BookmeterApi {
     @GET("/books/{book_id}")
     suspend fun bookDetail(@Path("book_id") bookId: Int): ResponseBody
 
-    @GET("/books/{book_id}.json")
-    suspend fun bookDetailJson(
+    /** Ids of the signed-in user's registrations (read/reading/stacked/wish) for the book. */
+    @GET("/users/{user_id}/books/{book_id}/status.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun bookRegistrationStatus(
         @Header("X-CSRF-Token") csrfToken: String,
+        @Path("user_id") userId: Int,
         @Path("book_id") bookId: Int,
-        @Query("offset") offset: Int,
-        @Query("limit") limit: Int,
-    ): JsonObject
+    ): BookRegistrationStatus
 
     @GET("/books/{book_id}/reviews.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun bookReviewsJson(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("book_id") bookId: Int,
@@ -115,15 +120,17 @@ interface BookmeterApi {
 
     @FormUrlEncoded
     @POST("/users/{user_id}/books/{book_list_menu}")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun addBook(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("user_id") userId: Int,
         @Path("book_list_menu") bookListMenu: String,
         @Field("book[book_id]") bookId: Int,
-    ): JsonObject
+    ): Response<ResponseBody>
 
     @FormUrlEncoded
     @POST("/users/{user_id}/books/read.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun addReadBook(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("user_id") userId: Int,
@@ -131,10 +138,11 @@ interface BookmeterApi {
         @Field("read_book[read_at]") readAt: String,
         @Field("read_book[review]") review: String,
         @Field("read_book[review_is_netabare]") netabare: Int,
-    ): JsonObject
+    ): Response<ResponseBody>
 
     @FormUrlEncoded
     @PUT("/read_books/{id}.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
     suspend fun updateReadBook(
         @Header("X-CSRF-Token") csrfToken: String,
         @Path("id") id: Int,

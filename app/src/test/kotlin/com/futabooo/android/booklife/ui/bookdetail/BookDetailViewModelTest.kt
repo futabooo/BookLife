@@ -24,6 +24,7 @@ class BookDetailViewModelTest {
     private class FakeSource : BookDetailSource {
         var myReview: Review? = null
         var fail = false
+        var myReviewFails = false
         var myReviewCalls = 0
 
         override suspend fun fetchDetail(bookId: Int): BookDetail {
@@ -33,6 +34,7 @@ class BookDetailViewModelTest {
 
         override suspend fun fetchMyReview(csrfToken: String, bookId: Int): BookDetailResource? {
             myReviewCalls++
+            if (myReviewFails) error("my review boom")
             return myReview?.let { BookDetailResource(review = it) }
         }
 
@@ -98,5 +100,16 @@ class BookDetailViewModelTest {
         val vm = BookDetailViewModel(BookDetailKey(1, "img"), source, FakeEvents(), errors)
         assertEquals(1, errors.count)
         assertNull(vm.state.value.detail)
+    }
+
+    @Test
+    fun `my review failure keeps reviews and shows no error`() {
+        val errors = FakeErrors()
+        val source = FakeSource().apply { myReviewFails = true }
+        val vm = BookDetailViewModel(BookDetailKey(1, "img"), source, FakeEvents(), errors)
+        assertEquals(0, errors.count)
+        assertEquals("title 1", vm.state.value.detail?.title)
+        assertEquals(2, vm.state.value.reviews.size)
+        assertNull(vm.state.value.myReview)
     }
 }

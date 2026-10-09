@@ -7,6 +7,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 
 @Singleton
 class BookActionRepository @Inject constructor(
@@ -19,7 +22,9 @@ class BookActionRepository @Inject constructor(
 
     /** Registers a book in READING / TO_READ / QUITTED (use [addReadBook] for READ). */
     suspend fun addBook(csrfToken: String, userId: Int, menu: BookListMenu, bookId: Int) {
-        withContext(Dispatchers.IO) { api.addBook(csrfToken, userId, menu.key, bookId) }
+        withContext(Dispatchers.IO) {
+            api.addBook(csrfToken, userId, menu.key, bookId).requireSuccess()
+        }
     }
 
     /** Registers a finished book. [readAt] is formatted `yyyy/M/d`. */
@@ -33,6 +38,7 @@ class BookActionRepository @Inject constructor(
     ) {
         withContext(Dispatchers.IO) {
             api.addReadBook(csrfToken, userId, bookId, readAt, review, if (netabare) 1 else 0)
+                .requireSuccess()
         }
     }
 
@@ -47,6 +53,19 @@ class BookActionRepository @Inject constructor(
     ) {
         withContext(Dispatchers.IO) {
             api.updateReadBook(csrfToken, reviewId, bookId, readAt, review, if (netabare) 1 else 0)
+        }
+    }
+
+    /**
+     * The body is deliberately not parsed: a redirect may be followed into an HTML page although the
+     * registration was recorded, so any 2xx final response counts as success.
+     */
+    private fun Response<ResponseBody>.requireSuccess() {
+        try {
+            if (!isSuccessful) throw HttpException(this)
+        } finally {
+            body()?.close()
+            errorBody()?.close()
         }
     }
 }

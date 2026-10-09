@@ -105,7 +105,16 @@ data class HomeResource(
     val user: User = User(),
 )
 
-/** An element of `resources` in `/books/{id}.json` (the signed-in user's own record of the book). */
+/** `/users/{uid}/books/{bid}/status.json`: ids of the current user's registrations of a book. */
+@Serializable
+data class BookRegistrationStatus(
+    @SerialName("read_book_ids") val readBookIds: List<Int> = emptyList(),
+    @SerialName("reading_book_id") val readingBookId: Int? = null,
+    @SerialName("stacked_book_id") val stackedBookId: Int? = null,
+    @SerialName("wish_book_id") val wishBookId: Int? = null,
+)
+
+/** The signed-in user's own record of a book, wrapping their [Review]. */
 @Serializable
 data class BookDetailResource(
     val id: Int = 0,

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo sized to fit the circular mask of the Android 12+ system splash screen. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:drawable="@drawable/ic_logo"
+      android:gravity="center"
+      android:width="140dp"
+      android:height="14dp"/>
+</layer-list>

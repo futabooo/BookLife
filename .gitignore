@@ -64,3 +64,5 @@ vendor/bundle
 
 # Fastlane
 fastlane/report.xml
+# Scratch output of skills
+.scratch/

@@ -14,10 +14,20 @@ Unofficial Android application of bookmeter(https://bookmeter.com/)
 <a href='https://play.google.com/store/apps/details?id=com.futabooo.android.booklife&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="92" width="240"/></a>
 
 ## How to build
-#### create keystore.properties
+Requirements: **JDK 21** (set `JAVA_HOME`), Android SDK (compileSdk 37; set `ANDROID_HOME` or `local.properties`).
+
 ```
-$ cd path/to/BookLife
-$ mv keystore.properties.template keystore.properties
+$ ./gradlew :app:assembleDebug        # debug APK
+$ ./gradlew :app:testDebugUnitTest    # unit + Robolectric Compose tests
+$ ./gradlew :app:lintDebug
+$ ./gradlew :app:bundleRelease        # release AAB (R8 minify + resource shrinking)
+```
+
+#### keystore.properties (optional, release signing)
+Without it the release build is signed with the bundled `debug.keystore`, so CI and forks still build.
+To sign with your own key:
+```
+$ cp keystore.properties.template keystore.properties
 ```
 
 ```txt:keystore.properties
@@ -27,24 +37,24 @@ keyAlias=[your key alias]
 keyPassword=[your key password]
 ```
 
-#### create fabric.properties.properties
-```
-$ cd path/to/BookLife/app
-$ mv fabric.properties.template fabric.properties
-```
+#### google-services.json (optional, Firebase)
+Create a Firebase project and put `google-services.json` in `app/`. It enables Crashlytics and Analytics.
+Without it the Google Services / Crashlytics plugins are skipped and Firebase is a no-op.
+(Fabric is no longer used; there is no `fabric.properties`.)
 
-```txt:fabric.properties
-apiSecret=[your api secret]
-apiKey=[your api key]
-```
+#### Open source licenses
+The licenses screen is generated at build time by [AboutLibraries](https://github.com/mikepenz/AboutLibrariesGradlePlugin); no manual step is needed.
 
-#### create google-services.json
-Create Firebase project and download google-services.json
+#### CI
+GitHub Actions (`.github/workflows/android.yml`) builds the debug APK and runs the unit tests with JDK 21.
 
-#### create licenses.html
+## Accounts
+The app does not create accounts; it signs in to your existing bookmeter.com account. Account creation and deletion are handled by bookmeter.com. Credentials are sent only to bookmeter.com over HTTPS and are not stored on the device (only a session cookie is kept, and removed on sign-out). See the [privacy policy](public/privacy_policy.html) and the [Play compliance report](docs/play-compliance-report.md).
+
+## Android skills
+The official [android/skills](https://github.com/android/skills) used for the modernization (Navigation 3, edge-to-edge, R8, security and Play policy audits, ...) were installed with:
 ```
-$ cd path/to/BookLife
-$ ./gradlew generateLicensePage
+$ android skills add --all --project=.
 ```
 
 ## How to remote build with mainframer
@@ -52,24 +62,17 @@ See https://github.com/gojuno/mainframer/tree/development/samples/gradle-android
 
 Japanese document [Androidのリモートビルドにmainframerを使ってみる - Qiita](https://qiita.com/futabooo/items/ed70efdd3929ebbfd161)
 
-## Thanks
-- [OkHttp](https://github.com/square/okhttp)
-- [Retrofit](https://github.com/square/retrofit)
-- [RxJava2 Adapter](https://github.com/square/retrofit/tree/master/retrofit-adapters/rxjava2)
-- [Gson Converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson)
-- [jsoup](https://jsoup.org/)
-- [PersistentCookieJar](https://github.com/franmontiel/PersistentCookieJar)
-- [RxJava2](https://github.com/ReactiveX/RxJava)
-- [RxAndroid2](https://github.com/ReactiveX/RxAndroid)
-- [RxKotlin2](https://github.com/ReactiveX/RxKotlin)
-- [Cryptore](https://github.com/KazaKago/Cryptore)
-- [Dagger2](https://github.com/google/dagger)
-- [Glide](https://github.com/bumptech/glide)
-- [Glide Transformations](https://github.com/wasabeef/glide-transformations)
-- [BottomBar](https://github.com/roughike/BottomBar)
-- [DrawMe](https://github.com/rafakob/DrawMe)
-- [ArcLayout](https://github.com/ogaclejapan/ArcLayout)
+## Tech stack
+- Kotlin, Jetpack Compose (Material 3), [Navigation 3](https://developer.android.com/guide/navigation/navigation-3)
+- Hilt, Coroutines / Flow, DataStore, AndroidX Splash Screen
+- [OkHttp](https://github.com/square/okhttp), [Retrofit](https://github.com/square/retrofit), kotlinx.serialization
+- [jsoup](https://jsoup.org/) (HTML parsing of bookmeter.com)
+- [Coil](https://github.com/coil-kt/coil)
+- Google Code Scanner (ML Kit barcode scanning)
+- Firebase Crashlytics / Analytics
+- [AboutLibraries](https://github.com/mikepenz/AboutLibraries)
 - [Timber](https://github.com/JakeWharton/timber)
+- Tests: JUnit, Robolectric, Compose UI test, MockWebServer
 
 ## Licenses
 https://github.com/futabooo/BookLife/blob/master/LICENSE

@@ -1,59 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.futabooo.android.booklife"
-    >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.INTERNET" />
+
+  <!-- The app shows no ads and does not use the advertising ID; Firebase Analytics merges these in. -->
+  <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
+  <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove" />
 
   <application
       android:name=".BookLife"
-      android:allowBackup="true"
+      android:allowBackup="false"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:supportsRtl="true"
-      android:theme="@style/Theme.BookLife"
-      >
-
-    <uses-library
-        android:name="org.apache.http.legacy"
-        android:required="false"
-        />
+      android:theme="@style/Theme.BookLife.Splash">
 
     <activity
-        android:name=".screen.splash.SplashActivity"
-        android:theme="@style/Theme.BookLife.Splash"
-        >
+        android:name=".MainActivity"
+        android:exported="true"
+        android:windowSoftInputMode="adjustResize"
+        android:theme="@style/Theme.BookLife.Splash">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-
-    <activity
-        android:name=".screen.login.LoginActivity">
-    </activity>
-
-    <activity
-        android:name=".screen.MainActivity">
-    </activity>
-
-    <activity
-        android:name=".screen.search.SearchActivity">
-    </activity>
-
-    <activity
-        android:name=".screen.bookdetail.BookDetailActivity">
-    </activity>
-
-    <activity
-        android:name=".screen.licenses.LicensesActivity">
-    </activity>
-
-    <activity
-        android:name=".screen.option.OptionActivity">
-    </activity>
-
   </application>
-
 </manifest>

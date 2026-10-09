@@ -1,0 +1,161 @@
+package com.futabooo.android.booklife.data.network
+
+import com.futabooo.android.booklife.data.model.BookRegistrationStatus
+import kotlinx.serialization.json.JsonObject
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+/**
+ * All bookmeter.com endpoints. HTML endpoints return [ResponseBody] (scraped with Jsoup, see
+ * `HtmlParsers`), JSON endpoints return [JsonObject] whose `resources` array is decoded by the
+ * repositories. Base URL: https://bookmeter.com
+ */
+interface BookmeterApi {
+
+    // ---- Login ---------------------------------------------------------------------------
+
+    @GET("/login")
+    @Headers("${AuthFlow.HEADER}: 1")
+    suspend fun loginPage(): ResponseBody
+
+    @FormUrlEncoded
+    @POST("/login")
+    @Headers("${AuthFlow.HEADER}: 1")
+    suspend fun login(
+        @Field("session[email_address]") email: String,
+        @Field("session[password]") password: String,
+        @Field("authenticity_token") authenticityToken: String,
+        @Field("session[keep]") keep: String = "1",
+    ): ResponseBody
+
+    // ---- Home ----------------------------------------------------------------------------
+
+    @GET("/home")
+    suspend fun home(): ResponseBody
+
+    /**
+     * Same page as [home] but keeps the HTTP response (needed to inspect the final URL). Part of the
+     * auth flow: the session-expiry interceptor must not throw for it.
+     */
+    @GET("/home")
+    @Headers("${AuthFlow.HEADER}: 1")
+    suspend fun homeResponse(): Response<ResponseBody>
+
+    @GET("/home.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun homeJson(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): JsonObject
+
+    // ---- Book list -----------------------------------------------------------------------
+
+    @GET("/users/{user_id}/books/{book_list_menu}")
+    suspend fun bookList(
+        @Path("user_id") userId: Int,
+        @Path("book_list_menu") bookListMenu: String,
+    ): ResponseBody
+
+    @GET("/users/{user_id}/books/{book_list_menu}.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun bookListJson(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("user_id") userId: Int,
+        @Path("book_list_menu") bookListMenu: String,
+        @Query("attach_review") attachReview: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): JsonObject
+
+    // ---- Book detail ---------------------------------------------------------------------
+
+    @GET("/books/{book_id}")
+    suspend fun bookDetail(@Path("book_id") bookId: Int): ResponseBody
+
+    /** Ids of the signed-in user's registrations (read/reading/stacked/wish) for the book. */
+    @GET("/users/{user_id}/books/{book_id}/status.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun bookRegistrationStatus(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("user_id") userId: Int,
+        @Path("book_id") bookId: Int,
+    ): BookRegistrationStatus
+
+    @GET("/books/{book_id}/reviews.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun bookReviewsJson(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("book_id") bookId: Int,
+        @Query("review_filter") filter: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+    ): JsonObject
+
+    // ---- Search --------------------------------------------------------------------------
+
+    @GET("/search")
+    suspend fun search(@Query("keyword") keyword: String): ResponseBody
+
+    /**
+     * Partial HTML search results (20 `li.group__book` items per [page], 1-based); this is what the
+     * website loads via XHR. An empty page means the end of the results.
+     */
+    @GET("/search")
+    @Headers("X-Requested-With: XMLHttpRequest", "Accept: */*")
+    suspend fun searchPartial(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Query("author") author: String = "",
+        @Query("keyword") keyword: String,
+        @Query("partial") partial: Boolean = true,
+        @Query("sort") sort: String,
+        @Query("type") type: String,
+        @Query("page") page: Int,
+    ): ResponseBody
+
+    // ---- Actions -------------------------------------------------------------------------
+
+    @FormUrlEncoded
+    @POST("/users/{user_id}/books/{book_list_menu}")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun addBook(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("user_id") userId: Int,
+        @Path("book_list_menu") bookListMenu: String,
+        @Field("book[book_id]") bookId: Int,
+    ): Response<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/users/{user_id}/books/read.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun addReadBook(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("user_id") userId: Int,
+        @Field("read_book[book_id]") bookId: Int,
+        @Field("read_book[read_at]") readAt: String,
+        @Field("read_book[review]") review: String,
+        @Field("read_book[review_is_netabare]") netabare: Int,
+    ): Response<ResponseBody>
+
+    @FormUrlEncoded
+    /** A null [readAt] is not sent at all (Retrofit skips null `@Field`s), which keeps the stored date. */
+    @PUT("/read_books/{id}.json")
+    @Headers("Accept: application/json", "X-Requested-With: XMLHttpRequest")
+    suspend fun updateReadBook(
+        @Header("X-CSRF-Token") csrfToken: String,
+        @Path("id") id: Int,
+        @Field("read_book[book_id]") bookId: Int,
+        @Field("read_book[read_at]") readAt: String?,
+        @Field("read_book[review]") review: String,
+        @Field("read_book[review_is_netabare]") netabare: Int,
+    )
+}

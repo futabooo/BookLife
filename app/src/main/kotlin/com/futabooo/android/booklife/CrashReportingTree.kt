@@ -1,23 +1,29 @@
 package com.futabooo.android.booklife
 
+import android.content.Context
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
-class CrashReportingTree : Timber.Tree() {
+/**
+ * Forwards logs to Firebase Crashlytics. Does nothing when Firebase is not configured (the build
+ * has no google-services.json), so the app never crashes because of it.
+ */
+class CrashReportingTree(context: Context) : Timber.Tree() {
 
-  override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-    if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
-      Crashlytics.log(priority, tag, message)
-      return
+    private val crashlytics: FirebaseCrashlytics? = try {
+        if (FirebaseApp.getApps(context).isNotEmpty()) FirebaseCrashlytics.getInstance() else null
+    } catch (e: IllegalStateException) {
+        null
     }
 
-    if (t != null) {
-      if (priority == Log.ERROR) {
-        Crashlytics.logException(t)
-      } else if (priority == Log.WARN) {
-        Crashlytics.logException(Exception(message))
-      }
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        val crashlytics = crashlytics ?: return
+        if (priority < Log.INFO) return
+        crashlytics.log("${tag ?: "BookLife"}: $message")
+        if (t != null && priority >= Log.WARN) {
+            crashlytics.recordException(t)
+        }
     }
-  }
 }

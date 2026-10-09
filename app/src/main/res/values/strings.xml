@@ -63,4 +63,23 @@
   <!-- Feature -->
   <string name="coming_soon">Coming Soon!!</string>
 
+  <!-- Shell / Home / Search / Settings -->
+  <string name="privacy_policy">Privacy Policy</string>
+  <string name="sign_out">Sign out</string>
+  <string name="sign_out_confirm">Do you want to sign out?</string>
+  <string name="version">Version</string>
+  <string name="back">Back</string>
+  <string name="error_barcode_scan">Barcode scan failed</string>
+  <string name="home_load_error">Failed to load data</string>
+  <string name="retry">Retry</string>
+  <string name="main_more_options">More options</string>
+  <string name="main_add_menu">Add book</string>
+  <string name="main_menu_barcode_scan">Scan barcode</string>
+  <string name="main_menu_record_voice">Voice record</string>
+  <string name="session_expired">Session expired. Please sign in again.</string>
+  <string name="load_error">Failed to load</string>
+  <string name="search_no_results">No results</string>
+  <string name="search_error">Search failed</string>
+  <string name="search_clear">Clear</string>
+
 </resources>

@@ -75,6 +75,10 @@ fun BookDetailScreen(
         bookId = key.bookId,
         onBack = navigator::goBack,
         onAmazon = { url ->
+            // The URL comes from scraped HTML: only ever hand web links to the system.
+            if (!url.startsWith("https://", ignoreCase = true) && !url.startsWith("http://", ignoreCase = true)) {
+                return@BookDetailContent
+            }
             try {
                 uriHandler.openUri(url)
             } catch (e: Exception) {
